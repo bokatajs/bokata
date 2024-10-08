@@ -27,5 +27,8 @@
   "dependencies": {
     "@bokata/core": "^0.0.2",
     "kuromoji": "^0.1.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

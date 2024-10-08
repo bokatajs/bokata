@@ -29,5 +29,8 @@
     "@bokata/core": "^0.0.2",
     "@bokata/request": "^0.0.2",
     "botbuilder": "^4.16.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

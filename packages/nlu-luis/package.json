@@ -28,5 +28,8 @@
     "@bokata/core": "^0.0.2",
     "@bokata/nlu": "^0.0.2",
     "@bokata/request": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

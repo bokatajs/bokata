@@ -26,5 +26,8 @@
   },
   "dependencies": {
     "@bokata/core": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

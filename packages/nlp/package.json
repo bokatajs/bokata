@@ -31,5 +31,8 @@
     "@bokata/nlu": "^0.0.2",
     "@bokata/sentiment": "^0.0.2",
     "@bokata/slot": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

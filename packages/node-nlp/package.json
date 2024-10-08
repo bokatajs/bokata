@@ -56,5 +56,8 @@
     "@bokata/sentiment": "^0.0.2",
     "@bokata/similarity": "^0.0.2",
     "@bokata/xtables": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

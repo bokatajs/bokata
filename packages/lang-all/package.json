@@ -67,5 +67,8 @@
     "@bokata/lang-uk": "^0.0.2",
     "@bokata/lang-zh": "^0.0.2",
     "@bokata/language": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

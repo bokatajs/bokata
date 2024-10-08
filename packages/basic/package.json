@@ -31,5 +31,8 @@
     "@bokata/lang-en": "^0.0.2",
     "@bokata/logger": "^0.0.2",
     "@bokata/nlp": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

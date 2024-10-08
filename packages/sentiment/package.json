@@ -28,5 +28,8 @@
     "@bokata/core": "^0.0.2",
     "@bokata/language-min": "^0.0.2",
     "@bokata/neural": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

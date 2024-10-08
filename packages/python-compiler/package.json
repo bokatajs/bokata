@@ -27,5 +27,8 @@
   "dependencies": {
     "@bokata/evaluator": "^0.0.2",
     "@bokata/lexer": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

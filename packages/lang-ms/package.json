@@ -27,5 +27,8 @@
   "dependencies": {
     "@bokata/core": "^0.0.2",
     "@bokata/lang-id": "^0.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
