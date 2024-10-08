@@ -28,12 +28,10 @@
     "@bokata/core": "^0.0.3",
     "compromise": "^13.7.0",
     "compromise-dates": "^1.2.0",
-    "compromise-numbers": "^1.0.0"
-  },
-  "devDependencies": {
-    "jest": "^29.3.1"
+    "compromise-numbers": "^1.4.0"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "fe15fc175b8b4c3851ad6301a6730a71e46f929d"
 }

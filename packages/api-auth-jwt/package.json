@@ -26,10 +26,10 @@
   },
   "dependencies": {
     "@bokata/core": "^0.0.3",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0",
-    "passport": "^0.6.0",
-    "passport-jwt": "^4.0.0",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
@@ -37,5 +37,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "fe15fc175b8b4c3851ad6301a6730a71e46f929d"
 }

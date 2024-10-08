@@ -18,7 +18,7 @@ class MongodbAdapter extends Clonable {
       this.settings.tag = 'mongodb-adapter';
     }
     if (!this.settings.url) {
-      this.settings.url = process.env.MONGO_URL;
+      this.settings.url = process.env.MONGO_URL || 'mongodb://localhost:27017';
     }
     if (!this.settings.dbName && this.settings.url) {
       this.settings.dbName = this.settings.url.slice(this.settings.url.lastIndexOf('/') + 1);

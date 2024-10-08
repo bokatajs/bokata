@@ -37,11 +37,12 @@
     "@bokata/express-api-server": "^0.0.3",
     "@bokata/mongodb-adapter": "^0.0.3",
     "@bokata/utils": "^0.0.3",
-    "archiver": "^5.2.0",
+    "archiver": "^7.0.1",
     "decompress": "^4.2.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^6.0.1"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "fe15fc175b8b4c3851ad6301a6730a71e46f929d"
 }

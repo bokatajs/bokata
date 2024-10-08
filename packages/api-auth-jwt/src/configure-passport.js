@@ -1,7 +1,7 @@
 const passport = require('passport');
 const { ExtractJwt, Strategy: JwtStrategy } = require('passport-jwt');
 const { Strategy: LocalStrategy } = require('passport-local');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 function getLocalStrategy(db, settings) {
   const localOptions = {

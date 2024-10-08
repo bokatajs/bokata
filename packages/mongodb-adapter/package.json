@@ -26,9 +26,10 @@
   },
   "dependencies": {
     "@bokata/core": "^0.0.3",
-    "mongodb": "^3.5.9"
+    "mongodb": "^6.9.0"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "fe15fc175b8b4c3851ad6301a6730a71e46f929d"
 }

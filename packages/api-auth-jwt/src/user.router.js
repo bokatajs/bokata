@@ -1,5 +1,5 @@
 const { uuid } = require('@bokata/core');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const getSettings = require('./default-settings');

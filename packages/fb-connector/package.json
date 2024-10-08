@@ -28,10 +28,11 @@
     "@bokata/bot": "^0.0.3",
     "@bokata/connector": "^0.0.3",
     "@bokata/core": "^0.0.3",
-    "botbuilder": "^4.16.0",
-    "botbuilder-adapter-facebook": "^1.0.11"
+    "botbuilder": "^4.23.1",
+    "botbuilder-adapter-facebook": "^1.0.12"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "fe15fc175b8b4c3851ad6301a6730a71e46f929d"
 }

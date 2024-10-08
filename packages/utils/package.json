@@ -29,8 +29,9 @@
   },
   "dependencies": {
     "@bokata/xtables": "^0.0.3",
-    "exceljs": "^4.1.1",
-    "https-proxy-agent": "^5.0.0",
-    "tar": "^6.0.2"
-  }
+    "exceljs": "^4.4.0",
+    "https-proxy-agent": "^5.0.1",
+    "tar": "^7.4.3"
+  },
+  "gitHead": "fe15fc175b8b4c3851ad6301a6730a71e46f929d"
 }

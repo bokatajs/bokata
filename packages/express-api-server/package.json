@@ -27,12 +27,13 @@
   "dependencies": {
     "@bokata/core": "^0.0.3",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.21.0"
   },
   "devDependencies": {
     "supertest": "^6.0.1"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "fe15fc175b8b4c3851ad6301a6730a71e46f929d"
 }
