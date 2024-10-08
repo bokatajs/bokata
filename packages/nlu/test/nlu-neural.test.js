@@ -1,34 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const {
-  ArrToObj,
-  Container,
-  Normalizer,
-  Tokenizer,
-  Stemmer,
-  Stopwords,
-} = require('@nlpjs/core');
+const { ArrToObj, Container, Normalizer, Tokenizer, Stemmer, Stopwords } = require('@bokata/core');
 const { NluNeural } = require('../src');
 const srccorpus = require('./corpus50.json');
 
@@ -53,10 +23,7 @@ function bootstrap() {
 describe('NLU Neural', () => {
   describe('Train and process', () => {
     test('It can train and process a corpus', async () => {
-      const nlu = new NluNeural(
-        { locale: 'en', useNoneFeature: true },
-        bootstrap()
-      );
+      const nlu = new NluNeural({ locale: 'en', useNoneFeature: true }, bootstrap());
       const status = await nlu.train(corpus);
       expect(status.status.iterations).toEqual(34);
       const json = nlu.neuralNetwork.toJSON();
@@ -83,10 +50,7 @@ describe('NLU Neural', () => {
     });
 
     test('It can explain the results', async () => {
-      const nlu = new NluNeural(
-        { locale: 'en', returnExplanation: true, useNoneFeature: true },
-        bootstrap()
-      );
+      const nlu = new NluNeural({ locale: 'en', returnExplanation: true, useNoneFeature: true }, bootstrap());
       await nlu.train(corpus);
       const result = await nlu.process('what develop your company');
       expect(result.explanation).toBeDefined();
@@ -120,10 +84,7 @@ describe('NLU Neural', () => {
     });
 
     test('An allow list can be added', async () => {
-      const nlu = new NluNeural(
-        { locale: 'en', useNoneFeature: true },
-        bootstrap()
-      );
+      const nlu = new NluNeural({ locale: 'en', useNoneFeature: true }, bootstrap());
       await nlu.train(corpus);
       const result = await nlu.process('who are you', {
         allowList: ['smalltalk.annoying', 'smalltalk.hungry'],
@@ -137,10 +98,7 @@ describe('NLU Neural', () => {
     });
 
     test('An allow list with wildcars can be added', async () => {
-      const nlu = new NluNeural(
-        { locale: 'en', useNoneFeature: true },
-        bootstrap()
-      );
+      const nlu = new NluNeural({ locale: 'en', useNoneFeature: true }, bootstrap());
       await nlu.train(corpus);
       const result = await nlu.process('who are you', {
         allowList: ['smalltalk.an*', 'smalltalk.hun*'],
@@ -154,10 +112,7 @@ describe('NLU Neural', () => {
     });
 
     test('Allow list can be an object', async () => {
-      const nlu = new NluNeural(
-        { locale: 'en', useNoneFeature: true },
-        bootstrap()
-      );
+      const nlu = new NluNeural({ locale: 'en', useNoneFeature: true }, bootstrap());
       await nlu.train(corpus);
       const result = await nlu.process('who are you', {
         allowList: { 'smalltalk.annoying': 1, 'smalltalk.hungry': 1 },

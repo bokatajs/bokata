@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { MemoryConversationContext } = require('../../src');
 
 describe('MemoryConversation Context', () => {
@@ -62,9 +39,7 @@ describe('MemoryConversation Context', () => {
       const context = new MemoryConversationContext();
       expect.assertions(1);
 
-      await expect(context.getConversationContext(session)).rejects.toThrow(
-        'No conversation id found'
-      );
+      await expect(context.getConversationContext(session)).rejects.toThrow('No conversation id found');
     });
     test('It should return the same object if called second time with same conversation id', async () => {
       const session = {
@@ -78,9 +53,7 @@ describe('MemoryConversation Context', () => {
       };
       const context = new MemoryConversationContext();
       const conversationContext = await context.getConversationContext(session);
-      const conversationContext2 = await context.getConversationContext(
-        session
-      );
+      const conversationContext2 = await context.getConversationContext(session);
       expect(conversationContext2).toBe(conversationContext);
     });
     test('It should return a different object if called with different conversation id', async () => {
@@ -103,12 +76,8 @@ describe('MemoryConversation Context', () => {
         },
       };
       const context = new MemoryConversationContext();
-      const conversationContext1 = await context.getConversationContext(
-        session1
-      );
-      const conversationContext2 = await context.getConversationContext(
-        session2
-      );
+      const conversationContext1 = await context.getConversationContext(session1);
+      const conversationContext2 = await context.getConversationContext(session2);
       expect(conversationContext2).not.toBe(conversationContext1);
     });
   });
@@ -126,9 +95,7 @@ describe('MemoryConversation Context', () => {
       };
       const conversationContext = { a: 1 };
       await context.setConversationContext(session, conversationContext);
-      const conversationContext1 = await context.getConversationContext(
-        session
-      );
+      const conversationContext1 = await context.getConversationContext(session);
       expect(conversationContext1).toBe(conversationContext);
     });
     test('It should reject if the conversation id does not exists', async () => {
@@ -143,9 +110,9 @@ describe('MemoryConversation Context', () => {
       expect.assertions(1);
       const conversationContext = { a: 1 };
 
-      await expect(
-        context.getConversationContext(session, conversationContext)
-      ).rejects.toThrow('No conversation id found');
+      await expect(context.getConversationContext(session, conversationContext)).rejects.toThrow(
+        'No conversation id found'
+      );
     });
   });
 });

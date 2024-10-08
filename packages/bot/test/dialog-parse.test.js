@@ -1,32 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const {
-  dialogParse,
-  trimBetween,
-  getName,
-  getDialogName,
-} = require('../src/dialog-parse');
+const { dialogParse, trimBetween, getName, getDialogName } = require('../src/dialog-parse');
 
 describe('Dialog Parse', () => {
   describe('dialogParse', () => {
@@ -61,9 +33,7 @@ describe('Dialog Parse', () => {
     test('parse dialog with comment', async () => {
       const dialog = `# this is comment`;
       const parsed = dialogParse(dialog);
-      expect(parsed).toMatchObject([
-        { text: 'this is comment', type: 'comment' },
-      ]);
+      expect(parsed).toMatchObject([{ text: 'this is comment', type: 'comment' }]);
     });
 
     test('parse dialog with link', () => {
@@ -74,8 +44,7 @@ describe('Dialog Parse', () => {
           condition: '',
           line: 'Hello! this is a dialog with [link](http://www.test.com)',
           settings: '',
-          srcLine:
-            'say Hello! this is a dialog with [link](http://www.test.com)',
+          srcLine: 'say Hello! this is a dialog with [link](http://www.test.com)',
           type: 'say',
         },
       ]);
@@ -103,8 +72,7 @@ describe('Dialog Parse', () => {
   });
 
   describe('trimBetween', () => {
-    const trimInputExample1 =
-      'say Hey this an example with [text inside] and (opt1, opt2)';
+    const trimInputExample1 = 'say Hey this an example with [text inside] and (opt1, opt2)';
     it('filter settings inside ()', () => {
       const result = trimBetween(trimInputExample1, '(', ')');
       expect(result).toMatchObject({
@@ -130,12 +98,7 @@ describe('Dialog Parse', () => {
     });
 
     it('filter text inside [] appearing at the beginning only if shouldBeFirst is enabled', () => {
-      const result = trimBetween(
-        '[hello] this is another example',
-        '[',
-        ']',
-        true
-      );
+      const result = trimBetween('[hello] this is another example', '[', ']', true);
       expect(result).toMatchObject({
         line: ' this is another example',
         trimmed: 'hello',

@@ -1,28 +1,5 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Container } = require('@nlpjs/core');
-const { Database } = require('@nlpjs/database');
+const { Container } = require('@bokata/core');
+const { Database } = require('@bokata/database');
 const { ApiAuthJwt } = require('../src');
 const ApiServerMock = require('./api-server-mock');
 const ResMock = require('./res-mock');
@@ -96,12 +73,7 @@ describe('API Auth JWT', () => {
           password: unicorn,
         },
       };
-      const actual = await callWithReq(
-        'post',
-        '/auth/local/login',
-        req2,
-        res1.container
-      );
+      const actual = await callWithReq('post', '/auth/local/login', req2, res1.container);
       const { res } = actual;
       expect(res.sendValue.access_token).toBeDefined();
       expect(res.sendValue.token_type).toEqual('bearer');
@@ -124,24 +96,14 @@ describe('API Auth JWT', () => {
           password: unicorn,
         },
       };
-      const res2 = await callWithReq(
-        'post',
-        '/auth/local/login',
-        req2,
-        res1.container
-      );
+      const res2 = await callWithReq('post', '/auth/local/login', req2, res1.container);
       const req3 = {
         body: {
           email: 'anna@email.com',
           refreshToken: res2.res.sendValue.refresh_token,
         },
       };
-      const res3 = await callWithReq(
-        'post',
-        '/auth/local/refresh',
-        req3,
-        res1.container
-      );
+      const res3 = await callWithReq('post', '/auth/local/refresh', req3, res1.container);
       expect(res3.res.sendValue.access_token).toBeDefined();
       expect(res3.res.sendValue.token_type).toEqual('bearer');
     });

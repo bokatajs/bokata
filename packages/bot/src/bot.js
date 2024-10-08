@@ -1,29 +1,6 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, containerBootstrap } = require('@nlpjs/core');
-const { ContextManager } = require('@nlpjs/nlp');
-const { JavascriptCompiler } = require('@nlpjs/evaluator');
+const { Clonable, containerBootstrap } = require('@bokata/core');
+const { ContextManager } = require('@bokata/nlp');
+const { JavascriptCompiler } = require('@bokata/evaluator');
 const DialogManager = require('./dialog-manager');
 const { loadScript, getDialogName, trimBetween } = require('./dialog-parse');
 const {
@@ -43,14 +20,12 @@ const { getValidationMessage, tryParseJson } = require('./helper');
 const localeDangle = '_localization';
 
 class Bot extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
         container:
-          settings.container ||
-          container ||
-          (settings.dock ? settings.dock.getContainer() : containerBootstrap()),
+          settings.container || container || (settings.dock ? settings.dock.getContainer() : containerBootstrap()),
       },
       container
     );
@@ -59,10 +34,7 @@ class Bot extends Clonable {
       this.settings.tag = `bot`;
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     if (!this.settings.globalFallbackDialog) {
       this.settings.globalFallbackDialog = '/globalFallbackDialog';
     }
@@ -142,10 +114,7 @@ class Bot extends Clonable {
 
   async setVariable(context, variableName, variableValue) {
     if (this.evaluator) {
-      await this.evaluator.evaluate(
-        `${variableName} = ${variableValue}`,
-        context
-      );
+      await this.evaluator.evaluate(`${variableName} = ${variableValue}`, context);
     } else {
       context[variableName] = variableValue;
     }
@@ -175,15 +144,10 @@ class Bot extends Clonable {
     } else {
       let shouldContinue = true;
       if (action.condition) {
-        shouldContinue = await this.evaluator.evaluate(
-          action.condition,
-          context
-        );
+        shouldContinue = await this.evaluator.evaluate(action.condition, context);
       }
       if (shouldContinue) {
-        const dialog =
-          (action.dialog && action.dialog.startsWith('/') ? '' : '/') +
-          action.dialog;
+        const dialog = (action.dialog && action.dialog.startsWith('/') ? '' : '/') + action.dialog;
         let fn;
         switch (action.command) {
           case 'say':
@@ -213,20 +177,12 @@ class Bot extends Clonable {
             break;
           case 'nlp':
             if (this.nlp && session.text) {
-              const result = await this.nlp.process(
-                session,
-                undefined,
-                context,
-                { allowList: action.allowedIntents }
-              );
+              const result = await this.nlp.process(session, undefined, context, { allowList: action.allowedIntents });
               if (this.onNlpActionResult) {
                 await this.onNlpActionResult(result, session, context);
               }
               if (result.answer) {
-                if (
-                  result.answer.startsWith('/') &&
-                  this.dialogManager.existsDialog(result.answer)
-                ) {
+                if (result.answer.startsWith('/') && this.dialogManager.existsDialog(result.answer)) {
                   await this.beginDialog(session, context, result.answer);
                 } else {
                   await session.say(result.answer, context);
@@ -296,8 +252,7 @@ class Bot extends Clonable {
           }
         }
       } else {
-        context.validation.currentRetry =
-          (context.validation.currentRetry || 0) + 1;
+        context.validation.currentRetry = (context.validation.currentRetry || 0) + 1;
         if (context.validation.retries === undefined) {
           context.validation.retries = 2;
         }
@@ -350,11 +305,7 @@ class Bot extends Clonable {
       if (context.validatorName) {
         shouldContinue = await this.runValidation(session, context);
       } else if (context.variableName) {
-        await this.setVariable(
-          context,
-          context.variableName,
-          `"${session.text || context[context.variableName]}"`
-        );
+        await this.setVariable(context, context.variableName, `"${session.text || context[context.variableName]}"`);
       }
     }
     if (shouldContinue) {
@@ -370,10 +321,7 @@ class Bot extends Clonable {
           if (this.onNextAction) {
             await this.onNextAction(current, session, context);
           }
-          if (
-            current.dialog === lastDialog &&
-            current.lastExecuted === lastPosition
-          ) {
+          if (current.dialog === lastDialog && current.lastExecuted === lastPosition) {
             await this.executeAction(session, context, { command: 'ask' });
           } else {
             lastDialog = current.dialog;
@@ -386,8 +334,7 @@ class Bot extends Clonable {
             context.errorLoops = 0;
           }
           const { globalFallbackDialog } = this.settings;
-          const fallbackDialogExists =
-            this.dialogManager.existsDialog(globalFallbackDialog);
+          const fallbackDialogExists = this.dialogManager.existsDialog(globalFallbackDialog);
           if (fallbackDialogExists && context.errorLoops < 1) {
             context.errorLoops += 1;
             context.validation = {};
@@ -462,9 +409,7 @@ class Bot extends Clonable {
       if (current.type.length > 3 && current.type.startsWith('ask')) {
         const lineComponents = current.line.split(' ');
         const [varName, ...validatorParams] = lineComponents;
-        current.line = `${varName} ${current.type.slice(3)} ${
-          validatorParams !== '' ? validatorParams.join(' ') : []
-        }`;
+        current.line = `${varName} ${current.type.slice(3)} ${validatorParams !== '' ? validatorParams.join(' ') : []}`;
         current.type = 'ask';
         current.validatorParams = validatorParams.join(' ');
       }
@@ -590,11 +535,7 @@ class Bot extends Clonable {
           tokens = current.line.split(' ');
           // custom validator
           if (current.srcLine[3] !== ' ') {
-            [
-              action.variableName,
-              action.validatorName,
-              ...action.rawValidatorParams
-            ] = tokens;
+            [action.variableName, action.validatorName, ...action.rawValidatorParams] = tokens;
           } else {
             [action.variableName, ...action.rawValidatorParams] = tokens;
             action.validatorName = undefined;
@@ -605,9 +546,7 @@ class Bot extends Clonable {
           break;
         case 'nlp':
           action = this.buildAction('nlp', current);
-          action.allowedIntents = current.line
-            ? current.line.split(' ')
-            : undefined;
+          action.allowedIntents = current.line ? current.line.split(' ') : undefined;
           currentDialog.actions.push(action);
           break;
         case 'call':
@@ -696,10 +635,7 @@ class Bot extends Clonable {
         await nlp.train();
       }
     }
-    this.addDialog('/#', [
-      { command: 'ask' },
-      { command: 'beginDialog', dialog: '/' },
-    ]);
+    this.addDialog('/#', [{ command: 'ask' }, { command: 'beginDialog', dialog: '/' }]);
     for (let i = 0; i < dialogs.length; i += 1) {
       this.addDialog(dialogs[i].name, dialogs[i].actions);
     }

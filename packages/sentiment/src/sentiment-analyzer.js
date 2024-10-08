@@ -1,30 +1,7 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable } = require('@nlpjs/core');
+const { Clonable } = require('@bokata/core');
 
 class SentimentAnalyzer extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
@@ -37,10 +14,7 @@ class SentimentAnalyzer extends Clonable {
       this.settings.tag = 'sentiment-analyzer';
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.applySettings(this, {
       pipelinePrepare: this.getPipeline(`${this.settings.tag}-prepare`),
       pipelineProcess: this.getPipeline(`${this.settings.tag}-process`),
@@ -62,16 +36,12 @@ class SentimentAnalyzer extends Clonable {
       return this.runPipeline(input, pipeline);
     }
     if (stemmed) {
-      const stemmer =
-        this.container.get(`stemmer-${locale}`) ||
-        this.container.get(`stemmer-en`);
+      const stemmer = this.container.get(`stemmer-${locale}`) || this.container.get(`stemmer-en`);
       if (stemmer) {
         return stemmer.tokenizeAndStem(text);
       }
     }
-    const tokenizer =
-      this.container.get(`tokenizer-${locale}`) ||
-      this.container.get(`tokenizer-en`);
+    const tokenizer = this.container.get(`tokenizer-${locale}`) || this.container.get(`tokenizer-en`);
     if (tokenizer) {
       return tokenizer.tokenize(text, true);
     }
@@ -108,8 +78,7 @@ class SentimentAnalyzer extends Clonable {
       type,
       dictionary: dictionaries[type],
       negations: dictionaries.negations.words,
-      stemmed:
-        dictionaries.stemmed === undefined ? false : dictionaries.stemmed,
+      stemmed: dictionaries.stemmed === undefined ? false : dictionaries.stemmed,
     };
     return input;
   }
@@ -130,9 +99,7 @@ class SentimentAnalyzer extends Clonable {
   calculate(srcInput) {
     const input = srcInput;
     if (input.sentimentDictionary.type) {
-      const tokens = Array.isArray(input.tokens)
-        ? input.tokens
-        : Object.keys(input.tokens);
+      const tokens = Array.isArray(input.tokens) ? input.tokens : Object.keys(input.tokens);
       if (!input.sentimentDictionary.dictionary) {
         input.sentiment = {
           score: 0,

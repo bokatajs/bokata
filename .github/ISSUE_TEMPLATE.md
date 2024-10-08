@@ -40,7 +40,7 @@ since someone might have asked the same thing before.
 
 | Software             | Version |
 |----------------------|---------|
-| `nlp.js`             |         |
+| `bokata`             |         |
 | `node`               |         |
 | `npm`                |         |
 | Operating System     |         |

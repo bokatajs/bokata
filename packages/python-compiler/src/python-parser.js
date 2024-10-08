@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Lexer } = require('@nlpjs/lexer');
+const { Lexer } = require('@bokata/lexer');
 const expressions = require('./expressions');
 
 const { TokenType } = Lexer;
@@ -72,9 +49,7 @@ class PythonParser {
   }
 
   tryParseEndOfCommand() {
-    return (
-      this.tryParseToken(';', TokenType.Separator) || this.tryParseEndOfLine()
-    );
+    return this.tryParseToken(';', TokenType.Separator) || this.tryParseEndOfLine();
   }
 
   parseEndOfLine() {
@@ -82,10 +57,7 @@ class PythonParser {
     if (!token) {
       return undefined;
     }
-    if (
-      token.type === TokenType.EndOfLine ||
-      token.type === TokenType.EndOfFile
-    ) {
+    if (token.type === TokenType.EndOfLine || token.type === TokenType.EndOfFile) {
       return token;
     }
     this.lexer.pushToken(token);
@@ -133,9 +105,7 @@ class PythonParser {
   }
 
   parseSuite(indent) {
-    return this.tryParseEndOfLine()
-      ? this.parseMultiLineSuite(indent)
-      : this.parseSingleLineSuite(indent);
+    return this.tryParseEndOfLine() ? this.parseMultiLineSuite(indent) : this.parseSingleLineSuite(indent);
   }
 
   parseExpressionCommand() {
@@ -191,11 +161,7 @@ class PythonParser {
       return cmd;
     }
     const cmds = [cmd];
-    for (
-      cmds.push(this.parseSimpleCommand());
-      this.tryParseToken(';', TokenType.Separator);
-
-    ) {
+    for (cmds.push(this.parseSimpleCommand()); this.tryParseToken(';', TokenType.Separator); ) {
       cmds.push(this.parseSimpleCommand(indent));
     }
     return new expressions.CompositeCommand(cmds);
@@ -230,8 +196,7 @@ class PythonParser {
     let token;
     for (
       token = this.nextToken();
-      token &&
-      !(token.type === TokenType.Separator && [')', ']'].includes(token.value));
+      token && !(token.type === TokenType.Separator && [')', ']'].includes(token.value));
       token = this.nextToken()
     ) {
       this.lexer.pushToken(token);
@@ -260,19 +225,14 @@ class PythonParser {
     }
     if (token.type === TokenType.Identifier) {
       if (this.constantIdentifiers[token.value]) {
-        return new expressions.ConstantExpression(
-          this.constantIdentifiers[token.value]
-        );
+        return new expressions.ConstantExpression(this.constantIdentifiers[token.value]);
       }
       if (token.value === 'new') {
         return new expressions.NewExpression(this.parseExpression());
       }
       return new expressions.VariableExpression(token.value);
     }
-    if (
-      token.type === TokenType.Separator &&
-      Object.keys(this.separatorIdentifiers).includes(token.value)
-    ) {
+    if (token.type === TokenType.Separator && Object.keys(this.separatorIdentifiers).includes(token.value)) {
       const oldskip = this.skipnewline;
       this.skipnewline = true;
       const { closing, Clazz, func } = this.separatorIdentifiers[token.value];
@@ -315,16 +275,8 @@ class PythonParser {
     if (!expr) {
       return undefined;
     }
-    for (
-      let oper = this.tryParseOperator();
-      oper;
-      oper = this.tryParseOperator()
-    ) {
-      expr = new expressions.BinaryExpression(
-        oper,
-        expr,
-        this.parseSimpleExpression()
-      );
+    for (let oper = this.tryParseOperator(); oper; oper = this.tryParseOperator()) {
+      expr = new expressions.BinaryExpression(oper, expr, this.parseSimpleExpression());
     }
     return expr;
   }
@@ -432,11 +384,7 @@ class PythonParser {
         const expr = this.parseExpression();
         const assign = this.tryParseAssignment();
         return assign
-          ? new expressions.AssignmentCommand(
-              expr,
-              this.parseExpression(),
-              assign
-            )
+          ? new expressions.AssignmentCommand(expr, this.parseExpression(), assign)
           : new expressions.ExpressionCommand(expr);
       }
     }

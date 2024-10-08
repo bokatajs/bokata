@@ -1,34 +1,6 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { NluManager } = require('../src');
 const container = require('./bootstrap');
-const {
-  addFoodDomainEn,
-  addFoodDomainEs,
-  addPersonalityDomainEn,
-  addPersonalityDomainEs,
-} = require('./domains');
+const { addFoodDomainEn, addFoodDomainEs, addPersonalityDomainEn, addPersonalityDomainEs } = require('./domains');
 
 describe('NLU Manager', () => {
   describe('constructor', () => {
@@ -216,16 +188,12 @@ describe('NLU Manager', () => {
     test('If locale is not defined and cannot be guessed, throw an error', () => {
       const manager = new NluManager({ container });
       manager.addLanguage(['en', 'es']);
-      expect(() => manager.add(undefined, '', 'keys')).toThrow(
-        'Locale must be defined'
-      );
+      expect(() => manager.add(undefined, '', 'keys')).toThrow('Locale must be defined');
     });
     test('If there is not domain for the given language, throw an error', () => {
       const manager = new NluManager({ container });
       manager.addLanguage(['en', 'es']);
-      expect(() => manager.add('fr', 'Bonjour', 'greet')).toThrow(
-        'Domain Manager not found for locale fr'
-      );
+      expect(() => manager.add('fr', 'Bonjour', 'greet')).toThrow('Domain Manager not found for locale fr');
     });
   });
 
@@ -261,16 +229,12 @@ describe('NLU Manager', () => {
     test('If locale cannot be guessed then throw an error', () => {
       const manager = new NluManager({ container });
       manager.addLanguage(['en', 'es']);
-      expect(() => manager.remove(undefined, '', 'keys')).toThrow(
-        'Locale must be defined'
-      );
+      expect(() => manager.remove(undefined, '', 'keys')).toThrow('Locale must be defined');
     });
     test('If there is not domain for the given language, throw an error', () => {
       const manager = new NluManager({ container });
       manager.addLanguage(['en', 'es']);
-      expect(() => manager.remove('fr', 'Bonjour', 'greet')).toThrow(
-        'Domain Manager not found for locale fr'
-      );
+      expect(() => manager.remove('fr', 'Bonjour', 'greet')).toThrow('Domain Manager not found for locale fr');
     });
   });
 
@@ -347,14 +311,9 @@ describe('NLU Manager', () => {
       addFoodDomainEs(manager);
       addPersonalityDomainEs(manager);
       await manager.train();
-      const actual = await manager.process(
-        'es',
-        'dime quién eres tú',
-        undefined,
-        {
-          allowList: ['agent.age', 'order.check'],
-        }
-      );
+      const actual = await manager.process('es', 'dime quién eres tú', undefined, {
+        allowList: ['agent.age', 'order.check'],
+      });
       expect(actual.classifications).toEqual([
         { intent: 'agent.age', score: 1 },
         { intent: 'agent.acquaintance', score: 0 },

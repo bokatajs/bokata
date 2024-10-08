@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, uuid } = require('@nlpjs/core');
+const { Clonable, uuid } = require('@bokata/core');
 const path = require('path');
 
 class MemorydbAdapter extends Clonable {
@@ -103,10 +80,7 @@ class MemorydbAdapter extends Clonable {
     }
     this.modifiedCollections[name] = true;
     if (!this.timer) {
-      this.timer = setInterval(
-        this.saveCollections.bind(this),
-        this.settings.autosaveInterval * 1000
-      );
+      this.timer = setInterval(this.saveCollections.bind(this), this.settings.autosaveInterval * 1000);
     }
     return true;
   }
@@ -141,10 +115,7 @@ class MemorydbAdapter extends Clonable {
     const result = [];
     for (let i = 0; i < keys.length; i += 1) {
       const item = collection[keys[i]];
-      if (
-        conditionKeys.lenght === 0 ||
-        MemorydbAdapter.match(item, condition || {}, conditionKeys)
-      ) {
+      if (conditionKeys.lenght === 0 || MemorydbAdapter.match(item, condition || {}, conditionKeys)) {
         if (pendingOffset > 0) {
           pendingOffset -= 1;
         } else {
@@ -209,9 +180,7 @@ class MemorydbAdapter extends Clonable {
     const { id } = item;
     const collection = await this.getCollection(name);
     if (!collection[id]) {
-      throw new Error(
-        `Trying to update collection ${name} with a non existing item with id ${id}`
-      );
+      throw new Error(`Trying to update collection ${name} with a non existing item with id ${id}`);
     }
     collection[id] = item;
     await this.markToSave(name);
@@ -225,10 +194,7 @@ class MemorydbAdapter extends Clonable {
     let result = 0;
     for (let i = 0; i < collectionKeys.length; i += 1) {
       const key = collectionKeys[i];
-      if (
-        conditionKeys.length === 0 ||
-        MemorydbAdapter.match(collection[key], condition, conditionKeys)
-      ) {
+      if (conditionKeys.length === 0 || MemorydbAdapter.match(collection[key], condition, conditionKeys)) {
         delete collection[key];
         result += 1;
       }

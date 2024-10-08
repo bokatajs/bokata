@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const fs = require('fs');
 const path = require('path');
 const {
@@ -33,14 +10,13 @@ const {
   Template,
   LangEn,
   listFilesAbsolute,
-} = require('@nlpjs/basic');
-const { ExpressApiServer } = require('@nlpjs/express-api-server');
-const { DirectlineConnector } = require('@nlpjs/directline-connector');
-const { Bot } = require('@nlpjs/bot');
-const { BuiltinMicrosoft } = require('@nlpjs/builtin-microsoft');
-const { BuiltinDuckling } = require('@nlpjs/builtin-duckling');
-const { Database } = require('@nlpjs/database');
-const { MongodbAdapter } = require('@nlpjs/mongodb-adapter');
+} = require('@bokata/basic');
+const { ExpressApiServer } = require('@bokata/express-api-server');
+const { DirectlineConnector } = require('@bokata/directline-connector');
+const { Bot } = require('@bokata/bot');
+const { BuiltinMicrosoft } = require('@bokata/builtin-microsoft');
+const { Database } = require('@bokata/database');
+const { MongodbAdapter } = require('@bokata/mongodb-adapter');
 const { mount, getUrlFileName, ensureDir } = require('./utils');
 
 const defaultConfiguration = {
@@ -59,8 +35,7 @@ const defaultConfiguration = {
 class FullBot {
   constructor(settings) {
     this.settings = settings || {};
-    this.marketUrl =
-      this.settings.marketUrl || 'https://nlpjsmarket.herokuapp.com/public';
+    this.marketUrl = this.settings.marketUrl || 'https://nlpjsmarket.herokuapp.com/public';
   }
 
   setDefaultConfiguration() {
@@ -89,13 +64,8 @@ class FullBot {
     this.container.use(DirectlineConnector);
     this.container.use(Bot);
     this.container.use(Database);
-    if (this.settings.ner && this.settings.ner.ducklingUrl) {
-      const builtin = new BuiltinDuckling(this.settings.ner);
-      this.container.register('extract-builtin-??', builtin, true);
-    } else {
-      const builtin = new BuiltinMicrosoft(this.settings.ner);
-      this.container.register('extract-builtin-??', builtin, true);
-    }
+    const builtin = new BuiltinMicrosoft(this.settings.ner);
+    this.container.register('extract-builtin-??', builtin, true);
     if (this.settings.mongoUrl || process.env.MONGO_URL) {
       this.container.use(MongodbAdapter);
     }
@@ -185,19 +155,14 @@ class FullBot {
       if (directline) {
         ensureDir(directline.settings.uploadDir);
         if (!directline.onCreateConversation) {
-          directline.onCreateConversation =
-            this.onDirectlineCreateConversation.bind(this);
+          directline.onCreateConversation = this.onDirectlineCreateConversation.bind(this);
         }
       }
     }
   }
 
   async onDirectlineCreateConversation(connector, conversation) {
-    if (
-      this.bot &&
-      this.bot.dialogManager &&
-      this.bot.dialogManager.dialogs['/directlineCreateConversation']
-    ) {
+    if (this.bot && this.bot.dialogManager && this.bot.dialogManager.dialogs['/directlineCreateConversation']) {
       const activity = {
         conversation: {
           id: conversation.conversationId,

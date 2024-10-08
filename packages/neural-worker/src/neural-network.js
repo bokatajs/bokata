@@ -1,34 +1,6 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-const { Clonable } = require('@nlpjs/core');
+const { Clonable } = require('@bokata/core');
 const path = require('path');
-const {
-  LookupTable,
-  lookupToArray,
-  lookupToObject,
-  toHash,
-  getTypedArrayFn,
-} = require('./helper');
+const { LookupTable, lookupToArray, lookupToObject, toHash, getTypedArrayFn } = require('./helper');
 const defaultSettings = require('./default-settings.json');
 
 let Worker;
@@ -47,16 +19,14 @@ try {
  * using a leaky-relu activation
  */
 class NeuralNetwork extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super({}, container);
     this.perceptronSettings = {};
     this.applySettings(this.perceptronSettings, settings);
     this.applySettings(this.perceptronSettings, defaultSettings);
     if (this.perceptronSettings.log === true) {
       this.logFn = (status, time) => {
-        this.logger.info(
-          `Epoch ${status.iterations} loss ${status.error} time ${time}ms`
-        );
+        this.logger.info(`Epoch ${status.iterations} loss ${status.error} time ${time}ms`);
       };
     } else if (typeof this.perceptronSettings.log === 'function') {
       this.logFn = this.perceptronSettings.log;
@@ -102,8 +72,7 @@ class NeuralNetwork extends Clonable {
       const key = keys[i];
       const index = this.inputLookup[key];
       if (index !== undefined) {
-        result[key] =
-          this.perceptrons[this.outputLookup[intent]].weights[index];
+        result[key] = this.perceptrons[this.outputLookup[intent]].weights[index];
       } else {
         result[key] = 0;
       }
@@ -169,8 +138,7 @@ class NeuralNetwork extends Clonable {
         });
       });
     }
-    const useNoneFeature =
-      srcData[srcData.length - 1].input.nonefeature !== undefined;
+    const useNoneFeature = srcData[srcData.length - 1].input.nonefeature !== undefined;
     if (useNoneFeature) {
       const intents = {};
       for (let i = 0; i < srcData.length - 1; i += 1) {
@@ -229,11 +197,7 @@ class NeuralNetwork extends Clonable {
       this.status.error = 0;
       for (let i = 0; i < data.length; i += 1) {
         const current = data[i];
-        this.status.error += this.calculateDeltas(
-          current.input,
-          current.output,
-          this.runInput(dataDict[i])
-        );
+        this.status.error += this.calculateDeltas(current.input, current.output, this.runInput(dataDict[i]));
       }
       this.status.error /= data.length;
       this.status.deltaError = Math.abs(this.status.error - lastError);
@@ -249,8 +213,7 @@ class NeuralNetwork extends Clonable {
     const { learningRate, alpha, momentum } = this.perceptronSettings;
     const numOutputs = this.sizes[1];
     let error = 0;
-    const decayLearningRate =
-      learningRate / (1 + 0.001 * this.status.iterations);
+    const decayLearningRate = learningRate / (1 + 0.001 * this.status.iterations);
     const startNode = marknode === undefined ? 0 : marknode;
     const endNode = marknode === undefined ? numOutputs : marknode + 1;
     for (let node = startNode; node < endNode; node += 1) {
@@ -260,8 +223,7 @@ class NeuralNetwork extends Clonable {
       const currentError = target[node] - output;
       if (currentError) {
         error += currentError ** 2;
-        const delta =
-          (output > 0 ? 1 : alpha) * currentError * decayLearningRate;
+        const delta = (output > 0 ? 1 : alpha) * currentError * decayLearningRate;
         for (let k = 0; k < incoming.length; k += 1) {
           const change = delta * incoming[k] + momentum * changes[k];
           changes[k] = change;
@@ -291,8 +253,7 @@ class NeuralNetwork extends Clonable {
   }
 
   adjust(n) {
-    return this.perceptronSettings.maxDecimals &&
-      this.perceptronSettings.maxDecimals < 17
+    return this.perceptronSettings.maxDecimals && this.perceptronSettings.maxDecimals < 17
       ? parseFloat(n.toFixed(this.perceptronSettings.maxDecimals))
       : n;
   }

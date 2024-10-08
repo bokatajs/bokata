@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * 'Software'), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { BaseStemmer } = require('@nlpjs/core');
+const { BaseStemmer } = require('@bokata/core');
 
 class StemmerEl extends BaseStemmer {
   constructor(container) {
@@ -78,11 +55,7 @@ class StemmerEl extends BaseStemmer {
     const match = /^(.+?)(ουδεσ|ουδων)$/.exec(word);
     if (match) {
       let result = match[1];
-      if (
-        /(αρκ|καλιακ|πεταλ|λιχ|πλεξ|σκ|σ|φλ|φρ|βελ|λουλ|χν|σπ|τραγ|φε)$/.test(
-          result
-        )
-      ) {
+      if (/(αρκ|καλιακ|πεταλ|λιχ|πλεξ|σκ|σ|φλ|φρ|βελ|λουλ|χν|σπ|τραγ|φε)$/.test(result)) {
         result += 'ουδ';
       }
     }
@@ -102,9 +75,7 @@ class StemmerEl extends BaseStemmer {
   }
 
   step3a(word) {
-    const match = /^(.+?)(ειο|ειοσ|ειοι|εια|ειασ|ειεσ|ειου|ειουσ|ειων)$/.exec(
-      word
-    );
+    const match = /^(.+?)(ειο|ειοσ|ειοι|εια|ειασ|ειεσ|ειου|ειουσ|ειων)$/.exec(word);
     return match && match[1].length > 4 ? match[1] : word;
   }
 
@@ -130,10 +101,7 @@ class StemmerEl extends BaseStemmer {
   }
 
   step4(word) {
-    const match =
-      /^(.+?)(ικοσ|ικον|ικεισ|ικοι|ικεσ|ικουσ|ικη|ικησ|ικο|ικα|ικου|ικων|ικωσ)$/.exec(
-        word
-      );
+    const match = /^(.+?)(ικοσ|ικον|ικεισ|ικοι|ικεσ|ικουσ|ικη|ικησ|ικο|ικα|ικου|ικων|ικωσ)$/.exec(word);
     if (match) {
       let result = match[1];
       if (
@@ -161,9 +129,7 @@ class StemmerEl extends BaseStemmer {
     match = /^(.+?)(αμε)$/.exec(result);
     if (match) {
       [, result] = match;
-      if (
-        /^(αναπ|αποθ|αποκ|αποστ|βουβ|ξεθ|ουλ|πεθ|πικρ|ποτ|σιχ|χ)$/.test(result)
-      ) {
+      if (/^(αναπ|αποθ|αποκ|αποστ|βουβ|ξεθ|ουλ|πεθ|πικρ|ποτ|σιχ|χ)$/.test(result)) {
         result += 'αμ';
       }
     }
@@ -172,10 +138,7 @@ class StemmerEl extends BaseStemmer {
 
   step5b(word) {
     let result = word;
-    let match =
-      /^(.+?)(αγανε|ησανε|ουσανε|ιοντανε|ιοτανε|ιουντανε|οντανε|οτανε|ουντανε|ηκανε|ηθηκανε)$/.exec(
-        result
-      );
+    let match = /^(.+?)(αγανε|ησανε|ουσανε|ιοντανε|ιοτανε|ιουντανε|οντανε|οτανε|ουντανε|ηκανε|ηθηκανε)$/.exec(result);
     if (match) {
       [, result] = match;
       if (/^(τρ|τς)$/.test(result)) {
@@ -276,10 +239,7 @@ class StemmerEl extends BaseStemmer {
     match = /^(.+?)(ηκα|ηκεσ|ηκε)$/.exec(result);
     if (match) {
       [, result] = match;
-      if (
-        /(σκωλ|σκουλ|ναρθ|σφ|οθ|πιθ)$/.test(match[1]) ||
-        /^(διαθ|θ|παρακαταθ|προσθ|συνθ)$/.test(match[1])
-      ) {
+      if (/(σκωλ|σκουλ|ναρθ|σφ|οθ|πιθ)$/.test(match[1]) || /^(διαθ|θ|παρακαταθ|προσθ|συνθ)$/.test(match[1])) {
         result += 'ηκ';
       }
     }
@@ -296,9 +256,7 @@ class StemmerEl extends BaseStemmer {
         /^(φαρμακ|χαδ|αγκ|αναρρ|βρομ|εκλιπ|λαμπιδ|λεχ|μ|πατ|ρ|λ|μεδ|μεσαζ|υποτειν|αμ|αιθ|ανηκ|δεσποζ|ενδιαφερ)$/.test(
           result
         ) ||
-        /(ποδαρ|βλεπ|πανταχ|φρυδ|μαντιλ|μαλλ|κυματ|λαχ|ληγ|φαγ|ομ|πρωτ)$/.test(
-          result
-        )
+        /(ποδαρ|βλεπ|πανταχ|φρυδ|μαντιλ|μαλλ|κυματ|λαχ|ληγ|φαγ|ομ|πρωτ)$/.test(result)
       ) {
         result += 'ουσ';
       }
@@ -315,8 +273,7 @@ class StemmerEl extends BaseStemmer {
         /^(αβαστ|πολυφ|αδηφ|παμφ|ρ|ασπ|αφ|αμαλ|αμαλλι|ανυστ|απερ|ασπαρ|αχαρ|δερβεν|δροσοπ|ξεφ|νεοπ|νομοτ|ολοπ|ομοτ|προστ|προσωποπ|συμπ|συντ|τ|υποτ|χαρ|αειπ|αιμοστ|ανυπ|αποτ|αρτιπ|διατ|εν|επιτ|κροκαλοπ|σιδηροπ|λ|ναυ|ουλαμ|ουρ|π|τρ|μ)$/.test(
           result
         ) ||
-        (/(οφ|πελ|χορτ|λλ|σφ|ρπ|φρ|πρ|λοχ|σμην)$/.test(result) &&
-          !/^(ψοφ|ναυλοχ)$/.test(result)) ||
+        (/(οφ|πελ|χορτ|λλ|σφ|ρπ|φρ|πρ|λοχ|σμην)$/.test(result) && !/^(ψοφ|ναυλοχ)$/.test(result)) ||
         /(κολλ)$/.test(result)
       ) {
         result += 'αγ';
@@ -342,9 +299,7 @@ class StemmerEl extends BaseStemmer {
     const match = /^(.+?)(ηστε)$/.exec(result);
     if (match) {
       [, result] = match;
-      if (
-        /^(ασβ|σβ|αχρ|χρ|απλ|αειμν|δυσχρ|ευχρ|κοινοχρ|παλιμψ)$/.test(result)
-      ) {
+      if (/^(ασβ|σβ|αχρ|χρ|απλ|αειμν|δυσχρ|ευχρ|κοινοχρ|παλιμψ)$/.test(result)) {
         result += 'ηστ';
       }
     }
@@ -377,10 +332,7 @@ class StemmerEl extends BaseStemmer {
 
   step6a(word) {
     let result = word;
-    const match =
-      /^(.+?)(ματοι|ματουσ|ματο|ματα|ματωσ|ματων|ματοσ|ματεσ|ματη|ματησ|ματου)$/.exec(
-        result
-      );
+    const match = /^(.+?)(ματοι|ματουσ|ματο|ματα|ματωσ|ματων|ματοσ|ματεσ|ματη|ματησ|ματου)$/.exec(result);
     if (match) {
       result = `${match[1]}μ`;
       if (/^(γραμ)$/.test(result)) {
@@ -412,9 +364,7 @@ class StemmerEl extends BaseStemmer {
 
   step7(word) {
     let result = word;
-    const match = /^(.+?)(εστερ|εστατ|οτερ|οτατ|υτερ|υτατ|ωτερ|ωτατ)$/.exec(
-      result
-    );
+    const match = /^(.+?)(εστερ|εστατ|οτερ|οτατ|υτερ|υτατ|ωτερ|ωτατ)$/.exec(result);
     if (match) {
       if (!/^(εξ|εσ|αν|κατ|κ|πρ)$/.test(result)) {
         [, result] = match;
@@ -430,11 +380,7 @@ class StemmerEl extends BaseStemmer {
     const srcWord = this.getCurrent();
     let word = srcWord;
     word = word.replace('ς', 'σ');
-    if (
-      word.length < 3 ||
-      !this.isGreek(word) ||
-      StemmerEl.protectedWords[word]
-    ) {
+    if (word.length < 3 || !this.isGreek(word) || StemmerEl.protectedWords[word]) {
       this.setCurrent(word);
       return;
     }
@@ -506,9 +452,7 @@ StemmerEl.step1Words = {
   ευα: 'ευ',
 };
 
-StemmerEl.step1WordsReg = new RegExp(
-  `(.*)(${Object.keys(StemmerEl.step1Words).join('|')})$`
-);
+StemmerEl.step1WordsReg = new RegExp(`(.*)(${Object.keys(StemmerEl.step1Words).join('|')})$`);
 
 StemmerEl.protectedWords = {
   ακριβωσ: 1,

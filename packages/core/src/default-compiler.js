@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 class DefaultCompiler {
   constructor(container) {
     this.container = container.container || container;
@@ -125,31 +102,17 @@ class DefaultCompiler {
   }
 
   executeReference(step, firstToken, context, input, srcObject) {
-    const currentObject = this.container.resolvePath(
-      firstToken.value,
-      context,
-      input,
-      srcObject
-    );
+    const currentObject = this.container.resolvePath(firstToken.value, context, input, srcObject);
     const args = [];
     for (let i = 1; i < step.length; i += 1) {
-      args.push(
-        this.container.resolvePathWithType(
-          step[i].value,
-          context,
-          input,
-          srcObject
-        )
-      );
+      args.push(this.container.resolvePathWithType(step[i].value, context, input, srcObject));
     }
     if (!currentObject) {
       throw new Error(`Method not found for step ${JSON.stringify(step)}`);
     }
     const method = currentObject.run || currentObject;
     if (typeof method === 'function') {
-      return typeof currentObject === 'function'
-        ? method(input, ...args)
-        : method.bind(currentObject)(input, ...args);
+      return typeof currentObject === 'function' ? method(input, ...args) : method.bind(currentObject)(input, ...args);
     }
     return method;
   }
@@ -171,24 +134,13 @@ class DefaultCompiler {
     }
     switch (firstToken.type) {
       case 'set':
-        this.container.setValue(
-          step[1].value,
-          step[2] ? step[2].value : undefined,
-          context,
-          input,
-          srcObject
-        );
+        this.container.setValue(step[1].value, step[2] ? step[2].value : undefined, context, input, srcObject);
         break;
       case 'delete':
         this.container.deleteValue(step[1].value, context, input, srcObject);
         break;
       case 'get':
-        return this.container.getValue(
-          step[1] ? step[1].value : undefined,
-          context,
-          input,
-          srcObject
-        );
+        return this.container.getValue(step[1] ? step[1].value : undefined, context, input, srcObject);
       case 'inc':
         this.container.incValue(
           step[1] ? step[1].value : undefined,
@@ -277,13 +229,7 @@ class DefaultCompiler {
       case 'call':
         return this.executeCall(firstToken, context, input, srcObject, depth);
       case 'reference':
-        return this.executeReference(
-          step,
-          firstToken,
-          context,
-          input,
-          srcObject
-        );
+        return this.executeReference(step, firstToken, context, input, srcObject);
       default:
         break;
     }
@@ -305,13 +251,7 @@ class DefaultCompiler {
     const context = { cursor: 0, labels: {} };
     this.findLabels(compiled, context.labels);
     while (context.cursor < compiled.length) {
-      input = await this.executeAction(
-        compiled[context.cursor],
-        context,
-        input,
-        srcObject,
-        depth
-      );
+      input = await this.executeAction(compiled[context.cursor], context, input, srcObject, depth);
       context.cursor += 1;
     }
     return input;

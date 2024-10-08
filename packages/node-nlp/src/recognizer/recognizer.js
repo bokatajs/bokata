@@ -1,31 +1,8 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { NlpManager } = require('../nlp');
 const MemoryConversationContext = require('./memory-conversation-context');
 
 /**
- * Microsoft Bot Framework compatible recognizer for nlp.js.
+ * Microsoft Bot Framework compatible recognizer for Bokata
  */
 class Recognizer {
   /**
@@ -41,8 +18,7 @@ class Recognizer {
         ner: { threshold: this.settings.nerThreshold || 1 },
       });
     this.threshold = this.settings.threshold || 0.7;
-    this.conversationContext =
-      this.settings.conversationContext || new MemoryConversationContext();
+    this.conversationContext = this.settings.conversationContext || new MemoryConversationContext();
   }
 
   /**
@@ -113,12 +89,7 @@ class Recognizer {
    * @param {Function} cb Callback Function.
    */
   async recognizeUtterance(utterance, model, cb) {
-    const response = await this.process(
-      model,
-      model ? model.locale : undefined,
-      utterance,
-      {}
-    );
+    const response = await this.process(model, model ? model.locale : undefined, utterance, {});
     return cb(null, response);
   }
 
@@ -246,11 +217,7 @@ class Recognizer {
    * @param {Object} results Results for the routing.
    */
   defaultRouting(bot, session, results) {
-    const route = bot.libraries.BotBuilder.constructor.bestRouteResult(
-      results,
-      session.dialogStack(),
-      bot.name
-    );
+    const route = bot.libraries.BotBuilder.constructor.bestRouteResult(results, session.dialogStack(), bot.name);
     if (route) {
       return bot.library(route.libraryName).selectRoute(session, route);
     }
@@ -265,9 +232,11 @@ class Recognizer {
         if (action.then) {
           action.then(() => resolve());
         } else {
+          // eslint-disable-next-line no-promise-executor-return
           return resolve();
         }
       }
+      // eslint-disable-next-line no-promise-executor-return
       return resolve();
     });
   }
@@ -281,9 +250,7 @@ class Recognizer {
       .then(async (srcContext) => {
         const context = srcContext;
         const { actions } = response;
-        const promises = actions.map((action) =>
-          this.executeAction(action.action, action.parameters, context)
-        );
+        const promises = actions.map((action) => this.executeAction(action.action, action.parameters, context));
         Promise.all(promises)
           .then(() => cb())
           .catch((err) => cb(err));
@@ -319,21 +286,14 @@ class Recognizer {
     }
     const self = this;
     // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-    bot._onDisambiguateRoute = function disambiguate(
-      session,
-      results,
-      cb = () => {}
-    ) {
+    bot._onDisambiguateRoute = function disambiguate(session, results, cb = () => {}) {
       if (self.onBeginRouting && !self.onBeginRouting(session)) {
         return cb();
       }
       if (session.message && session.message.text) {
         self.recognizeTwice(session, (err, result) => {
           if (result.score > routingThreshold) {
-            if (
-              self.onRecognizedRouting &&
-              !self.onRecognizedRouting(session, result)
-            ) {
+            if (self.onRecognizedRouting && !self.onRecognizedRouting(session, result)) {
               return cb();
             }
             self.processActions(session, result, () => {
@@ -344,10 +304,7 @@ class Recognizer {
             });
             return undefined;
           }
-          if (
-            self.onUnrecognizedRouting &&
-            !self.onUnrecognizedRouting(session, result)
-          ) {
+          if (self.onUnrecognizedRouting && !self.onUnrecognizedRouting(session, result)) {
             return cb();
           }
           self.defaultRouting(bot, session, results);

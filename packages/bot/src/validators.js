@@ -1,48 +1,15 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Recognizers } = require('@nlpjs/builtin-default');
+const { Recognizers } = require('@bokata/builtin-default');
 
 function findEntity(edges, entity, typeName) {
   for (let i = 0; i < edges.length; i += 1) {
-    if (
-      edges[i].entity === entity &&
-      (!typeName || (typeName && edges[i].resolution.type === typeName))
-    ) {
+    if (edges[i].entity === entity && (!typeName || (typeName && edges[i].resolution.type === typeName))) {
       return edges[i];
     }
   }
   return undefined;
 }
 
-async function validatorBuiltin(
-  session,
-  context,
-  params,
-  builtinsName,
-  entityName,
-  typeName
-) {
+async function validatorBuiltin(session, context, params, builtinsName, entityName, typeName) {
   const variableName = params[0] || '_lastVariable';
   const text = session.text.trim();
   const container = session.bot ? session.bot.container : undefined;
@@ -109,35 +76,15 @@ function validatorIP(session, context, params) {
 }
 
 function validatorIPv4(session, context, params) {
-  return validatorBuiltin(
-    session,
-    context,
-    params,
-    ['IpAddress'],
-    'ip',
-    'ipv4'
-  );
+  return validatorBuiltin(session, context, params, ['IpAddress'], 'ip', 'ipv4');
 }
 
 function validatorIPv6(session, context, params) {
-  return validatorBuiltin(
-    session,
-    context,
-    params,
-    ['IpAddress'],
-    'ip',
-    'ipv6'
-  );
+  return validatorBuiltin(session, context, params, ['IpAddress'], 'ip', 'ipv6');
 }
 
 function validatorPhoneNumber(session, context, params) {
-  return validatorBuiltin(
-    session,
-    context,
-    params,
-    ['PhoneNumber'],
-    'phonenumber'
-  );
+  return validatorBuiltin(session, context, params, ['PhoneNumber'], 'phonenumber');
 }
 
 function validatorNumber(session, context, params) {
@@ -145,24 +92,11 @@ function validatorNumber(session, context, params) {
 }
 
 function validatorInteger(session, context, params) {
-  return validatorBuiltin(
-    session,
-    context,
-    params,
-    ['Number'],
-    'number',
-    'integer'
-  );
+  return validatorBuiltin(session, context, params, ['Number'], 'number', 'integer');
 }
 
 function validatorDate(session, context, params) {
-  return validatorBuiltin(
-    session,
-    context,
-    params,
-    ['Date', 'DateTime'],
-    'date'
-  );
+  return validatorBuiltin(session, context, params, ['Date', 'DateTime'], 'date');
 }
 
 module.exports = {

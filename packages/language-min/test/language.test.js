@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { Language } = require('../src');
 const fixtures = require('./fixtures.json');
 const data = require('./testdata.json');
@@ -73,23 +50,17 @@ describe('Language', () => {
     });
     it('Should identify the language of an utterance', () => {
       const language = getLanguage();
-      let guess = language.guess(
-        'When the night has come And the land is dark And the moon is the only light we see'
-      );
+      let guess = language.guess('When the night has come And the land is dark And the moon is the only light we see');
       expect(guess[0].alpha3).toEqual('eng');
       expect(guess[0].alpha2).toEqual('en');
       expect(guess[0].language).toEqual('English');
       expect(guess[0].score).toEqual(1);
-      guess = language.guess(
-        'Cuando ha llegado la noche Y la tierra está oscura Y la luna es la única luz que vemos'
-      );
+      guess = language.guess('Cuando ha llegado la noche Y la tierra está oscura Y la luna es la única luz que vemos');
       expect(guess[0].alpha3).toEqual('spa');
       expect(guess[0].alpha2).toEqual('es');
       expect(guess[0].language).toEqual('Spanish');
       expect(guess[0].score).toEqual(1);
-      guess = language.guess(
-        "Quan ha arribat la nit, la terra és fosca i la lluna és l'única llum que veiem"
-      );
+      guess = language.guess("Quan ha arribat la nit, la terra és fosca i la lluna és l'única llum que veiem");
       expect(guess[0].alpha3).toEqual('cat');
       expect(guess[0].alpha2).toEqual('ca');
       expect(guess[0].language).toEqual('Catalan');
@@ -117,11 +88,7 @@ describe('Language', () => {
       expect(guess[0].alpha2).toEqual('es');
       expect(guess[0].language).toEqual('Spanish');
       expect(guess[0].score).toEqual(1);
-      guess = language.guess(
-        "Quan ha arribat la nit, la terra és fosca i la lluna és l'única llum que veiem",
-        null,
-        1
-      );
+      guess = language.guess("Quan ha arribat la nit, la terra és fosca i la lluna és l'única llum que veiem", null, 1);
       expect(guess).toHaveLength(1);
       expect(guess[0].alpha3).toEqual('cat');
       expect(guess[0].alpha2).toEqual('ca');
@@ -160,9 +127,7 @@ describe('Language', () => {
       expect(guess.alpha2).toEqual('es');
       expect(guess.language).toEqual('Spanish');
       expect(guess.score).toEqual(1);
-      guess = language.guessBest(
-        "Quan ha arribat la nit, la terra és fosca i la lluna és l'única llum que veiem"
-      );
+      guess = language.guessBest("Quan ha arribat la nit, la terra és fosca i la lluna és l'única llum que veiem");
       expect(guess.alpha3).toEqual('cat');
       expect(guess.alpha2).toEqual('ca');
       expect(guess.language).toEqual('Catalan');
@@ -195,20 +160,7 @@ describe('Language', () => {
   describe('Get trigrams', () => {
     it('Should return the trigrams of a sentence', () => {
       const text = 'Hola que tal';
-      const expected = [
-        ' ho',
-        'hol',
-        'ola',
-        'la ',
-        'a q',
-        ' qu',
-        'que',
-        'ue ',
-        'e t',
-        ' ta',
-        'tal',
-        'al ',
-      ];
+      const expected = [' ho', 'hol', 'ola', 'la ', 'a q', ' qu', 'que', 'ue ', 'e t', ' ta', 'tal', 'al '];
       const actual = Language.getTrigrams(text);
       expect(actual).toEqual(expected);
     });

@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const fs = require('fs');
 const path = require('path');
 const {
@@ -34,15 +11,10 @@ const {
   Timer,
   logger,
   MemoryStorage,
-} = require('@nlpjs/core');
-const { fs: requestfs, request } = require('@nlpjs/request');
+} = require('@bokata/core');
+const { fs: requestfs, request } = require('@bokata/request');
 const pluginInformation = require('./plugin-information.json');
-const {
-  listFilesAbsolute,
-  getAbsolutePath,
-  loadEnv,
-  loadEnvFromJson,
-} = require('./helper');
+const { listFilesAbsolute, getAbsolutePath, loadEnv, loadEnvFromJson } = require('./helper');
 
 const defaultPathConfiguration = './conf.json';
 const defaultPathPipeline = './pipelines.md';
@@ -64,9 +36,7 @@ function loadPipelines(instance, fileName) {
     }
   } else if (fs.existsSync(fileName)) {
     if (fs.lstatSync(fileName).isDirectory()) {
-      const files = listFilesAbsolute(fileName).filter((x) =>
-        x.endsWith('.md')
-      );
+      const files = listFilesAbsolute(fileName).filter((x) => x.endsWith('.md'));
       for (let i = 0; i < files.length; i += 1) {
         loadPipelines(instance, files[i]);
       }
@@ -83,9 +53,7 @@ function loadPlugins(instance, fileName) {
     }
   } else if (fs.existsSync(fileName)) {
     if (fs.lstatSync(fileName).isDirectory()) {
-      const files = listFilesAbsolute(fileName).filter((x) =>
-        x.endsWith('.js')
-      );
+      const files = listFilesAbsolute(fileName).filter((x) => x.endsWith('.js'));
       for (let i = 0; i < files.length; i += 1) {
         loadPlugins(instance, files[i]);
       }
@@ -100,9 +68,7 @@ function loadPlugins(instance, fileName) {
 function traverse(obj, preffix) {
   if (typeof obj === 'string') {
     if (obj.startsWith('$')) {
-      return (
-        process.env[`${preffix}${obj.slice(1)}`] || process.env[obj.slice(1)]
-      );
+      return process.env[`${preffix}${obj.slice(1)}`] || process.env[obj.slice(1)];
     }
     return obj;
   }
@@ -120,14 +86,7 @@ function traverse(obj, preffix) {
   return obj;
 }
 
-function containerBootstrap(
-  inputSettings,
-  srcMustLoadEnv,
-  container,
-  preffix,
-  pipelines,
-  parent
-) {
+function containerBootstrap(inputSettings, srcMustLoadEnv, container, preffix, pipelines, parent) {
   const mustLoadEnv = srcMustLoadEnv === undefined ? true : srcMustLoadEnv;
   const instance = container || new Container(preffix);
   instance.parent = parent;
@@ -163,10 +122,7 @@ function containerBootstrap(
       settings.pathPlugins = defaultPathPlugins;
     }
   }
-  if (
-    srcSettings.loadEnv ||
-    (srcSettings.loadEnv === undefined && mustLoadEnv)
-  ) {
+  if (srcSettings.loadEnv || (srcSettings.loadEnv === undefined && mustLoadEnv)) {
     loadEnv();
   }
   settings.pathConfiguration = getAbsolutePath(settings.pathConfiguration);
@@ -180,9 +136,7 @@ function containerBootstrap(
   if (settings.isChild || !fs.existsSync(settings.pathConfiguration)) {
     configuration = settings;
   } else {
-    configuration = JSON.parse(
-      fs.readFileSync(settings.pathConfiguration, 'utf8')
-    );
+    configuration = JSON.parse(fs.readFileSync(settings.pathConfiguration, 'utf8'));
   }
   configuration = traverse(configuration, preffix ? `${preffix}_` : '');
   if (configuration.pathPipeline) {
@@ -194,11 +148,7 @@ function containerBootstrap(
   if (configuration.settings) {
     const keys = Object.keys(configuration.settings);
     for (let i = 0; i < keys.length; i += 1) {
-      instance.registerConfiguration(
-        keys[i],
-        configuration.settings[keys[i]],
-        true
-      );
+      instance.registerConfiguration(keys[i], configuration.settings[keys[i]], true);
     }
   }
   if (configuration.use) {
@@ -207,9 +157,7 @@ function containerBootstrap(
       if (typeof current === 'string') {
         let infoArr = pluginInformation[current];
         if (!infoArr) {
-          throw new Error(
-            `Plugin information not found for plugin "${current}"`
-          );
+          throw new Error(`Plugin information not found for plugin "${current}"`);
         }
         if (!Array.isArray(infoArr)) {
           infoArr = [infoArr];
@@ -223,13 +171,9 @@ function containerBootstrap(
           } catch (err) {
             try {
               /* eslint-disable-next-line */
-              lib = require(getAbsolutePath(
-                path.join('./node_modules', info.path)
-              ));
+              lib = require(getAbsolutePath(path.join('./node_modules', info.path)));
             } catch (err2) {
-              throw new Error(
-                `You have to install library "${info.path}" to use plugin "${current}"`
-              );
+              throw new Error(`You have to install library "${info.path}" to use plugin "${current}"`);
             }
           }
           instance.use(lib[info.className], info.name, info.isSingleton);
@@ -260,11 +204,7 @@ function containerBootstrap(
   if (pipelines) {
     for (let i = 0; i < pipelines.length; i += 1) {
       const pipeline = pipelines[i];
-      instance.registerPipeline(
-        pipeline.tag,
-        pipeline.pipeline,
-        pipeline.overwrite
-      );
+      instance.registerPipeline(pipeline.tag, pipeline.pipeline, pipeline.overwrite);
     }
   }
   loadPipelines(instance, settings.pathPipeline || './pipelines.md');

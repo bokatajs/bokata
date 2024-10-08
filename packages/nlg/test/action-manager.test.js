@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { ActionManager } = require('../src');
 
 describe('Action Manager', () => {
@@ -41,10 +18,7 @@ describe('Action Manager', () => {
       manager.addAction('intent1', 'action1', ['parameter1', 'parameter2']);
       expect(manager.actions.intent1).toHaveLength(1);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
     });
     test('If the same action is added, then avoid it', () => {
       const manager = new ActionManager();
@@ -52,10 +26,7 @@ describe('Action Manager', () => {
       manager.addAction('intent1', 'action1', ['parameter1', 'parameter2']);
       expect(manager.actions.intent1).toHaveLength(1);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
     });
     test('Should be able to add several actions to an intent', () => {
       const manager = new ActionManager();
@@ -63,15 +34,9 @@ describe('Action Manager', () => {
       manager.addAction('intent1', 'action2', ['parameter3', 'parameter4']);
       expect(manager.actions.intent1).toHaveLength(2);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
       expect(manager.actions.intent1[1].action).toEqual('action2');
-      expect(manager.actions.intent1[1].parameters).toEqual([
-        'parameter3',
-        'parameter4',
-      ]);
+      expect(manager.actions.intent1[1].parameters).toEqual(['parameter3', 'parameter4']);
     });
     test('Should be able to add several actions to several intents', () => {
       const manager = new ActionManager();
@@ -81,42 +46,22 @@ describe('Action Manager', () => {
       manager.addAction('intent2', 'action4', ['parameter7', 'parameter8']);
       expect(manager.actions.intent1).toHaveLength(2);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
       expect(manager.actions.intent1[1].action).toEqual('action2');
-      expect(manager.actions.intent1[1].parameters).toEqual([
-        'parameter3',
-        'parameter4',
-      ]);
+      expect(manager.actions.intent1[1].parameters).toEqual(['parameter3', 'parameter4']);
       expect(manager.actions.intent2).toHaveLength(2);
       expect(manager.actions.intent2[0].action).toEqual('action3');
-      expect(manager.actions.intent2[0].parameters).toEqual([
-        'parameter5',
-        'parameter6',
-      ]);
+      expect(manager.actions.intent2[0].parameters).toEqual(['parameter5', 'parameter6']);
       expect(manager.actions.intent2[1].action).toEqual('action4');
-      expect(manager.actions.intent2[1].parameters).toEqual([
-        'parameter7',
-        'parameter8',
-      ]);
+      expect(manager.actions.intent2[1].parameters).toEqual(['parameter7', 'parameter8']);
     });
     test('Should be able to add an action method to an intent', () => {
       const manager = new ActionManager();
       const action = () => {};
-      manager.addAction(
-        'intent1',
-        'action1',
-        ['parameter1', 'parameter2'],
-        action
-      );
+      manager.addAction('intent1', 'action1', ['parameter1', 'parameter2'], action);
       expect(manager.actions.intent1).toHaveLength(1);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
       expect(manager.actionsMap.action1).toEqual(action);
     });
     test('Should be able to register an action method also without an intent', () => {
@@ -132,10 +77,7 @@ describe('Action Manager', () => {
       manager.addAction('intent1', 'action1', ['parameter1', 'parameter2']);
       expect(manager.actions.intent1).toHaveLength(1);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
       expect(manager.actionsMap.action1).toEqual(action);
     });
     test('Should be able to register an action method and override when add action with method later', () => {
@@ -143,18 +85,10 @@ describe('Action Manager', () => {
       const action = () => {};
       manager.registerActionInMap('action1', action);
       const action2 = () => {};
-      manager.addAction(
-        'intent1',
-        'action1',
-        ['parameter1', 'parameter2'],
-        action2
-      );
+      manager.addAction('intent1', 'action1', ['parameter1', 'parameter2'], action2);
       expect(manager.actions.intent1).toHaveLength(1);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
       expect(manager.actionsMap.action1).toEqual(action2);
     });
   });
@@ -196,10 +130,7 @@ describe('Action Manager', () => {
 
       const actions = manager.findActions('intent1');
 
-      const processedAnswer = await manager.processActions(
-        'intent1',
-        'original answer'
-      );
+      const processedAnswer = await manager.processActions('intent1', 'original answer');
 
       expect(actions).toHaveLength(3);
       expect(actions[0].action).toEqual('action1');
@@ -237,10 +168,7 @@ describe('Action Manager', () => {
 
       const actions = manager.findActions('intent1');
 
-      const processedAnswer = await manager.processActions(
-        'intent1',
-        'original answer'
-      );
+      const processedAnswer = await manager.processActions('intent1', 'original answer');
 
       expect(actions).toHaveLength(3);
       expect(actions[0].action).toEqual('action1');
@@ -265,21 +193,12 @@ describe('Action Manager', () => {
       manager.removeAction('intent1', 'action2', ['parameter3', 'parameter4']);
       expect(manager.actions.intent1).toHaveLength(1);
       expect(manager.actions.intent1[0].action).toEqual('action1');
-      expect(manager.actions.intent1[0].parameters).toEqual([
-        'parameter1',
-        'parameter2',
-      ]);
+      expect(manager.actions.intent1[0].parameters).toEqual(['parameter1', 'parameter2']);
       expect(manager.actions.intent2).toHaveLength(2);
       expect(manager.actions.intent2[0].action).toEqual('action3');
-      expect(manager.actions.intent2[0].parameters).toEqual([
-        'parameter5',
-        'parameter6',
-      ]);
+      expect(manager.actions.intent2[0].parameters).toEqual(['parameter5', 'parameter6']);
       expect(manager.actions.intent2[1].action).toEqual('action4');
-      expect(manager.actions.intent2[1].parameters).toEqual([
-        'parameter7',
-        'parameter8',
-      ]);
+      expect(manager.actions.intent2[1].parameters).toEqual(['parameter7', 'parameter8']);
     });
     test('No error if removing non existing action', () => {
       const manager = new ActionManager();
@@ -303,15 +222,9 @@ describe('Action Manager', () => {
       expect(manager.actions.intent1).toBeUndefined();
       expect(manager.actions.intent2).toHaveLength(2);
       expect(manager.actions.intent2[0].action).toEqual('action3');
-      expect(manager.actions.intent2[0].parameters).toEqual([
-        'parameter5',
-        'parameter6',
-      ]);
+      expect(manager.actions.intent2[0].parameters).toEqual(['parameter5', 'parameter6']);
       expect(manager.actions.intent2[1].action).toEqual('action4');
-      expect(manager.actions.intent2[1].parameters).toEqual([
-        'parameter7',
-        'parameter8',
-      ]);
+      expect(manager.actions.intent2[1].parameters).toEqual(['parameter7', 'parameter8']);
     });
   });
 });

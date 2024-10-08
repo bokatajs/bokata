@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { containerBootstrap } = require('@nlpjs/core');
+const { containerBootstrap } = require('@bokata/core');
 const { LangJa } = require('../../lang-ja');
 const { Ner, ExtractorEnum } = require('../src');
 
@@ -160,12 +137,7 @@ describe('Extractor Enum', () => {
       const text1 =
         'Morbi interdum ultricies neque varius condimentum. Donec volutpat turpis interdum metus ultricies vulputate. Duis ultricies rhoncus sapien, sit amet fermentum risus imperdiet vitae. Ut et lectus';
       const text2 = 'internum';
-      const result = instance.getBestSubstringList(
-        text1,
-        text2,
-        undefined,
-        0.8
-      );
+      const result = instance.getBestSubstringList(text1, text2, undefined, 0.8);
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         start: 6,
@@ -184,15 +156,9 @@ describe('Extractor Enum', () => {
     });
     test('Should be tolerant to typos with spaces when searching with threshold', () => {
       const instance = new ExtractorEnum();
-      const text1 =
-        'Morbi inter dum ultricies neque varius condimentum. Donec volutpat turpis in terdum';
+      const text1 = 'Morbi inter dum ultricies neque varius condimentum. Donec volutpat turpis in terdum';
       const text2 = 'internum';
-      const result = instance.getBestSubstringList(
-        text1,
-        text2,
-        undefined,
-        1 - 2 / text2.length
-      );
+      const result = instance.getBestSubstringList(text1, text2, undefined, 1 - 2 / text2.length);
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         start: 6,
@@ -213,12 +179,7 @@ describe('Extractor Enum', () => {
       const instance = new ExtractorEnum();
       const text1 = 'dumaultriciesbne';
       const text2 = 'interdumaultriciesbneque';
-      const result = instance.getBestSubstringList(
-        text1,
-        text2,
-        undefined,
-        0.6
-      );
+      const result = instance.getBestSubstringList(text1, text2, undefined, 0.6);
       expect(result).toBeDefined();
       expect(result).toEqual([
         {
@@ -234,12 +195,7 @@ describe('Extractor Enum', () => {
       const instance = new ExtractorEnum();
       const text1 = 'dumaultriciesbne';
       const text2 = 'interdumaultriciesbneque';
-      const result = instance.getBestSubstringList(
-        text1,
-        text2,
-        undefined,
-        0.7
-      );
+      const result = instance.getBestSubstringList(text1, text2, undefined, 0.7);
       expect(result).toBeDefined();
       expect(result).toEqual([]);
     });
@@ -248,14 +204,8 @@ describe('Extractor Enum', () => {
   describe('Extract', () => {
     test('It should extract enum entities without tokenizer', async () => {
       const ner = new Ner();
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw spederman eating spaghetti in the city',
@@ -280,14 +230,8 @@ describe('Extractor Enum', () => {
 
     test('It should extract enum entities when exact is marked without tokenizer', async () => {
       const ner = new Ner({ threshold: 1 });
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw spiderman eating spaghetti in the city',
@@ -389,14 +333,8 @@ describe('Extractor Enum', () => {
     test('It should extract enum entities with default tokenizer', async () => {
       const container = containerBootstrap();
       const ner = new Ner({}, container);
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw spederman eating spaghetti in the city',
@@ -422,14 +360,8 @@ describe('Extractor Enum', () => {
     test('It should extract enum entities with default tokenizer and forced position correction', async () => {
       const container = containerBootstrap();
       const ner = new Ner({}, container);
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw spederman eating spaghetti in the city.',
@@ -455,14 +387,8 @@ describe('Extractor Enum', () => {
     test('It should extract enum entities with default tokenizer and a point instead of space', async () => {
       const container = containerBootstrap();
       const ner = new Ner({}, container);
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw.spederman eating spaghetti in the city',
@@ -488,14 +414,8 @@ describe('Extractor Enum', () => {
     test('It should extract enum entities with default tokenizer and a double space before entity', async () => {
       const container = containerBootstrap();
       const ner = new Ner({}, container);
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw  spederman eating spaghetti in the city',
@@ -521,14 +441,8 @@ describe('Extractor Enum', () => {
     test('It should extract enum entities with default tokenizer and a double space after entity', async () => {
       const container = containerBootstrap();
       const ner = new Ner({}, container);
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw spederman eating  spaghetti in the city',
@@ -554,14 +468,8 @@ describe('Extractor Enum', () => {
     test('It should extract enum entities when exact is marked with tokenizer', async () => {
       const container = containerBootstrap();
       const ner = new Ner({ threshold: 1 }, container);
-      ner.addRuleOptionTexts('en', 'hero', 'spiderman', [
-        'Spiderman',
-        'spider-man',
-      ]);
-      ner.addRuleOptionTexts('en', 'hero', 'iron man', [
-        'iron man',
-        'iron-man',
-      ]);
+      ner.addRuleOptionTexts('en', 'hero', 'spiderman', ['Spiderman', 'spider-man']);
+      ner.addRuleOptionTexts('en', 'hero', 'iron man', ['iron man', 'iron-man']);
       ner.addRuleOptionTexts('en', 'hero', 'thor', ['Thor']);
       const input = {
         text: 'I saw spiderman eating spaghetti in the city',
@@ -639,10 +547,7 @@ describe('Extractor Enum', () => {
   describe('Get Entities From Utterance', () => {
     test('It should extract entities from utterance without tokenizer', async () => {
       const ner = new Ner();
-      const result = ner.getEntitiesFromUtterance(
-        'en',
-        'I saw a @hero eating @food in the @place'
-      );
+      const result = ner.getEntitiesFromUtterance('en', 'I saw a @hero eating @food in the @place');
       expect(result).toEqual(['hero', 'food', 'place']);
     });
   });

@@ -1,35 +1,11 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const fs = require('fs');
-const { BuiltinMicrosoft } = require('@nlpjs/builtin-microsoft');
-const { BuiltinDuckling } = require('@nlpjs/builtin-duckling');
-const { containerBootstrap } = require('@nlpjs/core-loader');
-const { Language } = require('@nlpjs/language');
-const { LangAll } = require('@nlpjs/lang-all');
-const { Nlp } = require('@nlpjs/nlp');
-const { Evaluator, Template } = require('@nlpjs/evaluator');
-const { fs: requestfs } = require('@nlpjs/request');
+const { BuiltinMicrosoft } = require('@bokata/builtin-microsoft');
+const { containerBootstrap } = require('@bokata/core-loader');
+const { Language } = require('@bokata/language');
+const { LangAll } = require('@bokata/lang-all');
+const { Nlp } = require('@bokata/nlp');
+const { Evaluator, Template } = require('@bokata/evaluator');
+const { fs: requestfs } = require('@bokata/request');
 const { SentimentManager } = require('../sentiment');
 const NlpExcelReader = require('./nlp-excel-reader');
 
@@ -51,18 +27,8 @@ class NlpManager {
     this.container.use(Template);
     this.nlp = new Nlp(this.settings);
     this.sentimentManager = new SentimentManager();
-    if (this.settings.ner) {
-      if (this.settings.ner.ducklingUrl || this.settings.ner.useDuckling) {
-        const builtin = new BuiltinDuckling(this.settings.ner);
-        this.container.register('extract-builtin-??', builtin, true);
-      } else {
-        const builtin = new BuiltinMicrosoft(this.settings.ner);
-        this.container.register('extract-builtin-??', builtin, true);
-      }
-    } else {
-      const builtin = new BuiltinMicrosoft(this.settings.ner);
-      this.container.register('extract-builtin-??', builtin, true);
-    }
+    const builtin = new BuiltinMicrosoft(this.settings.ner);
+    this.container.register('extract-builtin-??', builtin, true);
   }
 
   addDocument(locale, utterance, intent) {
@@ -134,21 +100,11 @@ class NlpManager {
   }
 
   addNamedEntityText(entityName, optionName, languages, texts) {
-    return this.nlp.addNerRuleOptionTexts(
-      languages,
-      entityName,
-      optionName,
-      texts
-    );
+    return this.nlp.addNerRuleOptionTexts(languages, entityName, optionName, texts);
   }
 
   removeNamedEntityText(entityName, optionName, languages, texts) {
-    return this.nlp.removeNerRuleOptionTexts(
-      languages,
-      entityName,
-      optionName,
-      texts
-    );
+    return this.nlp.removeNerRuleOptionTexts(languages, entityName, optionName, texts);
   }
 
   addRegexEntity(entityName, languages, regex) {
@@ -160,13 +116,7 @@ class NlpManager {
   }
 
   addPositionCondition(locale, name, position, words, opts) {
-    return this.nlp.addNerPositionCondition(
-      locale,
-      name,
-      position,
-      words,
-      opts
-    );
+    return this.nlp.addNerPositionCondition(locale, name, position, words, opts);
   }
 
   addAfterCondition(locale, name, words, opts) {

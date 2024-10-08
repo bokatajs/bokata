@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable } = require('@nlpjs/core');
+const { Clonable } = require('@bokata/core');
 const ExtractorEnum = require('./extractor-enum');
 const ExtractorRegex = require('./extractor-regex');
 const ExtractorTrim = require('./extractor-trim');
@@ -48,10 +25,7 @@ class Ner extends Clonable {
       this.settings.tag = `ner`;
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.rules = {};
     this.applySettings(this, {
       pipelineProcess: this.getPipeline(`${this.settings.tag}-process`),
@@ -80,7 +54,7 @@ class Ner extends Clonable {
     return this.rules[locale][name];
   }
 
-  addRule(locale = '*', name, type, rule) {
+  addRule(locale = '*', name = undefined, type = undefined, rule = undefined) {
     if (Array.isArray(locale)) {
       for (let i = 0; i < locale.length; i += 1) {
         this.addRule(locale[i], name, type, rule);
@@ -122,7 +96,7 @@ class Ner extends Clonable {
     return -1;
   }
 
-  removeRule(locale = '*', name, rule) {
+  removeRule(locale = '*', name = undefined, rule = undefined) {
     if (this.rules[locale]) {
       if (this.rules[locale][name]) {
         if (!rule) {
@@ -256,8 +230,7 @@ class Ner extends Clonable {
   }
 
   addRegexRule(locale, name, srcRegex) {
-    const regex =
-      typeof srcRegex === 'string' ? Ner.str2regex(srcRegex) : srcRegex;
+    const regex = typeof srcRegex === 'string' ? Ner.str2regex(srcRegex) : srcRegex;
     const globalFlag = 'g';
     const fixedRegex = regex.flags.includes(globalFlag)
       ? regex
@@ -265,41 +238,23 @@ class Ner extends Clonable {
     this.addRule(locale, name, 'regex', fixedRegex);
   }
 
-  addBetweenLastCondition(
-    locale,
-    name,
-    srcLeftWords,
-    srcRightWords,
-    srcOptions = {}
-  ) {
+  addBetweenLastCondition(locale, name, srcLeftWords, srcRightWords, srcOptions = {}) {
     const options = {
       ...srcOptions,
       closest: true,
     };
-    this.addBetweenCondition(
-      locale,
-      name,
-      srcLeftWords,
-      srcRightWords,
-      options
-    );
+    this.addBetweenCondition(locale, name, srcLeftWords, srcRightWords, options);
   }
 
   addBetweenCondition(locale, name, srcLeftWords, srcRightWords, srcOptions) {
     const options = srcOptions || {};
-    const leftWords = Array.isArray(srcLeftWords)
-      ? srcLeftWords
-      : [srcLeftWords];
-    const rightWords = Array.isArray(srcRightWords)
-      ? srcRightWords
-      : [srcRightWords];
+    const leftWords = Array.isArray(srcLeftWords) ? srcLeftWords : [srcLeftWords];
+    const rightWords = Array.isArray(srcRightWords) ? srcRightWords : [srcRightWords];
     const conditions = [];
     for (let i = 0; i < leftWords.length; i += 1) {
       for (let j = 0; j < rightWords.length; j += 1) {
-        const leftWord =
-          options.noSpaces === true ? leftWords[i] : ` ${leftWords[i]} `;
-        const rightWord =
-          options.noSpaces === true ? rightWords[j] : ` ${rightWords[j]} `;
+        const leftWord = options.noSpaces === true ? leftWords[i] : ` ${leftWords[i]} `;
+        const rightWord = options.noSpaces === true ? rightWords[j] : ` ${rightWords[j]} `;
         let regex;
         if (options.closest === true) {
           regex = `${leftWord}(?!.*${leftWord}.*)(.*)${rightWord}`;
@@ -416,9 +371,7 @@ class Ner extends Clonable {
     };
     let result;
     if (input.locale) {
-      const pipeline = this.container.getPipeline(
-        `${this.settings.tag}-${input.locale}-process`
-      );
+      const pipeline = this.container.getPipeline(`${this.settings.tag}-${input.locale}-process`);
       if (pipeline) {
         result = await this.runPipeline(input, pipeline);
       }
@@ -429,23 +382,15 @@ class Ner extends Clonable {
       result = await this.defaultPipelineProcess(input, consideredEntities);
     } else if (consideredEntities) {
       // when custom pipeline is used then we can not be sure it is handled correctly
-      result.entities = result.entities.filter((entity) =>
-        consideredEntities.includes(entity.entity)
-      );
+      result.entities = result.entities.filter((entity) => consideredEntities.includes(entity.entity));
     }
     delete result.threshold;
     return result;
   }
 
   nameToEntity(name) {
-    const preffix =
-      this.settings.entityPreffix === undefined
-        ? '@'
-        : this.settings.entityPreffix;
-    const suffix =
-      this.settings.entitySuffix === undefined
-        ? ''
-        : this.settings.entitySuffix;
+    const preffix = this.settings.entityPreffix === undefined ? '@' : this.settings.entityPreffix;
+    const suffix = this.settings.entitySuffix === undefined ? '' : this.settings.entitySuffix;
     return `${preffix}${name}${suffix}`;
   }
 
@@ -454,14 +399,8 @@ class Ner extends Clonable {
       return entity;
     }
     let name = entity;
-    const preffix =
-      this.settings.entityPreffix === undefined
-        ? '@'
-        : this.settings.entityPreffix;
-    const suffix =
-      this.settings.entitySuffix === undefined
-        ? ''
-        : this.settings.entitySuffix;
+    const preffix = this.settings.entityPreffix === undefined ? '@' : this.settings.entityPreffix;
+    const suffix = this.settings.entitySuffix === undefined ? '' : this.settings.entitySuffix;
     if (preffix) {
       if (!name.startsWith(preffix)) {
         return entity;

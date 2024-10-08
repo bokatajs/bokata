@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { TokenizerEn, NormalizerEn } = require('../src');
 
 const normalizer = new NormalizerEn();
@@ -67,28 +44,13 @@ describe('Tokenizer', () => {
     });
     test('Should tokenize "what else is developing your enterprise"', () => {
       const input = 'what else is developing your enterprise';
-      const expected = [
-        'what',
-        'else',
-        'is',
-        'developing',
-        'your',
-        'enterprise',
-      ];
+      const expected = ['what', 'else', 'is', 'developing', 'your', 'enterprise'];
       const actual = tokenizer.tokenize(normalizer.normalize(input));
       expect(actual).toEqual(expected);
     });
     test('Should tokenize "does your company have some other product?"', () => {
       const input = 'does your company have some other product?';
-      const expected = [
-        'does',
-        'your',
-        'company',
-        'have',
-        'some',
-        'other',
-        'product',
-      ];
+      const expected = ['does', 'your', 'company', 'have', 'some', 'other', 'product'];
       const actual = tokenizer.tokenize(normalizer.normalize(input));
       expect(actual).toEqual(expected);
     });
@@ -100,42 +62,19 @@ describe('Tokenizer', () => {
     });
     test('Should tokenize "does the enterprise have any other app?"', () => {
       const input = 'does the enterprise have any other app?';
-      const expected = [
-        'does',
-        'the',
-        'enterprise',
-        'have',
-        'any',
-        'other',
-        'app',
-      ];
+      const expected = ['does', 'the', 'enterprise', 'have', 'any', 'other', 'app'];
       const actual = tokenizer.tokenize(normalizer.normalize(input));
       expect(actual).toEqual(expected);
     });
     test('Should tokenize "Other product developed by your company?"', () => {
       const input = 'Other product developed by your company?';
-      const expected = [
-        'other',
-        'product',
-        'developed',
-        'by',
-        'your',
-        'company',
-      ];
+      const expected = ['other', 'product', 'developed', 'by', 'your', 'company'];
       const actual = tokenizer.tokenize(normalizer.normalize(input));
       expect(actual).toEqual(expected);
     });
     test('Should tokenize "what\'s the name of your application"', () => {
       const input = "what's the name of your application";
-      const expected = [
-        'what',
-        'is',
-        'the',
-        'name',
-        'of',
-        'your',
-        'application',
-      ];
+      const expected = ['what', 'is', 'the', 'name', 'of', 'your', 'application'];
       const actual = tokenizer.tokenize(normalizer.normalize(input));
       expect(actual).toEqual(expected);
     });
@@ -159,18 +98,7 @@ describe('Tokenizer', () => {
     });
     test('Should tokenize "I\'d like to know the name of your app"', () => {
       const input = "I'd like to know the name of your app";
-      const expected = [
-        'i',
-        'had',
-        'like',
-        'to',
-        'know',
-        'the',
-        'name',
-        'of',
-        'your',
-        'app',
-      ];
+      const expected = ['i', 'had', 'like', 'to', 'know', 'the', 'name', 'of', 'your', 'app'];
       const actual = tokenizer.tokenize(normalizer.normalize(input));
       expect(actual).toEqual(expected);
     });

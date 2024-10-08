@@ -1,44 +1,44 @@
-const { Language } = require('@nlpjs/language');
-const langAr = require('@nlpjs/lang-ar');
-const langBr = require('@nlpjs/lang-bn');
-const langCa = require('@nlpjs/lang-ca');
-const langCs = require('@nlpjs/lang-cs');
-const langDa = require('@nlpjs/lang-da');
-const langDe = require('@nlpjs/lang-de');
-const langEl = require('@nlpjs/lang-el');
-const langEn = require('@nlpjs/lang-en');
-const langEs = require('@nlpjs/lang-es');
-const langEu = require('@nlpjs/lang-eu');
-const langFa = require('@nlpjs/lang-fa');
-const langFi = require('@nlpjs/lang-fi');
-const langFr = require('@nlpjs/lang-fr');
-const langGa = require('@nlpjs/lang-ga');
-const langGl = require('@nlpjs/lang-gl');
-const langHi = require('@nlpjs/lang-hi');
-const langHu = require('@nlpjs/lang-hu');
-const langHy = require('@nlpjs/lang-hy');
-const langId = require('@nlpjs/lang-id');
-const langIt = require('@nlpjs/lang-it');
-const langJa = require('@nlpjs/lang-ja');
-const langKo = require('@nlpjs/lang-ko');
-const langLt = require('@nlpjs/lang-lt');
-const langMs = require('@nlpjs/lang-ms');
-const langNe = require('@nlpjs/lang-ne');
-const langNl = require('@nlpjs/lang-nl');
-const langNo = require('@nlpjs/lang-no');
-const langPl = require('@nlpjs/lang-pl');
-const langPt = require('@nlpjs/lang-pt');
-const langRo = require('@nlpjs/lang-ro');
-const langRu = require('@nlpjs/lang-ru');
-const langSl = require('@nlpjs/lang-sl');
-const langSr = require('@nlpjs/lang-sr');
-const langSv = require('@nlpjs/lang-sv');
-const langTa = require('@nlpjs/lang-ta');
-const langTh = require('@nlpjs/lang-th');
-const langTl = require('@nlpjs/lang-tl');
-const langTr = require('@nlpjs/lang-tr');
-const langUk = require('@nlpjs/lang-uk');
-const langZh = require('@nlpjs/lang-zh');
+const { Language } = require('@bokata/language');
+const langAr = require('@bokata/lang-ar');
+const langBr = require('@bokata/lang-bn');
+const langCa = require('@bokata/lang-ca');
+const langCs = require('@bokata/lang-cs');
+const langDa = require('@bokata/lang-da');
+const langDe = require('@bokata/lang-de');
+const langEl = require('@bokata/lang-el');
+const langEn = require('@bokata/lang-en');
+const langEs = require('@bokata/lang-es');
+const langEu = require('@bokata/lang-eu');
+const langFa = require('@bokata/lang-fa');
+const langFi = require('@bokata/lang-fi');
+const langFr = require('@bokata/lang-fr');
+const langGa = require('@bokata/lang-ga');
+const langGl = require('@bokata/lang-gl');
+const langHi = require('@bokata/lang-hi');
+const langHu = require('@bokata/lang-hu');
+const langHy = require('@bokata/lang-hy');
+const langId = require('@bokata/lang-id');
+const langIt = require('@bokata/lang-it');
+const langJa = require('@bokata/lang-ja');
+const langKo = require('@bokata/lang-ko');
+const langLt = require('@bokata/lang-lt');
+const langMs = require('@bokata/lang-ms');
+const langNe = require('@bokata/lang-ne');
+const langNl = require('@bokata/lang-nl');
+const langNo = require('@bokata/lang-no');
+const langPl = require('@bokata/lang-pl');
+const langPt = require('@bokata/lang-pt');
+const langRo = require('@bokata/lang-ro');
+const langRu = require('@bokata/lang-ru');
+const langSl = require('@bokata/lang-sl');
+const langSr = require('@bokata/lang-sr');
+const langSv = require('@bokata/lang-sv');
+const langTa = require('@bokata/lang-ta');
+const langTh = require('@bokata/lang-th');
+const langTl = require('@bokata/lang-tl');
+const langTr = require('@bokata/lang-tr');
+const langUk = require('@bokata/lang-uk');
+const langZh = require('@bokata/lang-zh');
 
 const langs = {
   ar: langAr,
@@ -102,13 +102,9 @@ function getLangClass(inputLanguage, className) {
   }
   const lang = langs[locale];
   if (!lang) {
-    throw new Error(
-      `Language classes not found for language "${inputLanguage}"`
-    );
+    throw new Error(`Language classes not found for language "${inputLanguage}"`);
   }
-  const localeCapitalized = `${locale.charAt(0).toUpperCase()}${locale.slice(
-    1
-  )}`;
+  const localeCapitalized = `${locale.charAt(0).toUpperCase()}${locale.slice(1)}`;
   return lang[`${className}${localeCapitalized}`];
 }
 

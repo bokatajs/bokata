@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { KoreanPos } = require('./korean-pos');
 const { KoreanToken } = require('./korean-token');
 const ChunkMatch = require('./chunk-match');
@@ -70,26 +47,14 @@ function fillInUnmatched(text, chunks) {
     if (cm.start === prevEnd) {
       chunksWithForeign.push(cm);
     } else if (cm.start > prevEnd) {
-      chunksWithForeign.push(
-        new ChunkMatch(
-          prevEnd,
-          cm.start,
-          text.substring(prevEnd, cm.start),
-          KoreanPos.Foreign
-        )
-      );
+      chunksWithForeign.push(new ChunkMatch(prevEnd, cm.start, text.substring(prevEnd, cm.start), KoreanPos.Foreign));
       chunksWithForeign.push(cm);
     }
     prevEnd = cm.end;
   }
   if (prevEnd < text.length) {
     chunksWithForeign.push(
-      new ChunkMatch(
-        prevEnd,
-        text.length,
-        text.substring(prevEnd, text.length),
-        KoreanPos.Foreign
-      )
+      new ChunkMatch(prevEnd, text.length, text.substring(prevEnd, text.length), KoreanPos.Foreign)
     );
   }
   return chunksWithForeign;
@@ -108,9 +73,7 @@ function splitChunks(text) {
       let m = r.exec(text);
       while (m) {
         const cm = new ChunkMatch(m.index, m.index + m[0].length, m[0], pos);
-        if (
-          chunksMatched.filter((c) => cm.disjoint(c) === false).length === 0
-        ) {
+        if (chunksMatched.filter((c) => cm.disjoint(c) === false).length === 0) {
           chunksMatched.push(cm);
           matchedLen += m[0].length;
         }

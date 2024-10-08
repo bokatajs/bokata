@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable } = require('@nlpjs/core');
+const { Clonable } = require('@bokata/core');
 
 /**
  * Action Manager.
@@ -31,7 +8,7 @@ class ActionManager extends Clonable {
   /**
    * Constructor of the class
    */
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
@@ -44,10 +21,7 @@ class ActionManager extends Clonable {
       this.settings.tag = 'action-manager';
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.actions = {};
     this.actionsMap = {};
     this.applySettings(this, {
@@ -69,10 +43,7 @@ class ActionManager extends Clonable {
     }
     const actions = this.actions[intent];
     for (let i = 0; i < actions.length; i += 1) {
-      if (
-        actions[i].action === action &&
-        JSON.stringify(actions[i].parameters) === JSON.stringify(parameters)
-      ) {
+      if (actions[i].action === action && JSON.stringify(actions[i].parameters) === JSON.stringify(parameters)) {
         return i;
       }
     }
@@ -110,10 +81,7 @@ class ActionManager extends Clonable {
 
     for (const { fn, parameters } of actionList) {
       if (fn) {
-        const newProcessedAnswer = await fn(
-          processedAnswer,
-          ...(parameters || [])
-        );
+        const newProcessedAnswer = await fn(processedAnswer, ...(parameters || []));
         if (newProcessedAnswer) {
           if (typeof processedAnswer === 'object') {
             if (typeof newProcessedAnswer === 'object') {

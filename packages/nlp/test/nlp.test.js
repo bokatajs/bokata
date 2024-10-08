@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { Nlp } = require('../src');
 const TemplateMock = require('./template-mock');
 
@@ -115,16 +92,12 @@ describe('NLP', () => {
     test('If locale is not defined and cannot be guessed, throw an error', () => {
       const nlp = new Nlp();
       nlp.addLanguage(['en', 'es']);
-      expect(() => nlp.addDocument(undefined, '', 'keys')).toThrow(
-        'Locale must be defined'
-      );
+      expect(() => nlp.addDocument(undefined, '', 'keys')).toThrow('Locale must be defined');
     });
     test('If there is not domain for the given language, throw an error', () => {
       const nlp = new Nlp();
       nlp.addLanguage(['en', 'es']);
-      expect(() => nlp.addDocument('fr', 'Bonjour', 'greet')).toThrow(
-        'Domain Manager not found for locale fr'
-      );
+      expect(() => nlp.addDocument('fr', 'Bonjour', 'greet')).toThrow('Domain Manager not found for locale fr');
     });
   });
 
@@ -160,16 +133,12 @@ describe('NLP', () => {
     test('If locale cannot be guessed then throw an error', () => {
       const nlp = new Nlp();
       nlp.addLanguage(['en', 'es']);
-      expect(() => nlp.removeDocument(undefined, '', 'keys')).toThrow(
-        'Locale must be defined'
-      );
+      expect(() => nlp.removeDocument(undefined, '', 'keys')).toThrow('Locale must be defined');
     });
     test('If there is not domain for the given language, throw an error', () => {
       const nlp = new Nlp();
       nlp.addLanguage(['en', 'es']);
-      expect(() => nlp.removeDocument('fr', 'Bonjour', 'greet')).toThrow(
-        'Domain Manager not found for locale fr'
-      );
+      expect(() => nlp.removeDocument('fr', 'Bonjour', 'greet')).toThrow('Domain Manager not found for locale fr');
     });
   });
 
@@ -467,10 +436,7 @@ describe('NLP', () => {
         },
       });
 
-      p = await nlp.process(
-        'en',
-        '8 days ago i saw spider-man coming from heaven'
-      );
+      p = await nlp.process('en', '8 days ago i saw spider-man coming from heaven');
       expect(p.entities).toEqual([
         {
           type: 'trim',
@@ -491,10 +457,7 @@ describe('NLP', () => {
         options_array: { options: { spiderman: ['spiderman', 'spider-man'] } },
       });
 
-      p = await nlp.process(
-        'en',
-        '8 days ago i saw spider-man coming from heaven'
-      );
+      p = await nlp.process('en', '8 days ago i saw spider-man coming from heaven');
       expect(p.entities).toEqual([
         {
           start: 17,
@@ -525,10 +488,7 @@ describe('NLP', () => {
         },
       });
 
-      p = await nlp.process(
-        'en',
-        '8 days ago i saw spider-man coming from heaven'
-      );
+      p = await nlp.process('en', '8 days ago i saw spider-man coming from heaven');
       expect(p.entities).toEqual([
         {
           start: 17,
@@ -573,10 +533,7 @@ describe('NLP', () => {
         },
       });
 
-      p = await nlp.process(
-        'en',
-        '8 days ago i saw spider-man coming from heaven'
-      );
+      p = await nlp.process('en', '8 days ago i saw spider-man coming from heaven');
       expect(p.entities).toEqual([
         {
           start: 0,
@@ -621,12 +578,7 @@ describe('NLP', () => {
   describe('Remove NER rule option texts', () => {
     test('A text can be removed', () => {
       const nlp = new Nlp();
-      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', [
-        'text1',
-        'text2',
-        'text3',
-        'text4',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', ['text1', 'text2', 'text3', 'text4']);
       nlp.removeNerRuleOptionTexts('en', 'A1', 'opt1', 'text2');
       expect(nlp.ner.rules.en.A1).toEqual({
         name: 'A1',
@@ -641,12 +593,7 @@ describe('NLP', () => {
     });
     test('If the locale does not exists do not crash', () => {
       const nlp = new Nlp();
-      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', [
-        'text1',
-        'text2',
-        'text3',
-        'text4',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', ['text1', 'text2', 'text3', 'text4']);
       nlp.removeNerRuleOptionTexts('es', 'A1', 'opt1', 'text2');
       expect(nlp.ner.rules.es).toBeUndefined();
       expect(nlp.ner.rules.en.A1).toEqual({
@@ -662,12 +609,7 @@ describe('NLP', () => {
     });
     test('If the rule name does not exists do not crash', () => {
       const nlp = new Nlp();
-      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', [
-        'text1',
-        'text2',
-        'text3',
-        'text4',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', ['text1', 'text2', 'text3', 'text4']);
       nlp.removeNerRuleOptionTexts('en', 'A2', 'opt1', 'text2');
       expect(nlp.ner.rules.en.A2).toBeUndefined();
       expect(nlp.ner.rules.en.A1).toEqual({
@@ -683,12 +625,7 @@ describe('NLP', () => {
     });
     test('If the option does not exists do not crash', () => {
       const nlp = new Nlp();
-      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', [
-        'text1',
-        'text2',
-        'text3',
-        'text4',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', ['text1', 'text2', 'text3', 'text4']);
       nlp.removeNerRuleOptionTexts('en', 'A1', 'opt2', 'text2');
       expect(nlp.ner.rules.en.A1).toEqual({
         name: 'A1',
@@ -703,12 +640,7 @@ describe('NLP', () => {
     });
     test('The texts can be a list', () => {
       const nlp = new Nlp();
-      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', [
-        'text1',
-        'text2',
-        'text3',
-        'text4',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', ['text1', 'text2', 'text3', 'text4']);
       nlp.removeNerRuleOptionTexts('en', 'A1', 'opt1', ['text2', 'text3']);
       expect(nlp.ner.rules.en.A1).toEqual({
         name: 'A1',
@@ -723,12 +655,7 @@ describe('NLP', () => {
     });
     test('If no text is defined use the option name', () => {
       const nlp = new Nlp();
-      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', [
-        'text1',
-        'text2',
-        'opt1',
-        'text4',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'A1', 'opt1', ['text1', 'text2', 'opt1', 'text4']);
       nlp.removeNerRuleOptionTexts('en', 'A1', 'opt1');
       expect(nlp.ner.rules.en.A1).toEqual({
         name: 'A1',
@@ -743,12 +670,7 @@ describe('NLP', () => {
     });
     test('The locale can be a list', () => {
       const nlp = new Nlp();
-      nlp.addNerRuleOptionTexts(['en', 'es'], 'A1', 'opt1', [
-        'text1',
-        'text2',
-        'text3',
-        'text4',
-      ]);
+      nlp.addNerRuleOptionTexts(['en', 'es'], 'A1', 'opt1', ['text1', 'text2', 'text3', 'text4']);
       nlp.removeNerRuleOptionTexts(['en', 'es'], 'A1', 'opt1', 'text2');
       expect(nlp.ner.rules.en.A1).toEqual({
         name: 'A1',
@@ -974,11 +896,7 @@ describe('NLP', () => {
         autoSave: false,
       });
       nlp.addDocument('en', 'convert from @ccyFrom to @ccyTo', 'GetForexRates');
-      nlp.addAnswer(
-        'en',
-        'GetForexRates',
-        '{{ ccyFrom }} is equal to 76 {{ ccyTo }}'
-      );
+      nlp.addAnswer('en', 'GetForexRates', '{{ ccyFrom }} is equal to 76 {{ ccyTo }}');
 
       nlp.addNerRuleOptionTexts('en', 'ccyFrom', 'usd', ['USD', 'Dollar']);
       nlp.addNerRuleOptionTexts('en', 'ccyFrom', 'inr', ['INR', 'rupee']);
@@ -1011,16 +929,8 @@ describe('NLP', () => {
         autoSave: false,
       });
       nlp.addDocument('en', 'convert from @ccyFrom to @ccyTo', 'GetForexRates');
-      nlp.addDocument(
-        'en',
-        'convert from @ccyFrom and @ccyFrom to @ccyTo',
-        'GetForexRates'
-      );
-      nlp.addAnswer(
-        'en',
-        'GetForexRates',
-        '{{ ccyFrom }} is equal to 76 {{ ccyTo }}'
-      );
+      nlp.addDocument('en', 'convert from @ccyFrom and @ccyFrom to @ccyTo', 'GetForexRates');
+      nlp.addAnswer('en', 'GetForexRates', '{{ ccyFrom }} is equal to 76 {{ ccyTo }}');
 
       nlp.addNerRuleOptionTexts('en', 'ccyFrom', 'usd', ['USD', 'Dollar']);
       nlp.addNerRuleOptionTexts('en', 'ccyFrom', 'inr', ['INR', 'rupee']);
@@ -1086,27 +996,13 @@ describe('NLP', () => {
       };
       const nlp = new Nlp();
       await nlp.addCorpus(corpus);
-      expect(nlp.nluManager.domainManagers.en.sentences[0].domain).toEqual(
-        'domain1'
-      );
-      expect(nlp.nluManager.domainManagers.en.sentences[1].domain).toEqual(
-        'domain1'
-      );
-      expect(nlp.nluManager.domainManagers.en.sentences[2].domain).toEqual(
-        'domain1'
-      );
-      expect(nlp.nluManager.domainManagers.en.sentences[3].domain).toEqual(
-        'domain1'
-      );
-      expect(nlp.nluManager.domainManagers.en.sentences[4].domain).toEqual(
-        'domain2'
-      );
-      expect(nlp.nluManager.domainManagers.en.sentences[5].domain).toEqual(
-        'domain2'
-      );
-      expect(nlp.nluManager.domainManagers.en.sentences[6].domain).toEqual(
-        'domain2'
-      );
+      expect(nlp.nluManager.domainManagers.en.sentences[0].domain).toEqual('domain1');
+      expect(nlp.nluManager.domainManagers.en.sentences[1].domain).toEqual('domain1');
+      expect(nlp.nluManager.domainManagers.en.sentences[2].domain).toEqual('domain1');
+      expect(nlp.nluManager.domainManagers.en.sentences[3].domain).toEqual('domain1');
+      expect(nlp.nluManager.domainManagers.en.sentences[4].domain).toEqual('domain2');
+      expect(nlp.nluManager.domainManagers.en.sentences[5].domain).toEqual('domain2');
+      expect(nlp.nluManager.domainManagers.en.sentences[6].domain).toEqual('domain2');
     });
 
     test('The corpus can contain entities', async () => {
@@ -1235,9 +1131,7 @@ describe('NLP', () => {
       expect(nlp.slotManager.intents.travel.fromCity).toBeDefined();
       expect(nlp.slotManager.intents.travel.fromCity.mandatory).toEqual(true);
       expect(nlp.slotManager.intents.travel.fromCity.locales).toBeDefined();
-      expect(nlp.slotManager.intents.travel.fromCity.locales.en).toEqual(
-        'From where you are traveling?'
-      );
+      expect(nlp.slotManager.intents.travel.fromCity.locales.en).toEqual('From where you are traveling?');
       expect(nlp.slotManager.intents.travel.toCity).toBeDefined();
       expect(nlp.slotManager.intents.travel.toCity.mandatory).toEqual(false);
       expect(nlp.slotManager.intents.travel.date).toBeDefined();
@@ -1283,10 +1177,7 @@ describe('NLP', () => {
           {
             intent: 'user.introduce',
             utterances: ['i am @clientName', 'my name is @clientName'],
-            answer: [
-              'Nice to meet you @clientName.',
-              "It's a pleasure to meet you @clientName.",
-            ],
+            answer: ['Nice to meet you @clientName.', "It's a pleasure to meet you @clientName."],
             slotFilling: {
               clientName: "I'm sorry but i didn't get your name",
               location: 'Where are you from @clientName?',
@@ -1346,27 +1237,16 @@ describe('NLP', () => {
       await nlp.addCorpus(corpus);
       expect(nlp.actionManager.actions.whatTimeIsIt).toBeDefined();
       expect(nlp.actionManager.actions.whatTimeIsIt[0]).toBeDefined();
-      expect(nlp.actionManager.actions.whatTimeIsIt[0].action).toEqual(
-        'handleWhatsTimeIntent'
-      );
-      expect(nlp.actionManager.actions.whatTimeIsIt[0].parameters).toEqual([
-        'en-US',
-        'parameter 2',
-      ]);
+      expect(nlp.actionManager.actions.whatTimeIsIt[0].action).toEqual('handleWhatsTimeIntent');
+      expect(nlp.actionManager.actions.whatTimeIsIt[0].parameters).toEqual(['en-US', 'parameter 2']);
       expect(nlp.actionManager.actions.whatDayIsIt).toBeDefined();
       expect(nlp.actionManager.actions.whatDayIsIt[0]).toBeDefined();
-      expect(nlp.actionManager.actions.whatDayIsIt[0].action).toEqual(
-        'handleWhatsDayIntent'
-      );
+      expect(nlp.actionManager.actions.whatDayIsIt[0].action).toEqual('handleWhatsDayIntent');
       expect(nlp.actionManager.actions.whatDayIsIt[0].parameters).toEqual([]);
       expect(nlp.actionManager.actions.whatDayIsIt[1]).toBeDefined();
-      expect(nlp.actionManager.actions.whatDayIsIt[1].action).toEqual(
-        'fallbackAction'
-      );
+      expect(nlp.actionManager.actions.whatDayIsIt[1].action).toEqual('fallbackAction');
       expect(nlp.actionManager.actions.whatDayIsIt[1].parameters).toEqual([]);
-      expect(
-        nlp.actionManager.actionsMap.handleWhatsTimeIntent
-      ).toBeUndefined();
+      expect(nlp.actionManager.actionsMap.handleWhatsTimeIntent).toBeUndefined();
       expect(nlp.actionManager.actionsMap.handleWhatsDayIntent).toBeUndefined();
       expect(nlp.actionManager.actionsMap.fallbackAction).toBeUndefined();
     });
@@ -1406,16 +1286,9 @@ describe('NLP', () => {
         languages: ['en'],
         autoSave: false,
       });
-      nlp.addDocument(
-        'en',
-        'Tell me about the @attribute of the device',
-        'attribute_intent'
-      );
+      nlp.addDocument('en', 'Tell me about the @attribute of the device', 'attribute_intent');
 
-      nlp.addNerRuleOptionTexts('en', 'attribute', 'display', [
-        'display',
-        'screen',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'attribute', 'display', ['display', 'screen']);
       nlp.addNerRuleOptionTexts('en', 'attribute', 'cpu', ['cpu', 'processor']);
       nlp.addNerBetweenCondition('en', 'attribute', ['the'], 'of');
 
@@ -1442,16 +1315,9 @@ describe('NLP', () => {
         languages: ['en'],
         autoSave: false,
       });
-      nlp.addDocument(
-        'en',
-        'Tell me about the @attribute of the device',
-        'attribute_intent'
-      );
+      nlp.addDocument('en', 'Tell me about the @attribute of the device', 'attribute_intent');
 
-      nlp.addNerRuleOptionTexts('en', 'attribute', 'display', [
-        'display',
-        'screen',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'attribute', 'display', ['display', 'screen']);
       nlp.addNerRuleOptionTexts('en', 'attribute', 'cpu', ['cpu', 'processor']);
       nlp.addNerBetweenCondition('en', 'attribute', ['the'], 'of');
 
@@ -1480,16 +1346,10 @@ describe('NLP', () => {
         autoSave: false,
       });
       nlp.addDocument('en', 'Hi, my name is @forename!', 'forename_intent');
-      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', ['myforename2']);
       nlp.addNerRuleOptionTexts('en', 'lastname', 'mylastname', ['mylastname']);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', [
-        'myforename1',
-      ]);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', ['myforename1']);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', ['myforename2']);
 
       expect(nlp.slotManager.intents.forename_intent).toBeDefined();
       expect(nlp.slotManager.intents.forename_intent.forename).toBeDefined();
@@ -1515,16 +1375,10 @@ describe('NLP', () => {
         autoSave: false,
       });
       nlp.addDocument('en', 'Hi, my name is @forename!', 'forename_intent');
-      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', ['myforename2']);
       nlp.addNerRuleOptionTexts('en', 'lastname', 'mylastname', ['mylastname']);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', [
-        'myforename1',
-      ]);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', ['myforename1']);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', ['myforename2']);
 
       expect(nlp.slotManager.intents.forename_intent).toBeDefined();
       expect(nlp.slotManager.intents.forename_intent.forename).toBeDefined();
@@ -1551,21 +1405,11 @@ describe('NLP', () => {
         languages: ['en'],
         autoSave: false,
       });
-      nlp.addDocument(
-        'en',
-        'Hi, my name is @forename @lastname!',
-        'forename_intent'
-      );
-      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addDocument('en', 'Hi, my name is @forename @lastname!', 'forename_intent');
+      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', ['myforename2']);
       nlp.addNerRuleOptionTexts('en', 'lastname', 'mylastname', ['mylastname']);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', [
-        'myforename1',
-      ]);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', ['myforename1']);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', ['myforename2']);
 
       expect(nlp.slotManager.intents.forename_intent).toBeDefined();
       expect(nlp.slotManager.intents.forename_intent.forename).toBeDefined();
@@ -1593,11 +1437,7 @@ describe('NLP', () => {
         autoSave: false,
       });
       nlp.addDocument('en', 'convert from @ccyFrom to @ccyTo', 'GetForexRates');
-      nlp.addAnswer(
-        'en',
-        'GetForexRates',
-        '{{ ccyFrom }} is equal to 76 {{ ccyTo }}'
-      );
+      nlp.addAnswer('en', 'GetForexRates', '{{ ccyFrom }} is equal to 76 {{ ccyTo }}');
 
       nlp.addNerRuleOptionTexts('en', 'ccyFrom', 'usd', ['USD', 'Dollar']);
       nlp.addNerRuleOptionTexts('en', 'ccyFrom', 'inr', ['INR', 'rupee']);
@@ -1629,16 +1469,10 @@ describe('NLP', () => {
         },
       });
       nlp.addDocument('en', 'Hi, my name is @forename!', 'forename_intent');
-      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', ['myforename2']);
       nlp.addNerRuleOptionTexts('en', 'lastname', 'mylastname', ['mylastname']);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', [
-        'myforename1',
-      ]);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', ['myforename1']);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', ['myforename2']);
 
       expect(nlp.slotManager.intents.forename_intent).toBeDefined();
       expect(nlp.slotManager.intents.forename_intent.forename).toBeDefined();
@@ -1667,21 +1501,11 @@ describe('NLP', () => {
           considerOnlyIntentEntities: true,
         },
       });
-      nlp.addDocument(
-        'en',
-        'Hi, my name is @forename @lastname!',
-        'forename_intent'
-      );
-      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addDocument('en', 'Hi, my name is @forename @lastname!', 'forename_intent');
+      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', ['myforename2']);
       nlp.addNerRuleOptionTexts('en', 'lastname', 'mylastname', ['mylastname']);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', [
-        'myforename1',
-      ]);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', ['myforename1']);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', ['myforename2']);
 
       expect(nlp.slotManager.intents.forename_intent).toBeDefined();
       expect(nlp.slotManager.intents.forename_intent.forename).toBeDefined();
@@ -1711,23 +1535,13 @@ describe('NLP', () => {
           considerOnlyIntentEntities: true,
         },
       });
-      nlp.addDocument(
-        'en',
-        'Hi, my name is @forename @lastname!',
-        'name_intent'
-      );
+      nlp.addDocument('en', 'Hi, my name is @forename @lastname!', 'name_intent');
       nlp.addDocument('en', 'Hi, my name is @lastname!', 'name_intent');
       nlp.addDocument('en', 'Hi, my name is @forename!', 'name_intent');
-      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', ['myforename2']);
       nlp.addNerRuleOptionTexts('en', 'lastname', 'mylastname', ['mylastname']);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', [
-        'myforename1',
-      ]);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', ['myforename1']);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', ['myforename2']);
 
       expect(nlp.slotManager.intents.name_intent).toBeDefined();
       expect(nlp.slotManager.intents.name_intent.forename).toBeDefined();
@@ -1758,16 +1572,10 @@ describe('NLP', () => {
         },
       });
       nlp.addDocument('en', 'Hi, my name is @forename!', 'forename_intent');
-      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'lastname', 'myforename2', ['myforename2']);
       nlp.addNerRuleOptionTexts('en', 'lastname', 'mylastname', ['mylastname']);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', [
-        'myforename1',
-      ]);
-      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', [
-        'myforename2',
-      ]);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename1', ['myforename1']);
+      nlp.addNerRuleOptionTexts('en', 'forename', 'myforename2', ['myforename2']);
 
       expect(nlp.slotManager.intents.forename_intent).toBeDefined();
       expect(nlp.slotManager.intents.forename_intent.forename).toBeDefined();

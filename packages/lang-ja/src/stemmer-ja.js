@@ -1,29 +1,6 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * 'Software'), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const fs = require('fs');
 const path = require('path');
-const { BaseStemmer } = require('@nlpjs/core');
+const { BaseStemmer } = require('@bokata/core');
 
 const kuromoji = require('kuromoji');
 const hepburn = require('./hepburn.json');
@@ -52,10 +29,7 @@ class StemmerJa extends BaseStemmer {
       } else {
         let dicPath = path.join(__dirname, '../node_modules/kuromoji/dict');
         if (!fs.existsSync(dicPath)) {
-          dicPath = path.join(
-            __dirname,
-            '../../../../node_modules/kuromoji/dict'
-          );
+          dicPath = path.join(__dirname, '../../../../node_modules/kuromoji/dict');
           if (!fs.existsSync(dicPath)) {
             dicPath = './node_modules/kuromoji/dict';
           }
@@ -106,9 +80,7 @@ class StemmerJa extends BaseStemmer {
    */
   isKanjiChar(ch) {
     return (
-      (ch >= '\u4e00' && ch <= '\u9fcf') ||
-      (ch >= '\uf900' && ch <= '\ufaff') ||
-      (ch >= '\u3400' && ch <= '\u4dbf')
+      (ch >= '\u4e00' && ch <= '\u9fcf') || (ch >= '\uf900' && ch <= '\ufaff') || (ch >= '\u3400' && ch <= '\u4dbf')
     );
   }
 
@@ -191,11 +163,7 @@ class StemmerJa extends BaseStemmer {
    */
   toHiragana(str) {
     return [...str]
-      .map((ch) =>
-        ch > '\u30a0' && ch < '\u30f7'
-          ? String.fromCharCode(ch.charCodeAt(0) + this.shiftToHiragana)
-          : ch
-      )
+      .map((ch) => (ch > '\u30a0' && ch < '\u30f7' ? String.fromCharCode(ch.charCodeAt(0) + this.shiftToHiragana) : ch))
       .join('');
   }
 
@@ -205,11 +173,7 @@ class StemmerJa extends BaseStemmer {
    */
   toKatakana(str) {
     return [...str]
-      .map((ch) =>
-        ch > '\u3040' && ch < '\u3097'
-          ? String.fromCharCode(ch.charCodeAt(0) - this.shiftToHiragana)
-          : ch
-      )
+      .map((ch) => (ch > '\u3040' && ch < '\u3097' ? String.fromCharCode(ch.charCodeAt(0) - this.shiftToHiragana) : ch))
       .join('');
   }
 
@@ -219,6 +183,7 @@ class StemmerJa extends BaseStemmer {
    * @param {String} srcStr Input string
    */
   toRomaji(srcStr) {
+    // eslint-disable-next-line prefer-regex-literals
     const reghatu = new RegExp(
       /(ん|ン)(?=あ|い|う|え|お|ア|イ|ウ|エ|オ|ぁ|ぃ|ぅ|ぇ|ぉ|ァ|ィ|ゥ|ェ|ォ|や|ゆ|よ|ヤ|ユ|ヨ|ゃ|ゅ|ょ|ャ|ュ|ョ)/g
     );
@@ -232,10 +197,7 @@ class StemmerJa extends BaseStemmer {
     if (indices.length !== 0) {
       let mstr = '';
       for (let i = 0; i < indices.length; i += 1) {
-        mstr +=
-          i === 0
-            ? `${str.slice(0, indices[i])}`
-            : `${str.slice(indices[i - 1], indices[i])}`;
+        mstr += i === 0 ? `${str.slice(0, indices[i])}` : `${str.slice(indices[i - 1], indices[i])}`;
       }
       mstr += str.slice(indices[indices.length - 1]);
       str = mstr;
@@ -272,9 +234,7 @@ class StemmerJa extends BaseStemmer {
       const token = tokens[i];
       if (this.hasJapanese(token.surface_form)) {
         if (!token.reading) {
-          token.reading = token.surface_form
-            .split('')
-            .every(this.isKanaChar.bind(this))
+          token.reading = token.surface_form.split('').every(this.isKanaChar.bind(this))
             ? this.toKatakana(token.surface_form)
             : token.surface_form;
         } else if (this.hasHiragana(token.reading)) {
@@ -287,11 +247,7 @@ class StemmerJa extends BaseStemmer {
     for (let i = 0; i < tokens.length; i += 1) {
       const current = tokens[i];
       const prev = tokens[i - 1];
-      if (
-        current.pos &&
-        current.pos === '助動詞' &&
-        (current.surface_form === 'う' || current.surface_form === 'ウ')
-      ) {
+      if (current.pos && current.pos === '助動詞' && (current.surface_form === 'う' || current.surface_form === 'ウ')) {
         if (i - 1 >= 0 && prev.pos && prev.pos === '動詞') {
           prev.surface_form += 'う';
           if (prev.pronunciation) {
@@ -315,11 +271,7 @@ class StemmerJa extends BaseStemmer {
         (current.surface_form[current.surface_form.length - 1] === 'っ' ||
           current.surface_form[current.surface_form.length - 1] === 'ッ')
       ) {
-        if (
-          i + 1 < tokens.length &&
-          next.pos &&
-          (next.pos === '動詞' || next.pos === '助動詞')
-        ) {
+        if (i + 1 < tokens.length && next.pos && (next.pos === '動詞' || next.pos === '助動詞')) {
           current.surface_form += next.surface_form;
           if (current.pronunciation) {
             current.pronunciation += next.pronunciation;
@@ -374,8 +326,7 @@ class StemmerJa extends BaseStemmer {
     await this.init();
     text = input.text;
     let tokens;
-    const normalizeFormality =
-      input.normalizeFormality === undefined ? true : input.normalizeFormality;
+    const normalizeFormality = input.normalizeFormality === undefined ? true : input.normalizeFormality;
     if (normalizeFormality) {
       tokens = this.formalityLevel(text).informalTokens;
     } else {
@@ -389,13 +340,11 @@ class StemmerJa extends BaseStemmer {
         )
       )
       .filter((token) => token !== '');
-    const removeNumbers =
-      input.removeNumbers === undefined ? true : input.removeNumbers;
+    const removeNumbers = input.removeNumbers === undefined ? true : input.removeNumbers;
     if (removeNumbers) {
       tokens = tokens.filter((x) => !this.isNumber(x));
     }
-    const stemMinLength =
-      input.stemMinLength === undefined ? 2 : input.stemMinLength;
+    const stemMinLength = input.stemMinLength === undefined ? 2 : input.stemMinLength;
     tokens = tokens.filter((x) => x.length >= stemMinLength);
     return tokens;
   }

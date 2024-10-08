@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { defaultContainer } = require('@nlpjs/core');
+const { defaultContainer } = require('@bokata/core');
 const reduceEdges = require('./reduce-edges');
 const { TrimType } = require('./trim-types');
 
@@ -32,11 +9,7 @@ class ExtractorTrim {
   }
 
   mustSkip(word, condition) {
-    if (
-      condition.options &&
-      condition.options.skip &&
-      condition.options.skip.length > 0
-    ) {
+    if (condition.options && condition.options.skip && condition.options.skip.length > 0) {
       for (let i = 0; i < condition.options.skip.length; i += 1) {
         const skipWord = condition.options.skip[i];
         if (condition.options.caseSensitive) {
@@ -102,10 +75,7 @@ class ExtractorTrim {
   findWord(utterance, word, caseSensitive = false, noSpaces = false) {
     const result = [];
     let matchFound;
-    const regex = new RegExp(
-      noSpaces ? word : ` ${word} | ${word}|${word} `,
-      caseSensitive ? 'g' : 'ig'
-    );
+    const regex = new RegExp(noSpaces ? word : ` ${word} | ${word}|${word} `, caseSensitive ? 'g' : 'ig');
     do {
       const match = regex.exec(utterance);
       if (match) {
@@ -266,9 +236,7 @@ class ExtractorTrim {
     const result = [];
     if (condition && Array.isArray(condition.words)) {
       for (let i = 0; i < condition.words.length; i += 1) {
-        const word = condition.options.noSpaces
-          ? condition.words[i]
-          : ` ${condition.words[i]}`;
+        const word = condition.options.noSpaces ? condition.words[i] : ` ${condition.words[i]}`;
         const wordPositions = this.findWord(utterance, word);
         if (!condition.options.noSpaces) {
           const wordPositions2 = this.findWord(utterance, condition.words[i]);
@@ -284,10 +252,7 @@ class ExtractorTrim {
     const filteredResult = [];
     for (let i = 0; i < result.length; i += 1) {
       // Remove common whitespace characters
-      result[i].sourceText = result[i].sourceText.replace(
-        /^[\s,.!?;:([\]'"¡¿)/]+|[\s,.!?;:([\]'"¡¿)/]+$/,
-        ''
-      );
+      result[i].sourceText = result[i].sourceText.replace(/^[\s,.!?;:([\]'"¡¿)/]+|[\s,.!?;:([\]'"¡¿)/]+$/, '');
       if (!this.mustSkip(result[i].utteranceText, condition)) {
         filteredResult.push(result[i]);
       }
@@ -321,10 +286,7 @@ class ExtractorTrim {
     const rules = this.getRules(input);
     const edges = input.edges || [];
     for (let i = 0; i < rules.length; i += 1) {
-      const newEdges = this.extractFromRule(
-        input.text || input.utterance,
-        rules[i]
-      );
+      const newEdges = this.extractFromRule(input.text || input.utterance, rules[i]);
       for (let j = 0; j < newEdges.length; j += 1) {
         edges.push(newEdges[j]);
       }

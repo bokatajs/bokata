@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const dictionary = require('./dictionary.json');
 
 class TranslateZh {
@@ -72,14 +49,7 @@ class TranslateZh {
     return true;
   }
 
-  createToken(
-    text,
-    processedPositions,
-    start,
-    currentLength,
-    dialect,
-    variant
-  ) {
+  createToken(text, processedPositions, start, currentLength, dialect, variant) {
     for (let i = 0; i < currentLength; i += 1) {
       processedPositions[start + i] = true;
     }
@@ -99,49 +69,13 @@ class TranslateZh {
       if (this.canGetSlice(processedPositions, i, currentLength)) {
         const slice = sentence.slice(i, i + currentLength);
         if (this.hkPhrasesInverse[slice] || this.hkRevPhrases[slice]) {
-          result.push(
-            this.createToken(
-              slice,
-              processedPositions,
-              i,
-              currentLength,
-              'traditional',
-              'hk'
-            )
-          );
+          result.push(this.createToken(slice, processedPositions, i, currentLength, 'traditional', 'hk'));
         } else if (this.twPhrasesInverse[slice] || this.twRevPhrases[slice]) {
-          result.push(
-            this.createToken(
-              slice,
-              processedPositions,
-              i,
-              currentLength,
-              'traditional',
-              'tw'
-            )
-          );
+          result.push(this.createToken(slice, processedPositions, i, currentLength, 'traditional', 'tw'));
         } else if (this.stPhrases[slice]) {
-          result.push(
-            this.createToken(
-              slice,
-              processedPositions,
-              i,
-              currentLength,
-              'simplified',
-              undefined
-            )
-          );
+          result.push(this.createToken(slice, processedPositions, i, currentLength, 'simplified', undefined));
         } else if (this.tsPhrases[slice]) {
-          result.push(
-            this.createToken(
-              slice,
-              processedPositions,
-              i,
-              currentLength,
-              'traditional',
-              undefined
-            )
-          );
+          result.push(this.createToken(slice, processedPositions, i, currentLength, 'traditional', undefined));
         }
       }
     }
@@ -160,63 +94,18 @@ class TranslateZh {
       if (!processedPositions[i]) {
         const char = sentence[i];
         if (this.both[char]) {
-          tokens.push(
-            this.createToken(char, processedPositions, i, 1, 'both', undefined)
-          );
+          tokens.push(this.createToken(char, processedPositions, i, 1, 'both', undefined));
         } else if (this.hkVariantsInverse[char]) {
-          tokens.push(
-            this.createToken(
-              char,
-              processedPositions,
-              i,
-              1,
-              'traditional',
-              'hk'
-            )
-          );
+          tokens.push(this.createToken(char, processedPositions, i, 1, 'traditional', 'hk'));
         } else if (this.twVariantsInverse[char]) {
-          tokens.push(
-            this.createToken(
-              char,
-              processedPositions,
-              i,
-              1,
-              'traditional',
-              'tw'
-            )
-          );
+          tokens.push(this.createToken(char, processedPositions, i, 1, 'traditional', 'tw'));
         } else if (this.st[char]) {
-          tokens.push(
-            this.createToken(
-              char,
-              processedPositions,
-              i,
-              1,
-              'simplified',
-              undefined
-            )
-          );
+          tokens.push(this.createToken(char, processedPositions, i, 1, 'simplified', undefined));
         } else if (this.ts[char]) {
-          tokens.push(
-            this.createToken(
-              char,
-              processedPositions,
-              i,
-              1,
-              'traditional',
-              undefined
-            )
-          );
+          tokens.push(this.createToken(char, processedPositions, i, 1, 'traditional', undefined));
         } else {
           tokens.push(
-            this.createToken(
-              char,
-              processedPositions,
-              i,
-              1,
-              this.isChineseChar(char) ? 'both' : 'none',
-              undefined
-            )
+            this.createToken(char, processedPositions, i, 1, this.isChineseChar(char) ? 'both' : 'none', undefined)
           );
         }
       }
@@ -226,10 +115,7 @@ class TranslateZh {
       let currentToken = tokens[0];
       for (let i = 1; i < tokens.length; i += 1) {
         const token = tokens[i];
-        if (
-          token.dialect === currentToken.dialect &&
-          token.variant === currentToken.variant
-        ) {
+        if (token.dialect === currentToken.dialect && token.variant === currentToken.variant) {
           currentToken.text += token.text;
           currentToken.end += 1;
           currentToken.length += 1;
@@ -478,10 +364,7 @@ class TranslateZh {
       if (identification.dialect === 'none') {
         return text;
       }
-      if (
-        identification.dialect === 'simplified' ||
-        identification.dialect === 'both'
-      ) {
+      if (identification.dialect === 'simplified' || identification.dialect === 'both') {
         source = 'simplified';
       } else if (identification.variant === 'hk') {
         source = 'hk';

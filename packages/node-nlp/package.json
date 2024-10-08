@@ -1,21 +1,21 @@
 {
-  "name": "node-nlp",
-  "version": "4.27.0",
+  "name": "bokata",
+  "version": "0.0.1",
   "description": "Library for NLU (Natural Language Understanding) done in Node.js",
   "author": {
-    "email": "opensource@axa.com",
+    "email": "jseijas@gmail.com",
     "name": "Jesus Seijas"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/axa-group/nlp.js.git"
+    "url": "git+https://github.com/bokatajs/bokata.git"
   },
   "bugs": {
-    "url": "https://github.com/axa-group/nlp.js/issues"
+    "url": "https://github.com/bokatajs/bokata/issues"
   },
   "maintainers": [
     {
-      "email": "opensource@axa.com",
+      "email": "jseijas@gmail.com",
       "name": "Jesus Seijas"
     }
   ],
@@ -42,21 +42,19 @@
     "bot"
   ],
   "dependencies": {
-    "@nlpjs/builtin-duckling": "^4.26.1",
-    "@nlpjs/builtin-microsoft": "^4.26.1",
-    "@nlpjs/core-loader": "^4.26.1",
-    "@nlpjs/emoji": "^4.26.1",
-    "@nlpjs/evaluator": "^4.26.1",
-    "@nlpjs/lang-all": "^4.26.1",
-    "@nlpjs/language": "^4.25.0",
-    "@nlpjs/neural": "^4.25.0",
-    "@nlpjs/nlg": "^4.26.1",
-    "@nlpjs/nlp": "^4.27.0",
-    "@nlpjs/nlu": "^4.27.0",
-    "@nlpjs/request": "^4.25.0",
-    "@nlpjs/sentiment": "^4.26.1",
-    "@nlpjs/similarity": "^4.26.1",
-    "@nlpjs/xtables": "^4.25.0"
-  },
-  "gitHead": "cc4249fa994c58d220e6f10a6c94fdad05df32fd"
+    "@bokata/builtin-microsoft": "^0.0.1",
+    "@bokata/core-loader": "^0.0.1",
+    "@bokata/emoji": "^0.0.1",
+    "@bokata/evaluator": "^0.0.1",
+    "@bokata/lang-all": "^0.0.1",
+    "@bokata/language": "^0.0.1",
+    "@bokata/neural": "^0.0.1",
+    "@bokata/nlg": "^0.0.1",
+    "@bokata/nlp": "^0.0.1",
+    "@bokata/nlu": "^0.0.1",
+    "@bokata/request": "^0.0.1",
+    "@bokata/sentiment": "^0.0.1",
+    "@bokata/similarity": "^0.0.1",
+    "@bokata/xtables": "^0.0.1"
+  }
 }

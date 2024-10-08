@@ -1,25 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 const { TrimTypesList } = require('./trim-types');
 
 function runDiscard(srcEdge, srcOther, useMaxLength, intentEntities = []) {
@@ -38,12 +16,7 @@ function runDiscard(srcEdge, srcOther, useMaxLength, intentEntities = []) {
   if (other.start <= edge.end && other.end >= edge.start) {
     if (other.accuracy < edge.accuracy) {
       other.discarded = true;
-    } else if (
-      (useMaxLength ||
-        other.entity === edge.entity ||
-        other.entity === 'number') &&
-      other.len <= edge.len
-    ) {
+    } else if ((useMaxLength || other.entity === edge.entity || other.entity === 'number') && other.len <= edge.len) {
       // Entities have same priority
       if (
         other.start === edge.start &&
@@ -68,34 +41,18 @@ function runDiscard(srcEdge, srcOther, useMaxLength, intentEntities = []) {
           other.discarded = true;
         }
       }
-    } else if (
-      (useMaxLength ||
-        other.entity === edge.entity ||
-        edge.entity === 'number') &&
-      other.len > edge.len
-    ) {
+    } else if ((useMaxLength || other.entity === edge.entity || edge.entity === 'number') && other.len > edge.len) {
       edge.discarded = true;
     } else if (edge.type === 'enum' && other.type === 'enum') {
       const edgeIncludedInIntentEntities = intentEntities.includes(edge.entity);
-      const otherIncludedInIntentEntities = intentEntities.includes(
-        other.entity
-      );
+      const otherIncludedInIntentEntities = intentEntities.includes(other.entity);
       if (edgeIncludedInIntentEntities && !otherIncludedInIntentEntities) {
         other.discarded = true;
-      } else if (
-        !edgeIncludedInIntentEntities &&
-        otherIncludedInIntentEntities
-      ) {
+      } else if (!edgeIncludedInIntentEntities && otherIncludedInIntentEntities) {
         edge.discarded = true;
-      } else if (
-        edge.len <= other.len &&
-        other.utteranceText.includes(edge.utteranceText)
-      ) {
+      } else if (edge.len <= other.len && other.utteranceText.includes(edge.utteranceText)) {
         edge.discarded = true;
-      } else if (
-        edge.len > other.len &&
-        edge.utteranceText.includes(other.utteranceText)
-      ) {
+      } else if (edge.len > other.len && edge.utteranceText.includes(other.utteranceText)) {
         other.discarded = true;
       }
     }
@@ -116,12 +73,7 @@ function splitEdges(edges) {
     if (edge.type === 'trim' && TrimTypesList.includes(edge.subtype)) {
       for (let j = 0; j < edges.length; j += 1) {
         const other = edges[j];
-        if (
-          i !== j &&
-          other.start >= edge.start &&
-          other.end <= edge.end &&
-          other.type !== 'trim'
-        ) {
+        if (i !== j && other.start >= edge.start && other.end <= edge.end && other.type !== 'trim') {
           const edgeLen = edge.end - edge.start;
           const otherLen = other.end - other.start;
           if (edge.end === other.end) {

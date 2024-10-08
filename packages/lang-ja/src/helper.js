@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 function replacer(translationTable) {
   const pattern = [];
   const keys = Object.keys(translationTable);
@@ -337,24 +314,12 @@ conversionTables.fullwidthToHalfwidth.punctuation = merge(
 );
 
 // Fill in the conversion tables with the flipped tables.
-conversionTables.halfwidthToFullwidth.alphabet = flip(
-  conversionTables.fullwidthToHalfwidth.alphabet
-);
-conversionTables.halfwidthToFullwidth.numbers = flip(
-  conversionTables.fullwidthToHalfwidth.numbers
-);
-conversionTables.halfwidthToFullwidth.symbol = flip(
-  conversionTables.fullwidthToHalfwidth.symbol
-);
-conversionTables.halfwidthToFullwidth.purePunctuation = flip(
-  conversionTables.fullwidthToHalfwidth.purePunctuation
-);
-conversionTables.halfwidthToFullwidth.punctuation = flip(
-  conversionTables.fullwidthToHalfwidth.punctuation
-);
-conversionTables.halfwidthToFullwidth.katakana = flip(
-  conversionTables.fullwidthToHalfwidth.katakana
-);
+conversionTables.halfwidthToFullwidth.alphabet = flip(conversionTables.fullwidthToHalfwidth.alphabet);
+conversionTables.halfwidthToFullwidth.numbers = flip(conversionTables.fullwidthToHalfwidth.numbers);
+conversionTables.halfwidthToFullwidth.symbol = flip(conversionTables.fullwidthToHalfwidth.symbol);
+conversionTables.halfwidthToFullwidth.purePunctuation = flip(conversionTables.fullwidthToHalfwidth.purePunctuation);
+conversionTables.halfwidthToFullwidth.punctuation = flip(conversionTables.fullwidthToHalfwidth.punctuation);
+conversionTables.halfwidthToFullwidth.katakana = flip(conversionTables.fullwidthToHalfwidth.katakana);
 
 // Build the normalization table.
 conversionTables.normalize = merge(
@@ -540,9 +505,7 @@ const converters = {
     alphabet: replacer(conversionTables.fullwidthToHalfwidth.alphabet),
     numbers: replacer(conversionTables.fullwidthToHalfwidth.numbers),
     symbol: replacer(conversionTables.fullwidthToHalfwidth.symbol),
-    purePunctuation: replacer(
-      conversionTables.fullwidthToHalfwidth.purePunctuation
-    ),
+    purePunctuation: replacer(conversionTables.fullwidthToHalfwidth.purePunctuation),
     punctuation: replacer(conversionTables.fullwidthToHalfwidth.punctuation),
     katakana: replacer(conversionTables.fullwidthToHalfwidth.katakana),
   },
@@ -551,9 +514,7 @@ const converters = {
     alphabet: replacer(conversionTables.halfwidthToFullwidth.alphabet),
     numbers: replacer(conversionTables.halfwidthToFullwidth.numbers),
     symbol: replacer(conversionTables.halfwidthToFullwidth.symbol),
-    purePunctuation: replacer(
-      conversionTables.halfwidthToFullwidth.purePunctuation
-    ),
+    purePunctuation: replacer(conversionTables.halfwidthToFullwidth.purePunctuation),
     punctuation: replacer(conversionTables.halfwidthToFullwidth.punctuation),
     katakana: replacer(conversionTables.halfwidthToFullwidth.katakana),
   },

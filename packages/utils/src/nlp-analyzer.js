@@ -1,34 +1,10 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const Excel = require('exceljs');
-const { XTableUtils } = require('@nlpjs/xtables');
+const { XTableUtils } = require('@bokata/xtables');
 
 class NlpAnalyzer {
   constructor(settings = {}) {
     this.settings = settings;
-    this.threshold =
-      this.settings.threshold === undefined ? 0.5 : this.settings.threshold;
+    this.threshold = this.settings.threshold === undefined ? 0.5 : this.settings.threshold;
   }
 
   async analyze(corpus, trainFn, testFn) {
@@ -58,9 +34,7 @@ class NlpAnalyzer {
           secondIntent: secondClassification.intent,
           secondScore: secondClassification.score,
           isCorrect: intent === topClassification.intent,
-          isCorrectGoodScore:
-            intent === topClassification.intent &&
-            topClassification.score >= this.threshold,
+          isCorrectGoodScore: intent === topClassification.intent && topClassification.score >= this.threshold,
         };
         if (intentNames.indexOf(current.topIntent) === -1) {
           intentNames.push(current.topIntent);
@@ -142,9 +116,7 @@ class NlpAnalyzer {
       } else {
         const expectedIntentPos = intentDict[output.expectedIntent];
         const actualIntentPos = intentDict[output.topIntent];
-        analysis.confusionMatrix.matrix[actualIntentPos][
-          expectedIntentPos
-        ] += 1;
+        analysis.confusionMatrix.matrix[actualIntentPos][expectedIntentPos] += 1;
         for (let j = 0; j < analysis.confusionMatrix.intents.length; j += 1) {
           const current = analysis.confusionMatrix.intents[j];
           if (j === expectedIntentPos) {
@@ -174,33 +146,25 @@ class NlpAnalyzer {
     analysis.correct = correct;
     analysis.correctGoodScore = correctGoodScore;
     analysis.correctPercentage = (correct * 100) / outputs.length;
-    analysis.correctGoodScorePercentage =
-      (correctGoodScore * 100) / outputs.length;
+    analysis.correctGoodScorePercentage = (correctGoodScore * 100) / outputs.length;
     for (let i = 0; i < analysis.confusionMatrix.intents.length; i += 1) {
       const current = analysis.confusionMatrix.intents[i];
       analysis.confusionMatrix.totals.tp += current.tp;
       analysis.confusionMatrix.totals.fp += current.fp;
       analysis.confusionMatrix.totals.tn += current.tn;
       analysis.confusionMatrix.totals.fn += current.fn;
-      current.accuracy =
-        (current.tp + current.tn) /
-        (current.tp + current.tn + current.fp + current.fn);
+      current.accuracy = (current.tp + current.tn) / (current.tp + current.tn + current.fp + current.fn);
       current.specificity = current.tn / (current.tn + current.fp);
       current.precision = current.tp / (current.tp + current.fp);
       current.recall = current.tp / (current.tp + current.fn);
-      current.f1Score =
-        (2 * current.precision * current.recall) /
-        (current.precision + current.recall);
+      current.f1Score = (2 * current.precision * current.recall) / (current.precision + current.recall);
     }
     const { totals } = analysis.confusionMatrix;
-    totals.accuracy =
-      (totals.tp + totals.tn) / (totals.tp + totals.tn + totals.fp + totals.fn);
+    totals.accuracy = (totals.tp + totals.tn) / (totals.tp + totals.tn + totals.fp + totals.fn);
     totals.specificity = totals.tn / (totals.tn + totals.fp);
     totals.precision = totals.tp / (totals.tp + totals.fp);
     totals.recall = totals.tp / (totals.tp + totals.fn);
-    totals.f1Score =
-      (2 * totals.precision * totals.recall) /
-      (totals.precision + totals.recall);
+    totals.f1Score = (2 * totals.precision * totals.recall) / (totals.precision + totals.recall);
     analysis.errors = errors;
     return analysis;
   }
@@ -364,8 +328,8 @@ class NlpAnalyzer {
 
   async generateExcel(fileName, analysis, options = {}) {
     const workbook = new Excel.Workbook();
-    workbook.creator = options.creator || 'Jesús Seijas';
-    workbook.lastModifiedBy = options.lastModifiedBy || 'Jesús Seijas';
+    workbook.creator = options.creator || 'Jesus Seijas';
+    workbook.lastModifiedBy = options.lastModifiedBy || 'Jesus Seijas';
     workbook.created = options.created || new Date();
     workbook.modified = options.modified || workbook.created;
     this.generateConfusionMatrix(workbook, analysis);
@@ -375,8 +339,8 @@ class NlpAnalyzer {
 
   streamExcel(outStream, analysis, options = {}) {
     const workbook = new Excel.Workbook();
-    workbook.creator = options.creator || 'Jesús Seijas';
-    workbook.lastModifiedBy = options.lastModifiedBy || 'Jesús Seijas';
+    workbook.creator = options.creator || 'Jesus Seijas';
+    workbook.lastModifiedBy = options.lastModifiedBy || 'Jesus Seijas';
     workbook.created = options.created || new Date();
     workbook.modified = options.modified || workbook.created;
     this.generateConfusionMatrix(workbook, analysis);

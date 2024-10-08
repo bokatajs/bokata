@@ -1,33 +1,7 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const fs = require('fs');
 const { BertWordPieceTokenizer } = require('../src');
 
-const vocabEn = fs.readFileSync(
-  './packages/bert-tokenizer/dicts/vocab-en.txt',
-  'utf-8'
-);
+const vocabEn = fs.readFileSync('./packages/bert-tokenizer/dicts/vocab-en.txt', 'utf-8');
 
 describe('BertWordPieceTokenizer', () => {
   describe('constructor', () => {
@@ -142,37 +116,25 @@ describe('BertWordPieceTokenizer', () => {
   describe('Encode', () => {
     test('It should add a [CLS] at the begining', () => {
       const tokenizer = new BertWordPieceTokenizer({ vocabContent: vocabEn });
-      const actual = tokenizer.encode(
-        'This is the question.',
-        'This is the context.'
-      );
+      const actual = tokenizer.encode('This is the question.', 'This is the context.');
       expect(actual.ids[0]).toEqual(101);
       expect(actual.tokens[0]).toEqual('[CLS]');
     });
     test('It should add a [SEP] between question and context', () => {
       const tokenizer = new BertWordPieceTokenizer({ vocabContent: vocabEn });
-      const actual = tokenizer.encode(
-        'This is the question.',
-        'This is the context.'
-      );
+      const actual = tokenizer.encode('This is the question.', 'This is the context.');
       expect(actual.ids[6]).toEqual(102);
       expect(actual.tokens[6]).toEqual('[SEP]');
     });
     test('It should add a [SEP] at the end', () => {
       const tokenizer = new BertWordPieceTokenizer({ vocabContent: vocabEn });
-      const actual = tokenizer.encode(
-        'This is the question.',
-        'This is the context.'
-      );
+      const actual = tokenizer.encode('This is the question.', 'This is the context.');
       expect(actual.ids[actual.ids.length - 1]).toEqual(102);
       expect(actual.tokens[actual.ids.length - 1]).toEqual('[SEP]');
     });
     test('It should add word indexes for words, null for special tokens', () => {
       const tokenizer = new BertWordPieceTokenizer({ vocabContent: vocabEn });
-      const actual = tokenizer.encode(
-        'This is the question.',
-        'This is the context.'
-      );
+      const actual = tokenizer.encode('This is the question.', 'This is the context.');
       expect(actual.wordIndexes[0]).toEqual(null);
       expect(actual.wordIndexes[1]).toEqual(0);
       expect(actual.wordIndexes[2]).toEqual(1);
@@ -181,30 +143,18 @@ describe('BertWordPieceTokenizer', () => {
     });
     test('It should add type ids, 0 for question, 1 for context', () => {
       const tokenizer = new BertWordPieceTokenizer({ vocabContent: vocabEn });
-      const actual = tokenizer.encode(
-        'This is the question.',
-        'This is the context.'
-      );
+      const actual = tokenizer.encode('This is the question.', 'This is the context.');
       expect(actual.typeIds[0]).toEqual(0);
       expect(actual.typeIds[8]).toEqual(1);
     });
     test('Min length can be provided', () => {
       const tokenizer = new BertWordPieceTokenizer({ vocabContent: vocabEn });
-      const actual = tokenizer.encode(
-        'This is the question.',
-        'This is the context.',
-        100
-      );
+      const actual = tokenizer.encode('This is the question.', 'This is the context.', 100);
       expect(actual.ids.length).toEqual(100);
     });
     test('Max length can be provided', () => {
       const tokenizer = new BertWordPieceTokenizer({ vocabContent: vocabEn });
-      const actual = tokenizer.encode(
-        'This is the question.',
-        'This is the context.',
-        undefined,
-        6
-      );
+      const actual = tokenizer.encode('This is the question.', 'This is the context.', undefined, 6);
       expect(actual.ids.length).toEqual(6);
     });
   });

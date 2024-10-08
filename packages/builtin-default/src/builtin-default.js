@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, defaultContainer } = require('@nlpjs/core');
+const { Clonable, defaultContainer } = require('@bokata/core');
 const Recognizers = require('./recognizers');
 
 class BuiltinDefault extends Clonable {
@@ -38,23 +15,12 @@ class BuiltinDefault extends Clonable {
       this.settings.tag = 'builtin-default';
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
   }
 
   registerDefault() {
     this.container.registerConfiguration('builtin-default', {
-      builtins: [
-        'Email',
-        'URL',
-        'IpAddress',
-        'PhoneNumber',
-        'Hashtag',
-        'Number',
-        'Date',
-      ],
+      builtins: ['Email', 'URL', 'IpAddress', 'PhoneNumber', 'Hashtag', 'Number', 'Date'],
     });
   }
 
@@ -84,10 +50,7 @@ class BuiltinDefault extends Clonable {
     const result = [];
     const builtins = srcBuiltins || this.settings.builtins;
     builtins.forEach((name) => {
-      const entities = Recognizers[`recognize${name}`](
-        utterance,
-        locale || 'en'
-      );
+      const entities = Recognizers[`recognize${name}`](utterance, locale || 'en');
       for (let i = 0; i < entities.length; i += 1) {
         const entity = entities[i];
         result.push(entity);
@@ -101,11 +64,7 @@ class BuiltinDefault extends Clonable {
 
   extract(srcInput) {
     const input = srcInput;
-    const entities = this.findBuiltinEntities(
-      input.text || input.utterance,
-      input.locale,
-      input.builtins
-    );
+    const entities = this.findBuiltinEntities(input.text || input.utterance, input.locale, input.builtins);
     if (!input.edges) {
       input.edges = [];
     }

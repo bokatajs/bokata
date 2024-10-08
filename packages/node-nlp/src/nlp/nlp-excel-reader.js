@@ -1,4 +1,4 @@
-const { XDoc } = require('@nlpjs/xtables');
+const { XDoc } = require('@bokata/xtables');
 
 class NlpExcelReader {
   constructor(manager) {
@@ -27,12 +27,7 @@ class NlpExcelReader {
   loadNamedEntities() {
     this.xdoc.getTable('Named Entities').data.forEach((row) => {
       const languages = row.language.split(',').map((x) => x.trim());
-      this.manager.addNamedEntityText(
-        row.entity,
-        row.option,
-        languages,
-        row.text
-      );
+      this.manager.addNamedEntityText(row.entity, row.option, languages, row.text);
     });
   }
 
@@ -54,13 +49,7 @@ class NlpExcelReader {
 
   loadResponses() {
     this.xdoc.getTable('Responses').data.forEach((row) => {
-      this.manager.addAnswer(
-        row.language,
-        row.intent,
-        row.response,
-        row.condition,
-        row.url
-      );
+      this.manager.addAnswer(row.language, row.intent, row.response, row.condition, row.url);
     });
   }
 }

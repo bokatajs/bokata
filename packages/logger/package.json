@@ -1,21 +1,21 @@
 {
-  "name": "@nlpjs/logger",
-  "version": "4.26.1",
+  "name": "@bokata/logger",
+  "version": "0.0.1",
   "description": "Logger",
   "author": {
-    "email": "opensource@axa.com",
+    "email": "jseijas@gmail.com",
     "name": "Jesus Seijas"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/axa-group/nlp.js.git"
+    "url": "git+https://github.com/bokatajs/bokata.git"
   },
   "bugs": {
-    "url": "https://github.com/axa-group/nlp.js/issues"
+    "url": "https://github.com/bokatajs/bokata/issues"
   },
   "maintainers": [
     {
-      "email": "opensource@axa.com",
+      "email": "jseijas@gmail.com",
       "name": "Jesus Seijas"
     }
   ],
@@ -27,6 +27,5 @@
   "dependencies": {
     "pino": "^7.6.1",
     "pino-pretty": "^7.2.0"
-  },
-  "gitHead": "cc4249fa994c58d220e6f10a6c94fdad05df32fd"
+  }
 }

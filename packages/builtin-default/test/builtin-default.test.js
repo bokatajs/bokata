@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { containerBootstrap } = require('@nlpjs/core');
+const { containerBootstrap } = require('@bokata/core');
 const { BuiltinDefault } = require('../src');
 
 const container = containerBootstrap();
@@ -79,10 +56,7 @@ describe('Builtin Default', () => {
       const input = 'My email is something@mail.com but also other@mail.com';
       const actual = builtin.extract(buildInput(input, 'Email'));
       const expected = {
-        edges: [
-          buildExpected('something@mail.com', 12, 'email'),
-          buildExpected('other@mail.com', 40, 'email'),
-        ],
+        edges: [buildExpected('something@mail.com', 12, 'email'), buildExpected('other@mail.com', 40, 'email')],
         locale: 'en',
         text: input,
         builtins: ['Email'],
@@ -107,10 +81,7 @@ describe('Builtin Default', () => {
       const input = 'My ip is 8.8.8.8 and yours is 192.168.0.1';
       const actual = builtin.extract(buildInput(input, 'IpAddress'));
       const expected = {
-        edges: [
-          buildExpected('8.8.8.8', 9, 'ip', 'ipv4'),
-          buildExpected('192.168.0.1', 30, 'ip', 'ipv4'),
-        ],
+        edges: [buildExpected('8.8.8.8', 9, 'ip', 'ipv4'), buildExpected('192.168.0.1', 30, 'ip', 'ipv4')],
         locale: 'en',
         text: input,
         builtins: ['IpAddress'],
@@ -132,10 +103,7 @@ describe('Builtin Default', () => {
       const input = 'My ip is ABEF:452::FE10 and other is ABEF:452::AE10';
       const actual = builtin.extract(buildInput(input, 'IpAddress'));
       const expected = {
-        edges: [
-          buildExpected('ABEF:452::FE10', 9, 'ip', 'ipv6'),
-          buildExpected('ABEF:452::AE10', 37, 'ip', 'ipv6'),
-        ],
+        edges: [buildExpected('ABEF:452::FE10', 9, 'ip', 'ipv6'), buildExpected('ABEF:452::AE10', 37, 'ip', 'ipv6')],
         locale: 'en',
         text: input,
         builtins: ['IpAddress'],
@@ -157,8 +125,7 @@ describe('Builtin Default', () => {
       expect(actual).toEqual(expected);
     });
     test('It should extract several URLs', () => {
-      const input =
-        'My url is https://www.uri.com but also http://me.com/more/things?a=7&b=test';
+      const input = 'My url is https://www.uri.com but also http://me.com/more/things?a=7&b=test';
       const actual = builtin.extract(buildInput(input, 'URL'));
       const expected = {
         edges: [
@@ -189,10 +156,7 @@ describe('Builtin Default', () => {
       const input = 'My phone number is 541-754-3010 but also 555-911-7340';
       const actual = builtin.extract(buildInput(input, 'PhoneNumber'));
       const expected = {
-        edges: [
-          buildExpected('541-754-3010', 19, 'phonenumber'),
-          buildExpected('555-911-7340', 41, 'phonenumber'),
-        ],
+        edges: [buildExpected('541-754-3010', 19, 'phonenumber'), buildExpected('555-911-7340', 41, 'phonenumber')],
         locale: 'en',
         text: input,
         builtins: ['PhoneNumber'],
@@ -217,10 +181,7 @@ describe('Builtin Default', () => {
       const input = 'Look at #hashtag and #party';
       const actual = builtin.extract(buildInput(input, 'Hashtag'));
       const expected = {
-        edges: [
-          buildExpected('#hashtag', 8, 'hashtag'),
-          buildExpected('#party', 21, 'hashtag'),
-        ],
+        edges: [buildExpected('#hashtag', 8, 'hashtag'), buildExpected('#party', 21, 'hashtag')],
         locale: 'en',
         text: input,
         builtins: ['Hashtag'],
@@ -234,10 +195,7 @@ describe('Builtin Default', () => {
       const input = 'A is 12 and B is -7';
       const actual = builtin.extract(buildInput(input, 'Number'));
       const expected = {
-        edges: [
-          buildExpected('12', 5, 'number', 'integer'),
-          buildExpected('-7', 17, 'number', 'integer'),
-        ],
+        edges: [buildExpected('12', 5, 'number', 'integer'), buildExpected('-7', 17, 'number', 'integer')],
         locale: 'en',
         text: input,
         builtins: ['Number'],
@@ -250,10 +208,7 @@ describe('Builtin Default', () => {
       const input = 'A is 12.1 and B is -7.2';
       const actual = builtin.extract(buildInput(input, 'Number'));
       const expected = {
-        edges: [
-          buildExpected('12.1', 5, 'number', 'float'),
-          buildExpected('-7.2', 19, 'number', 'float'),
-        ],
+        edges: [buildExpected('12.1', 5, 'number', 'float'), buildExpected('-7.2', 19, 'number', 'float')],
         locale: 'en',
         text: input,
         builtins: ['Number'],

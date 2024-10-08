@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const containerBootstrap = require('./container-bootstrap');
 
 class Dock {
@@ -32,14 +9,7 @@ class Dock {
     return this.containers[name || 'default'];
   }
 
-  async createContainer(
-    name,
-    settings,
-    srcMustLoadEnv,
-    preffix,
-    parent,
-    pipelines
-  ) {
+  async createContainer(name, settings, srcMustLoadEnv, preffix, parent, pipelines) {
     const mustLoadEnv = srcMustLoadEnv === undefined ? true : srcMustLoadEnv;
     if (typeof name !== 'string') {
       settings = name;
@@ -51,13 +21,7 @@ class Dock {
       }
     }
     if (!this.containers[name]) {
-      const container = containerBootstrap(
-        settings,
-        mustLoadEnv,
-        undefined,
-        preffix,
-        pipelines
-      );
+      const container = containerBootstrap(settings, mustLoadEnv, undefined, preffix, pipelines);
       container.name = name;
       this.containers[name] = container;
       container.dock = this;
@@ -86,9 +50,7 @@ class Dock {
           false,
           keys[i],
           container,
-          container.childPipelines
-            ? container.childPipelines[keys[i]]
-            : undefined
+          container.childPipelines ? container.childPipelines[keys[i]] : undefined
         );
       }
       container.childs = childs;
@@ -96,12 +58,7 @@ class Dock {
   }
 
   async terraform(settings, mustLoadEnv = true) {
-    const defaultContainer = await this.createContainer(
-      'default',
-      settings,
-      mustLoadEnv,
-      ''
-    );
+    const defaultContainer = await this.createContainer('default', settings, mustLoadEnv, '');
     return defaultContainer;
   }
 

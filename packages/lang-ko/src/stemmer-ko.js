@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { BaseStemmer } = require('@nlpjs/core');
+const { BaseStemmer } = require('@bokata/core');
 const { tokenize, stemWord } = require('./korean-tokenizer');
 const { initDicts, dictionary } = require('./korean-dictionary');
 const TokenizerKo = require('./tokenizer-ko');
@@ -156,11 +133,8 @@ class StemmerKo extends BaseStemmer {
 
   async stem(text, input) {
     initDicts();
-    const inputText =
-      typeof text === 'string' ? text : input.utterance || input.text;
-    const newText = this.tokenizer
-      .tokenize(this.normalizer.normalize(inputText))
-      .join(' ');
+    const inputText = typeof text === 'string' ? text : input.utterance || input.text;
+    const newText = this.tokenizer.tokenize(this.normalizer.normalize(inputText)).join(' ');
     const tokens = tokenize(this.normalizer.normalize(newText))
       .map((x) => stemWord(this.prestem(x.trim())))
       .filter((x) => x);
@@ -180,10 +154,7 @@ class StemmerKo extends BaseStemmer {
     const input = srcInput;
     const locale = input.locale || 'en';
     const stemmer = this.container.get(`stemmer-${locale}`) || this;
-    input.tokens = await stemmer.stem(
-      input.text || input.tokens.join(' '),
-      input
-    );
+    input.tokens = await stemmer.stem(input.text || input.tokens.join(' '), input);
     return input;
   }
 

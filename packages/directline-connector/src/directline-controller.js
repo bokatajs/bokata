@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { uuid } = require('@nlpjs/core');
+const { uuid } = require('@bokata/core');
 const fetch = require('node-fetch');
 
 class DirectlineController {
@@ -29,10 +6,7 @@ class DirectlineController {
     const localhost = 'http://localhost:3000';
     this.settings = settings;
     this.parent = parent;
-    this.serviceUrl =
-      this.settings.serviceUrl ||
-      process.env.DIRECTLINE_SERVICE_URL ||
-      localhost;
+    this.serviceUrl = this.settings.serviceUrl || process.env.DIRECTLINE_SERVICE_URL || localhost;
     this.botUrl = this.settings.botUrl || process.env.DIRECTLINE_BOT_URL;
     this.expiresIn = this.settings.expiresIn || 1800;
     this.conversations = {};
@@ -193,8 +167,7 @@ class DirectlineController {
                   activity,
                 })
                 .then((nlpresult) => {
-                  result.text =
-                    nlpresult.answer || "Sorry, I didn't understand you";
+                  result.text = nlpresult.answer || "Sorry, I didn't understand you";
                   if (activity.channelId === 'emulator') {
                     result.nlp = {
                       intent: nlpresult.intent,
@@ -241,10 +214,7 @@ class DirectlineController {
   getActivities(conversationId, watermark) {
     return new Promise((resolve) => {
       const conversation = this.getConversation(conversationId, true);
-      const activities =
-        conversation.history.length > watermark
-          ? conversation.history.slice(watermark)
-          : [];
+      const activities = conversation.history.length > watermark ? conversation.history.slice(watermark) : [];
       resolve({
         status: 200,
         body: {

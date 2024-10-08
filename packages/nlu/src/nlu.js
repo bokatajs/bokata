@@ -1,31 +1,8 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, compareWildcars } = require('@nlpjs/core');
-const { SpellCheck } = require('@nlpjs/similarity');
+const { Clonable, compareWildcars } = require('@bokata/core');
+const { SpellCheck } = require('@bokata/similarity');
 
 class Nlu extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
@@ -39,10 +16,7 @@ class Nlu extends Clonable {
       this.settings.tag = `nlu-${this.settings.locale}`;
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.applySettings(this, {
       pipelinePrepare: this.getPipeline(`${this.settings.tag}-prepare`),
       pipelineTrain: this.getPipeline(`${this.settings.tag}-train`),
@@ -65,11 +39,7 @@ class Nlu extends Clonable {
       },
       false
     );
-    this.container.registerPipeline(
-      'nlu-??-train',
-      ['.prepareCorpus', '.addNoneFeature', '.innerTrain'],
-      false
-    );
+    this.container.registerPipeline('nlu-??-train', ['.prepareCorpus', '.addNoneFeature', '.innerTrain'], false);
   }
 
   async defaultPipelinePrepare(input) {
@@ -93,10 +63,7 @@ class Nlu extends Clonable {
         arrToObj: this.container.get('arrToObj'),
       };
     } else if (this.cache.results[input.settings.locale]) {
-      result =
-        this.cache.results[input.settings.locale][
-          input.text || input.utterance
-        ];
+      result = this.cache.results[input.settings.locale][input.text || input.utterance];
       if (result) {
         return result;
       }
@@ -111,8 +78,7 @@ class Nlu extends Clonable {
     if (!this.cache.results[input.settings.locale]) {
       this.cache.results[input.settings.locale] = {};
     }
-    this.cache.results[input.settings.locale][input.text || input.utterance] =
-      result;
+    this.cache.results[input.settings.locale][input.text || input.utterance] = result;
     return result;
   }
 
@@ -147,9 +113,7 @@ class Nlu extends Clonable {
         }
         return result;
       }
-      let item = settings.fieldNameSrc
-        ? text[settings.fieldNameSrc]
-        : text.texts || text.utterances;
+      let item = settings.fieldNameSrc ? text[settings.fieldNameSrc] : text.texts || text.utterances;
       if (!item && typeof item !== 'string') {
         if (typeof text.text === 'string') {
           item = text.text;
@@ -163,30 +127,19 @@ class Nlu extends Clonable {
         return { [targetField]: result, ...text };
       }
     }
-    throw new Error(
-      `Error at nlu.prepare: expected a text but received ${text}`
-    );
+    throw new Error(`Error at nlu.prepare: expected a text but received ${text}`);
   }
 
   async doSpellCheck(input, srcSettings) {
     const settings = this.applySettings(srcSettings || {}, this.settings);
-    let shouldSpellCheck =
-      input.settings.spellCheck === undefined
-        ? undefined
-        : input.settings.spellCheck;
+    let shouldSpellCheck = input.settings.spellCheck === undefined ? undefined : input.settings.spellCheck;
     let spellCheckDistance =
-      input.settings.spellCheckDistance === undefined
-        ? undefined
-        : input.settings.spellCheckDistance;
+      input.settings.spellCheckDistance === undefined ? undefined : input.settings.spellCheckDistance;
     if (shouldSpellCheck === undefined) {
-      shouldSpellCheck =
-        settings.spellCheck === undefined ? undefined : settings.spellCheck;
+      shouldSpellCheck = settings.spellCheck === undefined ? undefined : settings.spellCheck;
     }
     if (spellCheckDistance === undefined) {
-      spellCheckDistance =
-        settings.spellCheckDistance === undefined
-          ? 1
-          : settings.spellCheckDistance;
+      spellCheckDistance = settings.spellCheckDistance === undefined ? 1 : settings.spellCheckDistance;
     }
     if (shouldSpellCheck) {
       const tokens = this.spellCheck.check(input.tokens, spellCheckDistance);
@@ -226,9 +179,7 @@ class Nlu extends Clonable {
       const features = Object.keys(this.intentFeatures[intent]);
       for (let j = 0; j < features.length; j += 1) {
         const feature = features[j];
-        if (
-          !Object.prototype.hasOwnProperty.call(this.featuresToIntent, feature)
-        ) {
+        if (!Object.prototype.hasOwnProperty.call(this.featuresToIntent, feature)) {
           this.featuresToIntent[feature] = [];
         }
         this.featuresToIntent[feature].push(intent);
@@ -327,13 +278,7 @@ class Nlu extends Clonable {
       for (let i = 0; i < intents.length; i += 1) {
         const intent = intents[i];
         if (intent !== 'None') {
-          if (
-            !this.intentIsActivated(
-              intent,
-              srcInput.tokens,
-              srcInput.settings.allowList
-            )
-          ) {
+          if (!this.intentIsActivated(intent, srcInput.tokens, srcInput.settings.allowList)) {
             srcInput.classifications[i].score = 0;
             someModified = true;
           }
@@ -383,9 +328,7 @@ class Nlu extends Clonable {
       }
     }
     let nonedelta =
-      input.settings.nonedeltaValue === undefined
-        ? this.numIntents / this.numFeatures
-        : this.settings.nonedeltaValue;
+      input.settings.nonedeltaValue === undefined ? this.numIntents / this.numFeatures : this.settings.nonedeltaValue;
     let nonevalue = 0;
     for (let i = 0; i < unknownTokens; i += 1) {
       nonevalue += nonedelta;

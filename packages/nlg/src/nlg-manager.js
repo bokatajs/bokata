@@ -1,30 +1,7 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable } = require('@nlpjs/core');
+const { Clonable } = require('@bokata/core');
 
 class NlgManager extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
@@ -37,10 +14,7 @@ class NlgManager extends Clonable {
       this.settings.tag = 'nlg-manager';
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.responses = {};
     this.applySettings(this, {
       pipelineFind: this.getPipeline(`${this.settings.tag}-find`),
@@ -72,10 +46,7 @@ class NlgManager extends Clonable {
         for (let i = 0; i < answers.length; i += 1) {
           const answer = answers[i];
           if (answer.opts) {
-            const condition =
-              typeof answer.opts === 'string'
-                ? answer.opts
-                : answer.opts.condition;
+            const condition = typeof answer.opts === 'string' ? answer.opts : answer.opts.condition;
             if (condition) {
               if (evaluator.evaluate(condition, context) === true) {
                 filtered.push(answer);
@@ -114,10 +85,7 @@ class NlgManager extends Clonable {
         for (let i = 0; i < match.length; i += 1) {
           const source = match[i];
           const options = source.substring(1, source.length - 1).split('|');
-          text = text.replace(
-            source,
-            options[Math.floor(Math.random() * options.length)]
-          );
+          text = text.replace(source, options[Math.floor(Math.random() * options.length)]);
         }
         matchFound = true;
       } else {
@@ -155,10 +123,7 @@ class NlgManager extends Clonable {
     const potential = this.responses[locale][intent];
     for (let i = 0; i < potential.length; i += 1) {
       const response = potential[i];
-      if (
-        response.answer === answer &&
-        JSON.stringify(response.opts) === JSON.stringify(opts)
-      ) {
+      if (response.answer === answer && JSON.stringify(response.opts) === JSON.stringify(opts)) {
         return i;
       }
     }
@@ -210,12 +175,7 @@ class NlgManager extends Clonable {
   }
 
   run(srcInput, settings) {
-    return this.find(
-      srcInput.locale,
-      srcInput.intent,
-      srcInput.context,
-      settings
-    );
+    return this.find(srcInput.locale, srcInput.intent, srcInput.context, settings);
   }
 
   toJSON() {

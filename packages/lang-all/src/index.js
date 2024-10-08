@@ -1,346 +1,43 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const {
-  LangAr,
-  NormalizerAr,
-  SentimentAr,
-  StemmerAr,
-  StopwordsAr,
-  TokenizerAr,
-} = require('@nlpjs/lang-ar');
-const {
-  LangBn,
-  NormalizerBn,
-  SentimentBn,
-  StemmerBn,
-  StopwordsBn,
-  TokenizerBn,
-} = require('@nlpjs/lang-bn');
-const {
-  LangCa,
-  NormalizerCa,
-  SentimentCa,
-  StemmerCa,
-  StopwordsCa,
-  TokenizerCa,
-} = require('@nlpjs/lang-ca');
-const {
-  LangCs,
-  NormalizerCs,
-  SentimentCs,
-  StemmerCs,
-  StopwordsCs,
-  TokenizerCs,
-} = require('@nlpjs/lang-cs');
-const {
-  LangDa,
-  NormalizerDa,
-  SentimentDa,
-  StemmerDa,
-  StopwordsDa,
-  TokenizerDa,
-} = require('@nlpjs/lang-da');
-const {
-  LangDe,
-  NormalizerDe,
-  SentimentDe,
-  StemmerDe,
-  StopwordsDe,
-  TokenizerDe,
-} = require('@nlpjs/lang-de');
-const {
-  LangEl,
-  NormalizerEl,
-  SentimentEl,
-  StemmerEl,
-  StopwordsEl,
-  TokenizerEl,
-} = require('@nlpjs/lang-el');
-const {
-  LangEn,
-  NormalizerEn,
-  SentimentEn,
-  StemmerEn,
-  StopwordsEn,
-  TokenizerEn,
-} = require('@nlpjs/lang-en');
-const {
-  LangEs,
-  NormalizerEs,
-  SentimentEs,
-  StemmerEs,
-  StopwordsEs,
-  TokenizerEs,
-} = require('@nlpjs/lang-es');
-const {
-  LangEu,
-  NormalizerEu,
-  SentimentEu,
-  StemmerEu,
-  StopwordsEu,
-  TokenizerEu,
-} = require('@nlpjs/lang-eu');
-const {
-  LangFa,
-  NormalizerFa,
-  SentimentFa,
-  StemmerFa,
-  StopwordsFa,
-  TokenizerFa,
-} = require('@nlpjs/lang-fa');
-const {
-  LangFi,
-  NormalizerFi,
-  SentimentFi,
-  StemmerFi,
-  StopwordsFi,
-  TokenizerFi,
-} = require('@nlpjs/lang-fi');
-const {
-  LangFr,
-  NormalizerFr,
-  SentimentFr,
-  StemmerFr,
-  StopwordsFr,
-  TokenizerFr,
-} = require('@nlpjs/lang-fr');
-const {
-  LangGa,
-  NormalizerGa,
-  SentimentGa,
-  StemmerGa,
-  StopwordsGa,
-  TokenizerGa,
-} = require('@nlpjs/lang-ga');
-const {
-  LangGl,
-  NormalizerGl,
-  SentimentGl,
-  StemmerGl,
-  StopwordsGl,
-  TokenizerGl,
-} = require('@nlpjs/lang-gl');
-const {
-  LangHi,
-  NormalizerHi,
-  SentimentHi,
-  StemmerHi,
-  StopwordsHi,
-  TokenizerHi,
-} = require('@nlpjs/lang-hi');
-const {
-  LangHu,
-  NormalizerHu,
-  SentimentHu,
-  StemmerHu,
-  StopwordsHu,
-  TokenizerHu,
-} = require('@nlpjs/lang-hu');
-const {
-  LangHy,
-  NormalizerHy,
-  SentimentHy,
-  StemmerHy,
-  StopwordsHy,
-  TokenizerHy,
-} = require('@nlpjs/lang-hy');
-const {
-  LangId,
-  NormalizerId,
-  SentimentId,
-  StemmerId,
-  StopwordsId,
-  TokenizerId,
-} = require('@nlpjs/lang-id');
-const {
-  LangIt,
-  NormalizerIt,
-  SentimentIt,
-  StemmerIt,
-  StopwordsIt,
-  TokenizerIt,
-} = require('@nlpjs/lang-it');
-const {
-  LangJa,
-  NormalizerJa,
-  SentimentJa,
-  StemmerJa,
-  StopwordsJa,
-  TokenizerJa,
-} = require('@nlpjs/lang-ja');
-const {
-  LangKo,
-  NormalizerKo,
-  SentimentKo,
-  StemmerKo,
-  StopwordsKo,
-  TokenizerKo,
-} = require('@nlpjs/lang-ko');
-const {
-  LangLt,
-  NormalizerLt,
-  SentimentLt,
-  StemmerLt,
-  StopwordsLt,
-  TokenizerLt,
-} = require('@nlpjs/lang-lt');
-const {
-  LangMs,
-  NormalizerMs,
-  SentimentMs,
-  StemmerMs,
-  StopwordsMs,
-  TokenizerMs,
-} = require('@nlpjs/lang-ms');
-const {
-  LangNe,
-  NormalizerNe,
-  SentimentNe,
-  StemmerNe,
-  StopwordsNe,
-  TokenizerNe,
-} = require('@nlpjs/lang-ne');
-const {
-  LangNl,
-  NormalizerNl,
-  SentimentNl,
-  StemmerNl,
-  StopwordsNl,
-  TokenizerNl,
-} = require('@nlpjs/lang-nl');
-const {
-  LangNo,
-  NormalizerNo,
-  SentimentNo,
-  StemmerNo,
-  StopwordsNo,
-  TokenizerNo,
-} = require('@nlpjs/lang-no');
-const {
-  LangPl,
-  NormalizerPl,
-  SentimentPl,
-  StemmerPl,
-  StopwordsPl,
-  TokenizerPl,
-} = require('@nlpjs/lang-pl');
-const {
-  LangPt,
-  NormalizerPt,
-  SentimentPt,
-  StemmerPt,
-  StopwordsPt,
-  TokenizerPt,
-} = require('@nlpjs/lang-pt');
-const {
-  LangRo,
-  NormalizerRo,
-  SentimentRo,
-  StemmerRo,
-  StopwordsRo,
-  TokenizerRo,
-} = require('@nlpjs/lang-ro');
-const {
-  LangRu,
-  NormalizerRu,
-  SentimentRu,
-  StemmerRu,
-  StopwordsRu,
-  TokenizerRu,
-} = require('@nlpjs/lang-ru');
-const {
-  LangSl,
-  NormalizerSl,
-  SentimentSl,
-  StemmerSl,
-  StopwordsSl,
-  TokenizerSl,
-} = require('@nlpjs/lang-sl');
-const {
-  LangSr,
-  NormalizerSr,
-  SentimentSr,
-  StemmerSr,
-  StopwordsSr,
-  TokenizerSr,
-} = require('@nlpjs/lang-sr');
-const {
-  LangSv,
-  NormalizerSv,
-  SentimentSv,
-  StemmerSv,
-  StopwordsSv,
-  TokenizerSv,
-} = require('@nlpjs/lang-sv');
-const {
-  LangTa,
-  NormalizerTa,
-  SentimentTa,
-  StemmerTa,
-  StopwordsTa,
-  TokenizerTa,
-} = require('@nlpjs/lang-ta');
-const {
-  LangTh,
-  NormalizerTh,
-  SentimentTh,
-  StemmerTh,
-  StopwordsTh,
-  TokenizerTh,
-} = require('@nlpjs/lang-th');
-const {
-  LangTl,
-  NormalizerTl,
-  SentimentTl,
-  StemmerTl,
-  StopwordsTl,
-  TokenizerTl,
-} = require('@nlpjs/lang-tl');
-const {
-  LangTr,
-  NormalizerTr,
-  SentimentTr,
-  StemmerTr,
-  StopwordsTr,
-  TokenizerTr,
-} = require('@nlpjs/lang-tr');
-const {
-  LangUk,
-  NormalizerUk,
-  SentimentUk,
-  StemmerUk,
-  StopwordsUk,
-  TokenizerUk,
-} = require('@nlpjs/lang-uk');
-const {
-  LangZh,
-  NormalizerZh,
-  SentimentZh,
-  StemmerZh,
-  StopwordsZh,
-  TokenizerZh,
-} = require('@nlpjs/lang-zh');
+const { LangAr, NormalizerAr, SentimentAr, StemmerAr, StopwordsAr, TokenizerAr } = require('@bokata/lang-ar');
+const { LangBn, NormalizerBn, SentimentBn, StemmerBn, StopwordsBn, TokenizerBn } = require('@bokata/lang-bn');
+const { LangCa, NormalizerCa, SentimentCa, StemmerCa, StopwordsCa, TokenizerCa } = require('@bokata/lang-ca');
+const { LangCs, NormalizerCs, SentimentCs, StemmerCs, StopwordsCs, TokenizerCs } = require('@bokata/lang-cs');
+const { LangDa, NormalizerDa, SentimentDa, StemmerDa, StopwordsDa, TokenizerDa } = require('@bokata/lang-da');
+const { LangDe, NormalizerDe, SentimentDe, StemmerDe, StopwordsDe, TokenizerDe } = require('@bokata/lang-de');
+const { LangEl, NormalizerEl, SentimentEl, StemmerEl, StopwordsEl, TokenizerEl } = require('@bokata/lang-el');
+const { LangEn, NormalizerEn, SentimentEn, StemmerEn, StopwordsEn, TokenizerEn } = require('@bokata/lang-en');
+const { LangEs, NormalizerEs, SentimentEs, StemmerEs, StopwordsEs, TokenizerEs } = require('@bokata/lang-es');
+const { LangEu, NormalizerEu, SentimentEu, StemmerEu, StopwordsEu, TokenizerEu } = require('@bokata/lang-eu');
+const { LangFa, NormalizerFa, SentimentFa, StemmerFa, StopwordsFa, TokenizerFa } = require('@bokata/lang-fa');
+const { LangFi, NormalizerFi, SentimentFi, StemmerFi, StopwordsFi, TokenizerFi } = require('@bokata/lang-fi');
+const { LangFr, NormalizerFr, SentimentFr, StemmerFr, StopwordsFr, TokenizerFr } = require('@bokata/lang-fr');
+const { LangGa, NormalizerGa, SentimentGa, StemmerGa, StopwordsGa, TokenizerGa } = require('@bokata/lang-ga');
+const { LangGl, NormalizerGl, SentimentGl, StemmerGl, StopwordsGl, TokenizerGl } = require('@bokata/lang-gl');
+const { LangHi, NormalizerHi, SentimentHi, StemmerHi, StopwordsHi, TokenizerHi } = require('@bokata/lang-hi');
+const { LangHu, NormalizerHu, SentimentHu, StemmerHu, StopwordsHu, TokenizerHu } = require('@bokata/lang-hu');
+const { LangHy, NormalizerHy, SentimentHy, StemmerHy, StopwordsHy, TokenizerHy } = require('@bokata/lang-hy');
+const { LangId, NormalizerId, SentimentId, StemmerId, StopwordsId, TokenizerId } = require('@bokata/lang-id');
+const { LangIt, NormalizerIt, SentimentIt, StemmerIt, StopwordsIt, TokenizerIt } = require('@bokata/lang-it');
+const { LangJa, NormalizerJa, SentimentJa, StemmerJa, StopwordsJa, TokenizerJa } = require('@bokata/lang-ja');
+const { LangKo, NormalizerKo, SentimentKo, StemmerKo, StopwordsKo, TokenizerKo } = require('@bokata/lang-ko');
+const { LangLt, NormalizerLt, SentimentLt, StemmerLt, StopwordsLt, TokenizerLt } = require('@bokata/lang-lt');
+const { LangMs, NormalizerMs, SentimentMs, StemmerMs, StopwordsMs, TokenizerMs } = require('@bokata/lang-ms');
+const { LangNe, NormalizerNe, SentimentNe, StemmerNe, StopwordsNe, TokenizerNe } = require('@bokata/lang-ne');
+const { LangNl, NormalizerNl, SentimentNl, StemmerNl, StopwordsNl, TokenizerNl } = require('@bokata/lang-nl');
+const { LangNo, NormalizerNo, SentimentNo, StemmerNo, StopwordsNo, TokenizerNo } = require('@bokata/lang-no');
+const { LangPl, NormalizerPl, SentimentPl, StemmerPl, StopwordsPl, TokenizerPl } = require('@bokata/lang-pl');
+const { LangPt, NormalizerPt, SentimentPt, StemmerPt, StopwordsPt, TokenizerPt } = require('@bokata/lang-pt');
+const { LangRo, NormalizerRo, SentimentRo, StemmerRo, StopwordsRo, TokenizerRo } = require('@bokata/lang-ro');
+const { LangRu, NormalizerRu, SentimentRu, StemmerRu, StopwordsRu, TokenizerRu } = require('@bokata/lang-ru');
+const { LangSl, NormalizerSl, SentimentSl, StemmerSl, StopwordsSl, TokenizerSl } = require('@bokata/lang-sl');
+const { LangSr, NormalizerSr, SentimentSr, StemmerSr, StopwordsSr, TokenizerSr } = require('@bokata/lang-sr');
+const { LangSv, NormalizerSv, SentimentSv, StemmerSv, StopwordsSv, TokenizerSv } = require('@bokata/lang-sv');
+const { LangTa, NormalizerTa, SentimentTa, StemmerTa, StopwordsTa, TokenizerTa } = require('@bokata/lang-ta');
+const { LangTh, NormalizerTh, SentimentTh, StemmerTh, StopwordsTh, TokenizerTh } = require('@bokata/lang-th');
+const { LangTl, NormalizerTl, SentimentTl, StemmerTl, StopwordsTl, TokenizerTl } = require('@bokata/lang-tl');
+const { LangTr, NormalizerTr, SentimentTr, StemmerTr, StopwordsTr, TokenizerTr } = require('@bokata/lang-tr');
+const { LangUk, NormalizerUk, SentimentUk, StemmerUk, StopwordsUk, TokenizerUk } = require('@bokata/lang-uk');
+const { LangZh, NormalizerZh, SentimentZh, StemmerZh, StopwordsZh, TokenizerZh } = require('@bokata/lang-zh');
 const LangAll = require('./lang-all');
 
 const {

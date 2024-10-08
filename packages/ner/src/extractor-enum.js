@@ -1,29 +1,6 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { defaultContainer } = require('@nlpjs/core');
-const { Language } = require('@nlpjs/language-min');
-const { similarity } = require('@nlpjs/similarity');
+const { defaultContainer } = require('@bokata/core');
+const { Language } = require('@bokata/language-min');
+const { similarity } = require('@bokata/similarity');
 const reduceEdges = require('./reduce-edges');
 
 class ExtractorEnum {
@@ -111,10 +88,7 @@ class ExtractorEnum {
     };
     for (let i = 0; i < wordPositionsLen; i += 1) {
       for (let j = i; j < wordPositionsLen; j += 1) {
-        const str3 = str1.substring(
-          wordPositions[i].start,
-          wordPositions[j].end + 1
-        );
+        const str3 = str1.substring(wordPositions[i].start, wordPositions[j].end + 1);
         const levenshtein = similarity(str3, str2, true);
         if (best.levenshtein === undefined || levenshtein < best.levenshtein) {
           best.levenshtein = levenshtein;
@@ -151,10 +125,7 @@ class ExtractorEnum {
     const wordPositionsLen = wordPositions.length;
     for (let i = 0; i < wordPositionsLen; i += 1) {
       for (let j = i; j < wordPositionsLen; j += 1) {
-        const str3 = str1.substring(
-          wordPositions[i].start,
-          wordPositions[j].end + 1
-        );
+        const str3 = str1.substring(wordPositions[i].start, wordPositions[j].end + 1);
         const levenshtein = similarity(str3, str2, true);
         const accuracy = (str2len - levenshtein) / str2len;
         if (accuracy >= threshold) {
@@ -166,10 +137,7 @@ class ExtractorEnum {
             accuracy,
           });
         }
-        if (
-          str3.length - wordPositions[0].len >=
-          str2.length + maxLevenshtein
-        ) {
+        if (str3.length - wordPositions[0].len >= str2.length + maxLevenshtein) {
           break;
         }
       }
@@ -218,10 +186,7 @@ class ExtractorEnum {
     const result = [];
     for (let i = 0; i < wordPositionsLen; i += 1) {
       for (let j = i; j < wordPositionsLen; j += 1) {
-        const str = text.substring(
-          wordPositions[i].start,
-          wordPositions[j].end + 1
-        );
+        const str = text.substring(wordPositions[i].start, wordPositions[j].end + 1);
         if (rule.dict[str]) {
           const subrule = rule.dict[str];
           for (let k = 0; k < subrule.length; k += 1) {
@@ -235,10 +200,7 @@ class ExtractorEnum {
               type: rule.type,
               option: subrule[k].option,
               sourceText: rule.inverseDict[str],
-              utteranceText: srcText.substring(
-                wordPositions[i].start,
-                wordPositions[j].end + 1
-              ),
+              utteranceText: srcText.substring(wordPositions[i].start, wordPositions[j].end + 1),
             });
           }
         }
@@ -263,12 +225,7 @@ class ExtractorEnum {
           const current = rule.rules[i];
           if (current && current.option && Array.isArray(current.texts)) {
             for (let j = 0; j < current.texts.length; j += 1) {
-              const newEdges = this.getBestSubstringList(
-                text,
-                current.texts[j],
-                words,
-                current.threshold || threshold
-              );
+              const newEdges = this.getBestSubstringList(text, current.texts[j], words, current.threshold || threshold);
               for (let k = 0; k < newEdges.length; k += 1) {
                 edges.push({
                   ...newEdges[k],
@@ -276,10 +233,7 @@ class ExtractorEnum {
                   type: rule.type,
                   option: rule.rules[i].option,
                   sourceText: current.texts[j],
-                  utteranceText: text.substring(
-                    newEdges[k].start,
-                    newEdges[k].end + 1
-                  ),
+                  utteranceText: text.substring(newEdges[k].start, newEdges[k].end + 1),
                 });
               }
             }
@@ -307,13 +261,9 @@ class ExtractorEnum {
         let originalTextIndex = 0;
         let tokenizedTextIndex = 0;
         for (let i = 0; i < tokenizeResult.tokens.length; i += 1) {
-          const originaltextPos = originalInputText.indexOf(
-            tokenizeResult.tokens[i],
-            originalTextIndex
-          );
+          const originaltextPos = originalInputText.indexOf(tokenizeResult.tokens[i], originalTextIndex);
           for (let idx = 0; idx < tokenizeResult.tokens[i].length; idx += 1) {
-            originalPositionMap[tokenizedTextIndex + idx] =
-              originaltextPos + idx;
+            originalPositionMap[tokenizedTextIndex + idx] = originaltextPos + idx;
           }
           originalTextIndex += tokenizeResult.tokens[i].length;
           tokenizedTextIndex += tokenizeResult.tokens[i].length + 1;
@@ -324,12 +274,7 @@ class ExtractorEnum {
     const rules = this.getRules(input);
     const edges = input.edges || [];
     for (let i = 0; i < rules.length; i += 1) {
-      const newEdges = this.extractFromRule(
-        tokenizedText,
-        rules[i],
-        wordPositions,
-        input.threshold || 0.8
-      );
+      const newEdges = this.extractFromRule(tokenizedText, rules[i], wordPositions, input.threshold || 0.8);
       for (let j = 0; j < newEdges.length; j += 1) {
         edges.push(newEdges[j]);
       }

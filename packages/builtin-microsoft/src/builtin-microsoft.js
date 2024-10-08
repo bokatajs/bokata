@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, defaultContainer } = require('@nlpjs/core');
+const { Clonable, defaultContainer } = require('@bokata/core');
 const Recognizers = require('@microsoft/recognizers-text-suite');
 const BuiltinDictionary = require('./builtin-dictionary.json');
 const BuiltinInverse = require('./builtin-inverse.json');
@@ -71,10 +48,7 @@ class BuiltinMicrosoft extends Clonable {
       this.settings.tag = `builtin-microsoft`;
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.settings.builtinAllowList = {};
     for (let i = 0; i < this.settings.allowList.length; i += 1) {
       this.settings.builtinAllowList[this.settings.allowList[i]] = 1;
@@ -256,31 +230,21 @@ class BuiltinMicrosoft extends Clonable {
                 other.entity === edge.entity &&
                 other.accuracy === edge.accuracy &&
                 ((!edge.resolution && !other.resolution) ||
-                  (edge.resolution &&
-                    other.resolution &&
-                    edge.resolution.subtype === other.resolution.subtype))
+                  (edge.resolution && other.resolution && edge.resolution.subtype === other.resolution.subtype))
               ) {
                 other.discarded = true;
-              } else if (
-                other.entity === 'ordinal' &&
-                edge.entity === 'number'
-              ) {
+              } else if (other.entity === 'ordinal' && edge.entity === 'number') {
                 edge.discarded = true;
-              } else if (
-                other.entity === edge.entity &&
-                edge.entity === 'number'
-              ) {
+              } else if (other.entity === edge.entity && edge.entity === 'number') {
                 if (
-                  (other.sourceText.includes(',') ||
-                    other.sourceText.includes('.')) &&
+                  (other.sourceText.includes(',') || other.sourceText.includes('.')) &&
                   parseFloat(other.sourceText.replace(',', '.')) !==
                     parseFloat(other.resolution.strValue.replace(',', '.'))
                 ) {
                   other.discarded = true;
                 }
                 if (
-                  (edge.sourceText.includes(',') ||
-                    edge.sourceText.includes('.')) &&
+                  (edge.sourceText.includes(',') || edge.sourceText.includes('.')) &&
                   parseFloat(edge.sourceText.replace(',', '.')) !==
                     parseFloat(edge.resolution.strValue.replace(',', '.'))
                 ) {
@@ -313,9 +277,7 @@ class BuiltinMicrosoft extends Clonable {
             ? Recognizers[`recognize${name}`](utterance, getCulture('en'))
             : Recognizers[`recognize${name}`](utterance, culture);
         if (name === 'Number' && locale !== 'en') {
-          entities.push(
-            ...Recognizers.recognizeNumber(utterance, getCulture('en'))
-          );
+          entities.push(...Recognizers.recognizeNumber(utterance, getCulture('en')));
         }
         for (let i = 0; i < entities.length; i += 1) {
           const entity = entities[i];
@@ -359,11 +321,7 @@ class BuiltinMicrosoft extends Clonable {
 
   extract(srcInput) {
     const input = srcInput;
-    const entities = this.findBuiltinEntities(
-      input.text || input.utterance,
-      input.locale,
-      input.builtins
-    );
+    const entities = this.findBuiltinEntities(input.text || input.utterance, input.locale, input.builtins);
     if (!input.edges) {
       input.edges = [];
     }

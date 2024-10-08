@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const languageData = require('./languages.json');
 const data = require('./data.json');
 
@@ -28,8 +5,7 @@ const scripts = {
   cmn: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]|[\uD840-\uD868\uD86A-\uD86C][\uDC00-\uDFFF]|\uD869[\uDC00-\uDED6\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D]|\uD87E[\uDC00-\uDE1D]/g,
   Latin:
     /[A-Za-z\xAA\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02B8\u02E0-\u02E4\u1D00-\u1D25\u1D2C-\u1D5C\u1D62-\u1D65\u1D6B-\u1D77\u1D79-\u1DBE\u1E00-\u1EFF\u2071\u207F\u2090-\u209C\u212A\u212B\u2132\u214E\u2160-\u2188\u2C60-\u2C7F\uA722-\uA787\uA78B-\uA78E\uA790-\uA7AD\uA7B0\uA7B1\uA7F7-\uA7FF\uAB30-\uAB5A\uAB5C-\uAB5F\uAB64\uFB00-\uFB06\uFF21-\uFF3A\uFF41-\uFF5A]/g,
-  Cyrillic:
-    /[\u0400-\u0484\u0487-\u052F\u1D2B\u1D78\u2DE0-\u2DFF\uA640-\uA69D\uA69F]/g,
+  Cyrillic: /[\u0400-\u0484\u0487-\u052F\u1D2B\u1D78\u2DE0-\u2DFF\uA640-\uA69D\uA69F]/g,
   Arabic:
     /[\u0600-\u0604\u0606-\u060B\u060D-\u061A\u061E\u0620-\u063F\u0641-\u064A\u0656-\u065F\u066A-\u066F\u0671-\u06DC\u06DE-\u06FF\u0750-\u077F\u08A0-\u08B2\u08E4-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC]|\uD803[\uDE60-\uDE7E]|\uD83B[\uDE00-\uDE03\uDE05-\uDE1F\uDE21\uDE22\uDE24\uDE27\uDE29-\uDE32\uDE34-\uDE37\uDE39\uDE3B\uDE42\uDE47\uDE49\uDE4B\uDE4D-\uDE4F\uDE51\uDE52\uDE54\uDE57\uDE59\uDE5B\uDE5D\uDE5F\uDE61\uDE62\uDE64\uDE67-\uDE6A\uDE6C-\uDE72\uDE74-\uDE77\uDE79-\uDE7C\uDE7E\uDE80-\uDE89\uDE8B-\uDE9B\uDEA1-\uDEA3\uDEA5-\uDEA9\uDEAB-\uDEBB\uDEF0\uDEF1]/g,
   ben: /[\u0980-\u0983\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BC-\u09C4\u09C7\u09C8\u09CB-\u09CE\u09D7\u09DC\u09DD\u09DF-\u09E3\u09E6-\u09FB]/g,
@@ -93,14 +69,11 @@ class Language {
   }
 
   static asTuples(value) {
-    const dictionary = Language.getTrigrams(value).reduce(
-      (srcprev, current) => {
-        const prev = srcprev;
-        prev[current] = (prev[current] || 0) + 1;
-        return prev;
-      },
-      {}
-    );
+    const dictionary = Language.getTrigrams(value).reduce((srcprev, current) => {
+      const prev = srcprev;
+      prev[current] = (prev[current] || 0) + 1;
+      return prev;
+    }, {});
     const tuples = [];
     Object.keys(dictionary).forEach((key) => {
       tuples.push([key, dictionary[key]]);
@@ -112,10 +85,7 @@ class Language {
   static getDistance(trigrams, model) {
     let distance = 0;
     trigrams.forEach((currentTrigram) => {
-      distance +=
-        currentTrigram[0] in model
-          ? Math.abs(currentTrigram[1] - model[currentTrigram[0]] - 1)
-          : 300;
+      distance += currentTrigram[0] in model ? Math.abs(currentTrigram[1] - model[currentTrigram[0]] - 1) : 300;
     });
     return distance;
   }
@@ -166,10 +136,7 @@ class Language {
     }
     const filteredLanguages = {};
     Object.keys(languages).forEach((language) => {
-      if (
-        (allowList.length === 0 || allowList.indexOf(language) > -1) &&
-        denyList.indexOf(language) === -1
-      ) {
+      if ((allowList.length === 0 || allowList.indexOf(language) > -1) && denyList.indexOf(language) === -1) {
         filteredLanguages[language] = languages[language];
       }
     });
@@ -180,19 +147,12 @@ class Language {
     const distances = [];
     const allowList = options.allowList || [];
     const denyList = options.denyList || [];
-    const languages = Language.filterLanguages(
-      srcLanguages,
-      allowList,
-      denyList
-    );
+    const languages = Language.filterLanguages(srcLanguages, allowList, denyList);
     if (!languages) {
       return und();
     }
     Object.keys(languages).forEach((language) => {
-      distances.push([
-        language,
-        Language.getDistance(trigrams, languages[language]),
-      ]);
+      distances.push([language, Language.getDistance(trigrams, languages[language])]);
     });
     return distances.sort((a, b) => a[1] - b[1]);
   }
@@ -218,11 +178,7 @@ class Language {
     }
 
     if (data[script[0]]) {
-      const distances = Language.getDistances(
-        Language.asTuples(value),
-        data[script[0]],
-        settings
-      );
+      const distances = Language.getDistances(Language.asTuples(value), data[script[0]], settings);
       if (distances[0][0] === 'und') {
         return [[script[0], 1]];
       }

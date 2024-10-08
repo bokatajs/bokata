@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * 'Software'), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { BaseStemmer } = require('@nlpjs/core');
+const { BaseStemmer } = require('@bokata/core');
 
 class StemmerTl extends BaseStemmer {
   constructor(container) {
@@ -44,9 +21,7 @@ class StemmerTl extends BaseStemmer {
     if (!word) {
       return false;
     }
-    return prefix instanceof RegExp
-      ? word.match(prefix)
-      : word.indexOf(prefix) === 0;
+    return prefix instanceof RegExp ? word.match(prefix) : word.indexOf(prefix) === 0;
   }
 
   hasSuffix(word, suffix) {
@@ -70,10 +45,7 @@ class StemmerTl extends BaseStemmer {
     }
     for (let i = 0; i < StemmerTl.prefixes.length; i += 1) {
       const prefix = StemmerTl.prefixes[i];
-      if (
-        this.hasPrefix(word, prefix) &&
-        syllables - this.countSyllables(prefix) > 1
-      ) {
+      if (this.hasPrefix(word, prefix) && syllables - this.countSyllables(prefix) > 1) {
         return word.replace(prefix, '').replace(/^-/, '');
       }
     }
@@ -86,10 +58,7 @@ class StemmerTl extends BaseStemmer {
     const syllables = this.countSyllables(word);
     for (let i = 0; i < StemmerTl.suffixes.length; i += 1) {
       const suffix = StemmerTl.suffixes[i];
-      if (
-        this.hasSuffix(word, suffix) &&
-        syllables - this.countSyllables(suffix) > 1
-      ) {
+      if (this.hasSuffix(word, suffix) && syllables - this.countSyllables(suffix) > 1) {
         word = word.slice(0, word.length - suffix.length);
         removed = suffix;
         break;

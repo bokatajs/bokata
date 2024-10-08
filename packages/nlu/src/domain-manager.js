@@ -1,32 +1,9 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, compareWildcars } = require('@nlpjs/core');
+const { Clonable, compareWildcars } = require('@bokata/core');
 
 const defaultDomainName = 'master_domain';
 
 class DomainManager extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
@@ -40,10 +17,7 @@ class DomainManager extends Clonable {
       this.settings.tag = `domain-manager-${this.settings.locale}`;
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.domains = {};
     this.addDomain(defaultDomainName);
     this.stemDict = {};
@@ -72,13 +46,7 @@ class DomainManager extends Clonable {
     );
     this.container.registerPipeline(
       'domain-manager-??-train',
-      [
-        '.trainStemmer',
-        '.generateCorpus',
-        '.fillStemDict',
-        '.innerTrain',
-        'output.status',
-      ],
+      ['.trainStemmer', '.generateCorpus', '.fillStemDict', '.innerTrain', 'output.status'],
       false
     );
   }
@@ -94,10 +62,7 @@ class DomainManager extends Clonable {
       };
     return this.container.get(
       domainSettings.className || 'NeuralNlu',
-      this.applySettings(
-        { locale: this.settings.locale },
-        domainSettings.settings || {}
-      )
+      this.applySettings({ locale: this.settings.locale }, domainSettings.settings || {})
     );
   }
 
@@ -148,11 +113,7 @@ class DomainManager extends Clonable {
     const intent = srcIntent || srcUtterance;
     for (let i = 0; i < this.sentences.length; i += 1) {
       const sentence = this.sentences[i];
-      if (
-        sentence.domain === domain &&
-        sentence.utterance === utterance &&
-        sentence.intent === intent
-      ) {
+      if (sentence.domain === domain && sentence.utterance === utterance && sentence.intent === intent) {
         this.sentences.splice(i, 1);
         return true;
       }
@@ -204,9 +165,7 @@ class DomainManager extends Clonable {
 
   async generateCorpus(srcInput) {
     const input = srcInput;
-    input.corpus = this.innerGenerateCorpus(
-      this.settings.trainByDomain ? undefined : defaultDomainName
-    );
+    input.corpus = this.innerGenerateCorpus(this.settings.trainByDomain ? undefined : defaultDomainName);
     return input;
   }
 
@@ -229,9 +188,7 @@ class DomainManager extends Clonable {
       const { utterance, intent, domain } = this.sentences[i];
       const key = await this.generateStemKey(utterance);
       if (!key || key === '') {
-        this.container
-          .get('logger')
-          .warn(`This utterance: "${utterance}" contains only stop words`);
+        this.container.get('logger').warn(`This utterance: "${utterance}" contains only stop words`);
       }
       this.stemDict[key] = {
         intent,
@@ -329,10 +286,7 @@ class DomainManager extends Clonable {
         };
         return input;
       }
-      const nluAnswer = await nlu.process(
-        input.utterance,
-        input.settings || this.settings
-      );
+      const nluAnswer = await nlu.process(input.utterance, input.settings || this.settings);
       let classifications;
       if (Array.isArray(nluAnswer)) {
         classifications = nluAnswer;
@@ -357,11 +311,7 @@ class DomainManager extends Clonable {
       return input;
     }
     let domain = defaultDomainName;
-    if (
-      (input.settings.trainByDomain === undefined &&
-        this.settings.trainByDomain) ||
-      input.settings.trainByDomain
-    ) {
+    if ((input.settings.trainByDomain === undefined && this.settings.trainByDomain) || input.settings.trainByDomain) {
       const nlu = this.domains[defaultDomainName];
       let classifications = await nlu.process(input.utterance);
       if (classifications.classifications) {

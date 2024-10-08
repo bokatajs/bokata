@@ -1,45 +1,15 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, defaultContainer } = require('@nlpjs/core');
+const { Clonable, defaultContainer } = require('@bokata/core');
 
 // allow for using compromise with react
 const compromise = require('compromise');
 const compromiseNumbers = require('compromise-numbers');
 const compromiseDates = require('compromise-dates');
 
-const nlp =
-  compromise && typeof compromise.default === 'function'
-    ? compromise.default
-    : compromise;
+const nlp = compromise && typeof compromise.default === 'function' ? compromise.default : compromise;
 const nlpDates =
-  compromiseDates && typeof compromiseDates.default === 'function'
-    ? compromiseDates.default
-    : compromiseDates;
+  compromiseDates && typeof compromiseDates.default === 'function' ? compromiseDates.default : compromiseDates;
 const nlpNumbers =
-  compromiseNumbers && typeof compromiseNumbers.default === 'function'
-    ? compromiseNumbers.default
-    : compromiseNumbers;
+  compromiseNumbers && typeof compromiseNumbers.default === 'function' ? compromiseNumbers.default : compromiseNumbers;
 nlp.extend(nlpDates);
 nlp.extend(nlpNumbers);
 
@@ -81,10 +51,7 @@ class BuiltinCompromise extends Clonable {
       this.settings.tag = `builtin-compromise`;
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
   }
 
   registerDefault() {
@@ -124,8 +91,7 @@ class BuiltinCompromise extends Clonable {
         date: [
           extractor.dates(),
           function (result, data) {
-            result.resolution.value =
-              data && data.date && data.date.start ? data.date.start : '';
+            result.resolution.value = data && data.date && data.date.start ? data.date.start : '';
             return result;
           },
         ],
@@ -181,10 +147,7 @@ class BuiltinCompromise extends Clonable {
             result.resolution = {
               value: text,
             };
-            if (
-              extractions[extractionKey].length > 1 &&
-              extractions[extractionKey][1]
-            ) {
+            if (extractions[extractionKey].length > 1 && extractions[extractionKey][1]) {
               result = extractions[extractionKey][1](result, data);
             }
             edges.push(result);
@@ -202,10 +165,7 @@ class BuiltinCompromise extends Clonable {
 
   async extract(srcInput) {
     const input = srcInput;
-    const entities = await this.findBuiltinEntities(
-      input.text || input.utterance,
-      input.locale
-    );
+    const entities = await this.findBuiltinEntities(input.text || input.utterance, input.locale);
     if (!input.edges) {
       input.edges = [];
     }

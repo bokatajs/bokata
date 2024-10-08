@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { compareWildcars } = require('./helper');
 const DefaultCompiler = require('./default-compiler');
 const logger = require('./logger');
@@ -153,20 +130,10 @@ class Container {
       return this.buildLiteral('number', step, parseFloat(token), context);
     }
     if (token.startsWith('"')) {
-      return this.buildLiteral(
-        'string',
-        step,
-        token.replace(/^"(.+(?="$))"$/, '$1'),
-        context
-      );
+      return this.buildLiteral('string', step, token.replace(/^"(.+(?="$))"$/, '$1'), context);
     }
     if (token.startsWith("'")) {
-      return this.buildLiteral(
-        'string',
-        step,
-        token.replace(/^'(.+(?='$))'$/, '$1'),
-        context
-      );
+      return this.buildLiteral('string', step, token.replace(/^'(.+(?='$))'$/, '$1'), context);
     }
     if (token === 'true') {
       return this.buildLiteral('boolean', step, true, context);
@@ -304,14 +271,9 @@ class Container {
 
   async runPipeline(srcPipeline, input, srcObject, depth = 0) {
     if (depth > 10) {
-      throw new Error(
-        'Pipeline depth is too high: perhaps you are using recursive pipelines?'
-      );
+      throw new Error('Pipeline depth is too high: perhaps you are using recursive pipelines?');
     }
-    const pipeline =
-      typeof srcPipeline === 'string'
-        ? this.getPipeline(srcPipeline)
-        : srcPipeline;
+    const pipeline = typeof srcPipeline === 'string' ? this.getPipeline(srcPipeline) : srcPipeline;
     if (!pipeline) {
       throw new Error(`Pipeline not found ${srcPipeline}`);
     }
@@ -321,12 +283,7 @@ class Container {
       const built = this.getPipeline(tag);
       return built.compiler.execute(built.compiled, input, srcObject, depth);
     }
-    return pipeline.compiler.execute(
-      pipeline.compiled,
-      input,
-      srcObject,
-      depth
-    );
+    return pipeline.compiler.execute(pipeline.compiled, input, srcObject, depth);
   }
 
   use(item, name, isSingleton, onlyIfNotExists = false) {
@@ -345,8 +302,7 @@ class Container {
       instance.register(this);
     }
     const tag = instance.settings ? instance.settings.tag : undefined;
-    const itemName =
-      name || instance.name || tag || item.name || instance.constructor.name;
+    const itemName = name || instance.name || tag || item.name || instance.constructor.name;
     if (!onlyIfNotExists || !this.get(itemName)) {
       this.register(itemName, instance, isSingleton);
     }
@@ -382,9 +338,7 @@ class Container {
       }
     }
     const compilerName =
-      !pipeline.length || !pipeline[0].startsWith('// compiler=')
-        ? 'default'
-        : pipeline[0].slice(12);
+      !pipeline.length || !pipeline[0].startsWith('// compiler=') ? 'default' : pipeline[0].slice(12);
     const compiler = this.getCompiler(compilerName);
     const compiled = compiler.compile(pipeline);
     return {
@@ -398,10 +352,7 @@ class Container {
     if (overwrite || !this.pipelines[tag]) {
       this.cache.pipelines = {};
       const prev = this.getPipeline(tag);
-      this.pipelines[tag] = this.buildPipeline(
-        pipeline,
-        prev ? prev.pipeline : []
-      );
+      this.pipelines[tag] = this.buildPipeline(pipeline, prev ? prev.pipeline : []);
     }
   }
 
@@ -462,15 +413,8 @@ class Container {
       if (line !== '') {
         if (line.startsWith('# ')) {
           if (currentName) {
-            if (
-              currentTitle &&
-              !['default', 'pipelines'].includes(currentTitle.toLowerCase())
-            ) {
-              this.registerPipelineForChilds(
-                currentTitle,
-                currentName,
-                currentPipeline
-              );
+            if (currentTitle && !['default', 'pipelines'].includes(currentTitle.toLowerCase())) {
+              this.registerPipelineForChilds(currentTitle, currentName, currentPipeline);
             } else {
               this.registerPipeline(currentName, currentPipeline);
             }
@@ -480,15 +424,8 @@ class Container {
           currentPipeline = [];
         } else if (line.startsWith('## ')) {
           if (currentName) {
-            if (
-              currentTitle &&
-              !['default', 'pipelines'].includes(currentTitle.toLowerCase())
-            ) {
-              this.registerPipelineForChilds(
-                currentTitle,
-                currentName,
-                currentPipeline
-              );
+            if (currentTitle && !['default', 'pipelines'].includes(currentTitle.toLowerCase())) {
+              this.registerPipelineForChilds(currentTitle, currentName, currentPipeline);
             } else {
               this.registerPipeline(currentName, currentPipeline);
             }
@@ -501,15 +438,8 @@ class Container {
       }
     }
     if (currentName) {
-      if (
-        currentTitle &&
-        !['default', 'pipelines'].includes(currentTitle.toLowerCase())
-      ) {
-        this.registerPipelineForChilds(
-          currentTitle,
-          currentName,
-          currentPipeline
-        );
+      if (currentTitle && !['default', 'pipelines'].includes(currentTitle.toLowerCase())) {
+        this.registerPipelineForChilds(currentTitle, currentName, currentPipeline);
       } else {
         this.registerPipeline(currentName, currentPipeline);
       }

@@ -1,21 +1,21 @@
 {
-  "name": "@nlpjs/core-loader",
-  "version": "4.26.1",
+  "name": "@bokata/core-loader",
+  "version": "0.0.1",
   "description": "Core",
   "author": {
-    "email": "opensource@axa.com",
+    "email": "jseijas@gmail.com",
     "name": "Jesus Seijas"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/axa-group/nlp.js.git"
+    "url": "git+https://github.com/bokatajs/bokata.git"
   },
   "bugs": {
-    "url": "https://github.com/axa-group/nlp.js/issues"
+    "url": "https://github.com/bokatajs/bokata/issues"
   },
   "maintainers": [
     {
-      "email": "opensource@axa.com",
+      "email": "jseijas@gmail.com",
       "name": "Jesus Seijas"
     }
   ],
@@ -25,8 +25,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@nlpjs/core": "^4.26.1",
-    "@nlpjs/request": "^4.25.0"
-  },
-  "gitHead": "cc4249fa994c58d220e6f10a6c94fdad05df32fd"
+    "@bokata/core": "^0.0.1",
+    "@bokata/request": "^0.0.1"
+  }
 }

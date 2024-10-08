@@ -1,42 +1,13 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable, containerBootstrap } = require('@nlpjs/core');
-const { NluManager, NluNeural } = require('@nlpjs/nlu');
-const {
-  Ner,
-  ExtractorEnum,
-  ExtractorRegex,
-  ExtractorTrim,
-  ExtractorBuiltin,
-} = require('@nlpjs/ner');
-const { ActionManager, NlgManager } = require('@nlpjs/nlg');
-const { SentimentAnalyzer } = require('@nlpjs/sentiment');
-const { SlotManager } = require('@nlpjs/slot');
+const { Clonable, containerBootstrap } = require('@bokata/core');
+const { NluManager, NluNeural } = require('@bokata/nlu');
+const { Ner, ExtractorEnum, ExtractorRegex, ExtractorTrim, ExtractorBuiltin } = require('@bokata/ner');
+const { ActionManager, NlgManager } = require('@bokata/nlg');
+const { SentimentAnalyzer } = require('@bokata/sentiment');
+const { SlotManager } = require('@bokata/slot');
 const ContextManager = require('./context-manager');
 
 class Nlp extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
@@ -49,26 +20,14 @@ class Nlp extends Clonable {
       this.settings.tag = `nlp`;
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     this.nluManager = this.container.get('nlu-manager', this.settings.nlu);
     this.ner = this.container.get('ner', this.settings.ner);
     this.nlgManager = this.container.get('nlg-manager', this.settings.nlg);
-    this.actionManager = this.container.get(
-      'action-manager',
-      this.settings.action
-    );
-    this.sentiment = this.container.get(
-      'sentiment-analyzer',
-      this.settings.sentiment
-    );
+    this.actionManager = this.container.get('action-manager', this.settings.action);
+    this.sentiment = this.container.get('sentiment-analyzer', this.settings.sentiment);
     this.slotManager = this.container.get('SlotManager', this.settings.slot);
-    this.contextManager = this.container.get(
-      'context-manager',
-      this.settings.context
-    );
+    this.contextManager = this.container.get('context-manager', this.settings.context);
     this.forceNER = this.settings.forceNER;
     if (this.forceNER === undefined) {
       this.forceNER = false;
@@ -156,15 +115,11 @@ class Nlp extends Clonable {
         this.useNlu(clazz, locale[i], domain, settings);
       }
     } else {
-      const className =
-        typeof clazz === 'string' ? clazz : this.container.use(clazz);
+      const className = typeof clazz === 'string' ? clazz : this.container.use(clazz);
       let config = this.container.getConfiguration(`domain-manager-${locale}`);
       if (!config) {
         config = {};
-        this.container.registerConfiguration(
-          `domain-manager-${locale}`,
-          config
-        );
+        this.container.registerConfiguration(`domain-manager-${locale}`, config);
       }
       if (!config.nluByDomain) {
         config.nluByDomain = {};
@@ -202,9 +157,7 @@ class Nlp extends Clonable {
           const entityName = this.ner.nameToEntity(rule.name);
           replaceTexts[entityName] = replaceTexts[entityName] || [];
           rule.rules.forEach((value) => {
-            replaceTexts[entityName] = replaceTexts[entityName].concat(
-              value.texts
-            );
+            replaceTexts[entityName] = replaceTexts[entityName].concat(value.texts);
           });
         }
       });
@@ -227,15 +180,7 @@ class Nlp extends Clonable {
     });
   }
 
-  replaceEnumEntitiesInSentence(
-    manager,
-    locale,
-    domain,
-    utterance,
-    intent,
-    entityList,
-    replaceTexts
-  ) {
+  replaceEnumEntitiesInSentence(manager, locale, domain, utterance, intent, entityList, replaceTexts) {
     if (!entityList.length) {
       this.nluManager.guesser.addExtraSentence(locale, utterance);
       manager.add(domain, utterance, intent);
@@ -256,15 +201,7 @@ class Nlp extends Clonable {
         );
       });
     } else {
-      this.replaceEnumEntitiesInSentence(
-        manager,
-        locale,
-        domain,
-        utterance,
-        intent,
-        entityList.slice(1),
-        replaceTexts
-      );
+      this.replaceEnumEntitiesInSentence(manager, locale, domain, utterance, intent, entityList.slice(1), replaceTexts);
     }
   }
 
@@ -443,12 +380,7 @@ class Nlp extends Clonable {
       if (entity.options) {
         const optionNames = Object.keys(entity.options);
         for (let j = 0; j < optionNames.length; j += 1) {
-          this.addNerRuleOptionTexts(
-            finalLocale,
-            entityName,
-            optionNames[j],
-            entity.options[optionNames[j]]
-          );
+          this.addNerRuleOptionTexts(finalLocale, entityName, optionNames[j], entity.options[optionNames[j]]);
         }
       }
       if (entity.regex) {
@@ -536,12 +468,7 @@ class Nlp extends Clonable {
             slotQuestions[locale] = slot.question;
             mandatory = slot.mandatory || false;
           }
-          this.slotManager.updateSlot(
-            intent,
-            entities[j],
-            mandatory,
-            slotQuestions
-          );
+          this.slotManager.updateSlot(intent, entities[j], mandatory, slotQuestions);
         }
       }
       if (actions) {
@@ -633,11 +560,7 @@ class Nlp extends Clonable {
   }
 
   async classify(locale, utterance, settings) {
-    return this.nluManager.process(
-      locale,
-      utterance,
-      settings || this.settings.nlu
-    );
+    return this.nluManager.process(locale, utterance, settings || this.settings.nlu);
   }
 
   async extractEntities(locale, utterance, context, settings) {
@@ -707,9 +630,7 @@ class Nlp extends Clonable {
         // assume that there could be more than one entity with the same name
         output.context[`${entity.entity}_0`] = entity.sourceText;
       }
-      output.context[entity.entity] = entity.isList
-        ? entity.items[0].sourceText
-        : entity.sourceText;
+      output.context[entity.entity] = entity.isList ? entity.items[0].sourceText : entity.sourceText;
     }
     return output;
   }
@@ -752,8 +673,7 @@ class Nlp extends Clonable {
       }
     } else {
       locale = sourceInput.locale;
-      utterance =
-        sourceInput.utterance || sourceInput.message || sourceInput.text;
+      utterance = sourceInput.utterance || sourceInput.message || sourceInput.text;
     }
     if (!context) {
       context = await this.contextManager.getContext(sourceInput);
@@ -767,16 +687,10 @@ class Nlp extends Clonable {
       context,
       settings: this.applySettings(settings, this.settings.nlu),
     };
-    const forceNER =
-      input.settings && 'forceNER' in input.settings
-        ? input.settings.forceNER
-        : this.forceNER;
+    const forceNER = input.settings && 'forceNER' in input.settings ? input.settings.forceNER : this.forceNER;
     let output = await this.nluManager.process(input);
     if (forceNER || !this.slotManager.isEmpty) {
-      const optionalUtterance = await this.ner.generateEntityUtterance(
-        output.locale || locale,
-        utterance
-      );
+      const optionalUtterance = await this.ner.generateEntityUtterance(output.locale || locale, utterance);
       if (optionalUtterance && optionalUtterance !== utterance) {
         const optionalInput = {
           locale: output.locale || locale,
@@ -785,10 +699,7 @@ class Nlp extends Clonable {
           settings: this.applySettings(settings, this.settings.nlu),
         };
         const optionalOutput = await this.nluManager.process(optionalInput);
-        if (
-          optionalOutput &&
-          (optionalOutput.score > output.score || output.intent === 'None')
-        ) {
+        if (optionalOutput && (optionalOutput.score > output.score || output.intent === 'None')) {
           output = optionalOutput;
           output.utterance = utterance;
           output.optionalUtterance = optionalUtterance;
@@ -801,9 +712,7 @@ class Nlp extends Clonable {
     }
     output.context = context;
     if (forceNER || !this.slotManager.isEmpty) {
-      const intentEntities = this.slotManager.getIntentEntityNames(
-        output.intent
-      );
+      const intentEntities = this.slotManager.getIntentEntityNames(output.intent);
       output = await this.ner.process({ ...output }, intentEntities);
     } else {
       output.entities = [];
@@ -846,16 +755,11 @@ class Nlp extends Clonable {
     await this.contextManager.setContext(sourceInput, context);
     delete output.context;
     delete output.settings;
-    const result = sourceInput
-      ? this.applySettings(sourceInput, output)
-      : output;
+    const result = sourceInput ? this.applySettings(sourceInput, output) : output;
     if (result.intent === 'None' && !result.answer) {
       const openQuestion = this.container.get('open-question');
       if (openQuestion) {
-        const qnaAnswer = await openQuestion.getAnswer(
-          result.locale,
-          result.utterance
-        );
+        const qnaAnswer = await openQuestion.getAnswer(result.locale, result.utterance);
         if (qnaAnswer && qnaAnswer.answer && qnaAnswer.answer.length > 0) {
           result.answer = qnaAnswer.answer;
           result.isOpenQuestionAnswer = true;

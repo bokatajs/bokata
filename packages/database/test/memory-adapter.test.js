@@ -1,27 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Container } = require('@nlpjs/core');
+const { Container } = require('@bokata/core');
 const fs = require('./fs');
 const { MemorydbAdapter } = require('../src');
 
@@ -73,10 +50,7 @@ describe('MemoryDB Adapter', () => {
     test('It should create the collection', async () => {
       const adapter = new MemorydbAdapter();
       await adapter.connect();
-      await adapter.insertMany('user', [
-        { name: 'user 1' },
-        { name: 'user 2' },
-      ]);
+      await adapter.insertMany('user', [{ name: 'user 1' }, { name: 'user 2' }]);
       expect(adapter.collections.user).toBeDefined();
     });
     test('It should return all items with ids', async () => {
@@ -225,10 +199,7 @@ describe('MemoryDB Adapter', () => {
     test('Should remove one item', async () => {
       const adapter = new MemorydbAdapter();
       await adapter.connect();
-      const inserted = await adapter.insertMany('items', [
-        { name: 'a' },
-        { name: 'b' },
-      ]);
+      const inserted = await adapter.insertMany('items', [{ name: 'a' }, { name: 'b' }]);
       const result = await adapter.removeById('items', inserted[0].id);
       expect(result).toEqual(1);
       const actual = await adapter.find('items');

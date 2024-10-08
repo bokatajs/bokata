@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { generate: unparse } = require('escodegen');
 const { parse } = require('esprima');
 
@@ -181,15 +158,9 @@ class JavascriptCompiler {
 
   async walkCall(node, context) {
     let callee;
-    if (
-      node.callee &&
-      node.callee.type === 'Identifier' &&
-      node.callee.name === 'run'
-    ) {
+    if (node.callee && node.callee.type === 'Identifier' && node.callee.name === 'run') {
       if (context && context.this && context.this.container) {
-        callee = context.this.container.runPipeline.bind(
-          context.this.container
-        );
+        callee = context.this.container.runPipeline.bind(context.this.container);
       } else {
         return this.failResult;
       }
@@ -199,9 +170,7 @@ class JavascriptCompiler {
         return this.failResult;
       }
     }
-    let ctx = node.callee.object
-      ? await this.walk(node.callee.object, context)
-      : {};
+    let ctx = node.callee.object ? await this.walk(node.callee.object, context) : {};
     if (ctx === this.failResult) {
       ctx = null;
     }
@@ -216,11 +185,7 @@ class JavascriptCompiler {
     if (args.length === 0) {
       args.push(context.input);
     }
-    if (
-      node.callee &&
-      node.callee.type === 'Identifier' &&
-      node.callee.name === 'run'
-    ) {
+    if (node.callee && node.callee.type === 'Identifier' && node.callee.name === 'run') {
       if (args.length === 1) {
         args.push(context.input);
       }
@@ -351,9 +316,7 @@ class JavascriptCompiler {
     let value;
     for (let i = 0; i < node.declarations.length; i += 1) {
       const declaration = node.declarations[i];
-      value = declaration.init
-        ? await this.walk(declaration.init, context)
-        : undefined;
+      value = declaration.init ? await this.walk(declaration.init, context) : undefined;
       if (value === this.failResult) {
         return this.failResult;
       }
@@ -480,10 +443,7 @@ class JavascriptCompiler {
     const newContext = context;
     if ({}.hasOwnProperty.call(context, node.name)) {
       context[node.name] = value;
-    } else if (
-      context.input &&
-      {}.hasOwnProperty.call(context.input, node.name)
-    ) {
+    } else if (context.input && {}.hasOwnProperty.call(context.input, node.name)) {
       context.input[node.name] = value;
     } else {
       newContext[node.name] = value;
@@ -527,13 +487,8 @@ class JavascriptCompiler {
     const newContext = context || this.context;
     const compiled = parse(str);
     for (let i = 0; i < compiled.body.length; i += 1) {
-      let expression = compiled.body[i].expression
-        ? compiled.body[i].expression
-        : compiled.body[i];
-      if (
-        expression.callee &&
-        expression.callee.type === 'ArrowFunctionExpression'
-      ) {
+      let expression = compiled.body[i].expression ? compiled.body[i].expression : compiled.body[i];
+      if (expression.callee && expression.callee.type === 'ArrowFunctionExpression') {
         expression = expression.callee.body;
       }
       const value = await this.walk(expression, newContext);

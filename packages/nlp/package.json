@@ -1,21 +1,21 @@
 {
-  "name": "@nlpjs/nlp",
-  "version": "4.27.0",
+  "name": "@bokata/nlp",
+  "version": "0.0.1",
   "description": "Natural Language Processing",
   "author": {
-    "email": "opensource@axa.com",
+    "email": "jseijas@gmail.com",
     "name": "Jesus Seijas"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/axa-group/nlp.js.git"
+    "url": "git+https://github.com/bokatajs/bokata.git"
   },
   "bugs": {
-    "url": "https://github.com/axa-group/nlp.js/issues"
+    "url": "https://github.com/bokatajs/bokata/issues"
   },
   "maintainers": [
     {
-      "email": "opensource@axa.com",
+      "email": "jseijas@gmail.com",
       "name": "Jesus Seijas"
     }
   ],
@@ -25,12 +25,11 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@nlpjs/core": "^4.26.1",
-    "@nlpjs/ner": "^4.27.0",
-    "@nlpjs/nlg": "^4.26.1",
-    "@nlpjs/nlu": "^4.27.0",
-    "@nlpjs/sentiment": "^4.26.1",
-    "@nlpjs/slot": "^4.26.1"
-  },
-  "gitHead": "cc4249fa994c58d220e6f10a6c94fdad05df32fd"
+    "@bokata/core": "^0.0.1",
+    "@bokata/ner": "^0.0.1",
+    "@bokata/nlg": "^0.0.1",
+    "@bokata/nlu": "^0.0.1",
+    "@bokata/sentiment": "^0.0.1",
+    "@bokata/slot": "^0.0.1"
+  }
 }

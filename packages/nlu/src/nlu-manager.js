@@ -1,32 +1,9 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-const { Clonable } = require('@nlpjs/core');
-const { Language } = require('@nlpjs/language-min');
+const { Clonable } = require('@bokata/core');
+const { Language } = require('@bokata/language-min');
 const DomainManager = require('./domain-manager');
 
 class NluManager extends Clonable {
-  constructor(settings = {}, container) {
+  constructor(settings = {}, container = undefined) {
     super(
       {
         settings: {},
@@ -39,10 +16,7 @@ class NluManager extends Clonable {
       this.settings.tag = 'nlu-manager';
     }
     this.registerDefault();
-    this.applySettings(
-      this.settings,
-      this.container.getConfiguration(this.settings.tag)
-    );
+    this.applySettings(this.settings, this.container.getConfiguration(this.settings.tag));
     if (!this.container.get('Language')) {
       this.container.register('Language', Language, false);
     }
@@ -62,11 +36,7 @@ class NluManager extends Clonable {
 
   registerDefault() {
     this.container.registerConfiguration('nlu-manager', {}, false);
-    this.container.registerPipeline(
-      'nlu-manager-train',
-      ['.innerTrain'],
-      false
-    );
+    this.container.registerPipeline('nlu-manager-train', ['.innerTrain'], false);
   }
 
   describeLanguage(locale, name) {
@@ -184,9 +154,7 @@ class NluManager extends Clonable {
   }
 
   consolidateLocale(srcLocale, utterance) {
-    const locale = srcLocale
-      ? srcLocale.substr(0, 2).toLowerCase()
-      : this.guessLanguage(utterance);
+    const locale = srcLocale ? srcLocale.substr(0, 2).toLowerCase() : this.guessLanguage(utterance);
     if (!locale) {
       throw new Error('Locale must be defined');
     }
@@ -284,9 +252,7 @@ class NluManager extends Clonable {
       return input;
     }
     const classifications = await domain.process(srcInput);
-    input.classifications = classifications.classifications.sort(
-      (a, b) => b.score - a.score
-    );
+    input.classifications = classifications.classifications.sort((a, b) => b.score - a.score);
     if (input.classifications.length === 0) {
       input.classifications.push({ intent: 'None', score: 1 });
     }

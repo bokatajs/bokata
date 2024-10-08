@@ -1,26 +1,4 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-const { Tokenizer } = require('@nlpjs/core');
+const { Tokenizer } = require('@bokata/core');
 const aspects = require('./thai-aspects.json');
 
 class TokenizerTh extends Tokenizer {
@@ -52,10 +30,7 @@ class TokenizerTh extends Tokenizer {
     const result = [];
     for (let i = 0; i < tokens.length; i += 1) {
       const current = tokens[i];
-      if (
-        (!current.isDiscarded && current.start !== token.start) ||
-        current.length !== token.length
-      ) {
+      if ((!current.isDiscarded && current.start !== token.start) || current.length !== token.length) {
         if (current.start <= token.end && current.end >= token.start) {
           result.push(current);
         }
@@ -81,18 +56,10 @@ class TokenizerTh extends Tokenizer {
 
   isLate(token, collisions, open = false) {
     for (let i = 0; i < collisions.length; i += 1) {
-      if (
-        !open &&
-        token.start > collisions[i].start &&
-        token.end < collisions[i].end
-      ) {
+      if (!open && token.start > collisions[i].start && token.end < collisions[i].end) {
         return true;
       }
-      if (
-        open &&
-        token.start >= collisions[i].start &&
-        token.end <= collisions[i].end
-      ) {
+      if (open && token.start >= collisions[i].start && token.end <= collisions[i].end) {
         return true;
       }
     }
@@ -168,9 +135,7 @@ class TokenizerTh extends Tokenizer {
     for (let i = 0; i < edges.length; i += 1) {
       const current = edges[i];
       if (current.start > index) {
-        result.push(
-          ...str.slice(index, current.start).split(/[\s,.!?;:([\]'"¡¿)/]+/)
-        );
+        result.push(...str.slice(index, current.start).split(/[\s,.!?;:([\]'"¡¿)/]+/));
       }
       result.push(current.value);
       index = current.end + 1;

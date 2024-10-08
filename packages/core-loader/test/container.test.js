@@ -1,26 +1,3 @@
-/*
- * Copyright (c) AXA Group Operations Spain S.A.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 const { Container, Timer } = require('../src');
 const Cloned = require('./assets/cloned');
 const Lower = require('./assets/lower');
@@ -248,9 +225,9 @@ describe('Container', () => {
       const instance = new Container();
       const input = {};
       const srcObject = new Other();
-      expect(() =>
-        instance.resolvePath('this.potato.cucumber', {}, input, srcObject)
-      ).toThrow('Path not found in pipeline "this.potato.cucumber"');
+      expect(() => instance.resolvePath('this.potato.cucumber', {}, input, srcObject)).toThrow(
+        'Path not found in pipeline "this.potato.cucumber"'
+      );
     });
   });
 
@@ -293,12 +270,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'lower',
-        'char',
-        'char.filter',
-        'this',
-      ]);
+      const pipeline = instance.buildPipeline(['lower', 'char', 'char.filter', 'this']);
       const input = {
         source: 'VECTOR',
         text: 'VECTOR',
@@ -377,10 +349,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'inc input.value',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'inc input.value']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toEqual({ value: 8 });
@@ -389,10 +358,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'inc input.value 3',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'inc input.value 3']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toEqual({ value: 10 });
@@ -401,10 +367,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'dec input.value',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'dec input.value']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toEqual({ value: 6 });
@@ -413,10 +376,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'dec input.value 3',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'dec input.value 3']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toEqual({ value: 4 });
@@ -425,11 +385,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'eq input.value 7',
-        'get',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'eq input.value 7', 'get']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toBe(true);
@@ -438,11 +394,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'neq input.value 7',
-        'get',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'neq input.value 7', 'get']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toBe(false);
@@ -451,11 +403,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'lt input.value 7',
-        'get',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'lt input.value 7', 'get']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toBe(false);
@@ -464,11 +412,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'le input.value 7',
-        'get',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'le input.value 7', 'get']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toBe(true);
@@ -477,11 +421,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'gt input.value 7',
-        'get',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'gt input.value 7', 'get']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toBe(false);
@@ -490,11 +430,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'set input.value 7',
-        'ge input.value 7',
-        'get',
-      ]);
+      const pipeline = instance.buildPipeline(['set input.value 7', 'ge input.value 7', 'get']);
       const input = {};
       const actual = await instance.runPipeline(pipeline, input, new Other());
       expect(actual).toBe(true);
@@ -579,17 +515,8 @@ describe('Container', () => {
       instance.register('char', Char);
       instance.use(Timer);
       instance.registerPipeline('lowerchar', ['lower', 'char']);
-      instance.registerPipeline('lowerchar', [
-        'timer.start',
-        '$super',
-        'timer.stop',
-      ]);
-      const pipeline = instance.buildPipeline([
-        'set input.text "magdalena"',
-        '$lowerchar',
-        'char.filter',
-        'this',
-      ]);
+      instance.registerPipeline('lowerchar', ['timer.start', '$super', 'timer.stop']);
+      const pipeline = instance.buildPipeline(['set input.text "magdalena"', '$lowerchar', 'char.filter', 'this']);
       const input = {
         source: 'VECTOR',
         text: 'VECTOR',
@@ -623,13 +550,7 @@ describe('Container', () => {
       const instance = new Container();
       instance.register('lower', Lower);
       instance.register('char', Char);
-      const pipeline = instance.buildPipeline([
-        'lower "magdalena"',
-        'char',
-        'char.filter',
-        'this',
-        'delete input.arr',
-      ]);
+      const pipeline = instance.buildPipeline(['lower "magdalena"', 'char', 'char.filter', 'this', 'delete input.arr']);
       const input = {
         source: 'VECTOR',
         text: 'VECTOR',
@@ -684,9 +605,7 @@ describe('Container', () => {
         text: 'VECTOR',
         excludeChars: 'e',
       };
-      await expect(
-        instance.runPipeline(pipeline, input, new Other())
-      ).rejects.toThrow(
+      await expect(instance.runPipeline(pipeline, input, new Other())).rejects.toThrow(
         'Pipeline depth is too high: perhaps you are using recursive pipelines?'
       );
     });
@@ -707,9 +626,9 @@ describe('Container', () => {
         text: 'VECTOR',
         excludeChars: 'e',
       };
-      await expect(
-        instance.runPipeline(pipeline, input, new Other())
-      ).rejects.toThrow('Pipeline $loperchar not found.');
+      await expect(instance.runPipeline(pipeline, input, new Other())).rejects.toThrow(
+        'Pipeline $loperchar not found.'
+      );
     });
   });
 
