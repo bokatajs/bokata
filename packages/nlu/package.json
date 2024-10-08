@@ -1,6 +1,6 @@
 {
   "name": "@bokata/nlu",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Natural Language Understanding",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,10 +25,10 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/core": "^0.0.3",
-    "@bokata/language-min": "^0.0.3",
-    "@bokata/neural": "^0.0.3",
-    "@bokata/similarity": "^0.0.3"
+    "@bokata/core": "^0.0.4",
+    "@bokata/language-min": "^0.0.4",
+    "@bokata/neural": "^0.0.4",
+    "@bokata/similarity": "^0.0.4"
   },
   "publishConfig": {
     "access": "public"

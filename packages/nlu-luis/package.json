@@ -1,6 +1,6 @@
 {
   "name": "@bokata/nlu-luis",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Natural Language Understanding",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,9 +25,9 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/core": "^0.0.3",
-    "@bokata/nlu": "^0.0.3",
-    "@bokata/request": "^0.0.3"
+    "@bokata/core": "^0.0.4",
+    "@bokata/nlu": "^0.0.4",
+    "@bokata/request": "^0.0.4"
   },
   "publishConfig": {
     "access": "public"

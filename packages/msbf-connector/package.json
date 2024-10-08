@@ -1,6 +1,6 @@
 {
   "name": "@bokata/msbf-connector",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Microsoft Bot Framework Connector",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,9 +25,9 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/connector": "^0.0.3",
-    "@bokata/core": "^0.0.3",
-    "@bokata/request": "^0.0.3",
+    "@bokata/connector": "^0.0.4",
+    "@bokata/core": "^0.0.4",
+    "@bokata/request": "^0.0.4",
     "botbuilder": "^4.23.1"
   },
   "publishConfig": {
