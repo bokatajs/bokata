@@ -1,6 +1,6 @@
 {
   "name": "@bokata/console-connector",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Console Connector",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,8 +25,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/connector": "^0.0.2",
-    "@bokata/core": "^0.0.2"
+    "@bokata/connector": "^0.0.3",
+    "@bokata/core": "^0.0.3"
   },
   "publishConfig": {
     "access": "public"

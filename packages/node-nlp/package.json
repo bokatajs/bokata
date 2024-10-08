@@ -1,6 +1,6 @@
 {
   "name": "bokata",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Library for NLU (Natural Language Understanding) done in Node.js",
   "author": {
     "email": "jseijas@gmail.com",
@@ -42,20 +42,20 @@
     "bot"
   ],
   "dependencies": {
-    "@bokata/builtin-microsoft": "^0.0.2",
-    "@bokata/core-loader": "^0.0.2",
-    "@bokata/emoji": "^0.0.2",
-    "@bokata/evaluator": "^0.0.2",
-    "@bokata/lang-all": "^0.0.2",
-    "@bokata/language": "^0.0.2",
-    "@bokata/neural": "^0.0.2",
-    "@bokata/nlg": "^0.0.2",
-    "@bokata/nlp": "^0.0.2",
-    "@bokata/nlu": "^0.0.2",
-    "@bokata/request": "^0.0.2",
-    "@bokata/sentiment": "^0.0.2",
-    "@bokata/similarity": "^0.0.2",
-    "@bokata/xtables": "^0.0.2"
+    "@bokata/builtin-microsoft": "^0.0.3",
+    "@bokata/core-loader": "^0.0.3",
+    "@bokata/emoji": "^0.0.3",
+    "@bokata/evaluator": "^0.0.3",
+    "@bokata/lang-all": "^0.0.3",
+    "@bokata/language": "^0.0.3",
+    "@bokata/neural": "^0.0.3",
+    "@bokata/nlg": "^0.0.3",
+    "@bokata/nlp": "^0.0.3",
+    "@bokata/nlu": "^0.0.3",
+    "@bokata/request": "^0.0.3",
+    "@bokata/sentiment": "^0.0.3",
+    "@bokata/similarity": "^0.0.3",
+    "@bokata/xtables": "^0.0.3"
   },
   "publishConfig": {
     "access": "public"
