@@ -1,6 +1,6 @@
 {
   "name": "@bokata/utils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NLP utils",
   "author": {
     "email": "jseijas@gmail.com",
@@ -28,7 +28,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@bokata/xtables": "^0.0.1",
+    "@bokata/xtables": "^0.0.2",
     "exceljs": "^4.1.1",
     "https-proxy-agent": "^5.0.0",
     "tar": "^6.0.2"

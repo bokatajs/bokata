@@ -1,6 +1,6 @@
 {
   "name": "@bokata/basic",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic dependencies for node",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,11 +25,11 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/console-connector": "^0.0.1",
-    "@bokata/core-loader": "^0.0.1",
-    "@bokata/evaluator": "^0.0.1",
-    "@bokata/lang-en": "^0.0.1",
-    "@bokata/logger": "^0.0.1",
-    "@bokata/nlp": "^0.0.1"
+    "@bokata/console-connector": "^0.0.2",
+    "@bokata/core-loader": "^0.0.2",
+    "@bokata/evaluator": "^0.0.2",
+    "@bokata/lang-en": "^0.0.2",
+    "@bokata/logger": "^0.0.2",
+    "@bokata/nlp": "^0.0.2"
   }
 }

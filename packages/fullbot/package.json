@@ -1,6 +1,6 @@
 {
   "name": "@bokata/fullbot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Full bot for Bokata",
   "author": {
     "email": "jseijas@gmail.com",
@@ -29,14 +29,14 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/basic": "^0.0.1",
-    "@bokata/bot": "^0.0.1",
-    "@bokata/builtin-microsoft": "^0.0.1",
-    "@bokata/database": "^0.0.1",
-    "@bokata/directline-connector": "^0.0.1",
-    "@bokata/express-api-server": "^0.0.1",
-    "@bokata/mongodb-adapter": "^0.0.1",
-    "@bokata/utils": "^0.0.1",
+    "@bokata/basic": "^0.0.2",
+    "@bokata/bot": "^0.0.2",
+    "@bokata/builtin-microsoft": "^0.0.2",
+    "@bokata/database": "^0.0.2",
+    "@bokata/directline-connector": "^0.0.2",
+    "@bokata/express-api-server": "^0.0.2",
+    "@bokata/mongodb-adapter": "^0.0.2",
+    "@bokata/utils": "^0.0.2",
     "archiver": "^5.2.0",
     "decompress": "^4.2.1",
     "rimraf": "^3.0.2"

@@ -1,6 +1,6 @@
 {
   "name": "@bokata/nlp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Natural Language Processing",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,11 +25,11 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/core": "^0.0.1",
-    "@bokata/ner": "^0.0.1",
-    "@bokata/nlg": "^0.0.1",
-    "@bokata/nlu": "^0.0.1",
-    "@bokata/sentiment": "^0.0.1",
-    "@bokata/slot": "^0.0.1"
+    "@bokata/core": "^0.0.2",
+    "@bokata/ner": "^0.0.2",
+    "@bokata/nlg": "^0.0.2",
+    "@bokata/nlu": "^0.0.2",
+    "@bokata/sentiment": "^0.0.2",
+    "@bokata/slot": "^0.0.2"
   }
 }

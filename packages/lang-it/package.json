@@ -1,6 +1,6 @@
 {
   "name": "@bokata/lang-it",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Core",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,6 +25,6 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/core": "^0.0.1"
+    "@bokata/core": "^0.0.2"
   }
 }
