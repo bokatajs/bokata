@@ -1,6 +1,6 @@
 {
   "name": "@bokata/builtin-compromise",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Builtin Named Entity Recognition with Compromise",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,7 +25,7 @@
     "test": "jest --coverage --maxWorkers=4 ."
   },
   "dependencies": {
-    "@bokata/core": "^0.0.4",
+    "@bokata/core": "^0.0.5",
     "compromise": "^13.7.0",
     "compromise-dates": "^1.2.0",
     "compromise-numbers": "^1.4.0"

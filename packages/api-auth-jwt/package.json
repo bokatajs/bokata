@@ -1,6 +1,6 @@
 {
   "name": "@bokata/api-auth-jwt",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "JWT API Authorization",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,7 +25,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/core": "^0.0.4",
+    "@bokata/core": "^0.0.5",
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
     "passport": "^0.7.0",
@@ -33,7 +33,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "@bokata/database": "^0.0.4"
+    "@bokata/database": "^0.0.5"
   },
   "publishConfig": {
     "access": "public"

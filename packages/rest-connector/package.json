@@ -1,6 +1,6 @@
 {
   "name": "@bokata/rest-connector",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "REST connector for Bokata",
   "author": {
     "email": "jseijas@gmail.com",
@@ -29,8 +29,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/connector": "^0.0.4",
-    "@bokata/core": "^0.0.4"
+    "@bokata/connector": "^0.0.5",
+    "@bokata/core": "^0.0.5"
   },
   "publishConfig": {
     "access": "public"

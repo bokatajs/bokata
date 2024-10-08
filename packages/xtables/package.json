@@ -1,6 +1,6 @@
 {
   "name": "@bokata/xtables",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Excel tables reader",
   "author": {
     "email": "jseijas@gmail.com",

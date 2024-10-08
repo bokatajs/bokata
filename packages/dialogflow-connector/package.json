@@ -1,6 +1,6 @@
 {
   "name": "@bokata/dialogflow-connector",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Dialogflow connector for Bokata",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,7 +25,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/connector": "^0.0.4",
+    "@bokata/connector": "^0.0.5",
     "actions-on-google": "^3.0.0"
   },
   "publishConfig": {

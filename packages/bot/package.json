@@ -1,6 +1,6 @@
 {
   "name": "@bokata/bot",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Bot plugin for Bokata",
   "author": {
     "email": "jseijas@gmail.com",
@@ -29,11 +29,11 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/builtin-default": "^0.0.4",
-    "@bokata/connector": "^0.0.4",
-    "@bokata/core": "^0.0.4",
-    "@bokata/evaluator": "^0.0.4",
-    "@bokata/nlp": "^0.0.4"
+    "@bokata/builtin-default": "^0.0.5",
+    "@bokata/connector": "^0.0.5",
+    "@bokata/core": "^0.0.5",
+    "@bokata/evaluator": "^0.0.5",
+    "@bokata/nlp": "^0.0.5"
   },
   "publishConfig": {
     "access": "public"

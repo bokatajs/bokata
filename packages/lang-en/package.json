@@ -1,6 +1,6 @@
 {
   "name": "@bokata/lang-en",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Core",
   "author": {
     "email": "jseijas@gmail.com",
@@ -25,8 +25,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@bokata/core": "^0.0.4",
-    "@bokata/lang-en-min": "^0.0.4"
+    "@bokata/core": "^0.0.5",
+    "@bokata/lang-en-min": "^0.0.5"
   },
   "publishConfig": {
     "access": "public"
